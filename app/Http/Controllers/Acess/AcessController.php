@@ -33,4 +33,9 @@ class AcessController extends Controller {
         return view('forgout-password', ['code' => $code]);
     }
 
+    public function registerUserExternal($id) {
+
+        return view('Form.registerUser', ['id' => $id]);
+    }
+
 }

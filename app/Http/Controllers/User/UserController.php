@@ -165,7 +165,65 @@ class UserController extends Controller {
         $user->password     = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->cpf));
 
         if($user->save()) {
-            return redirect()->back()->with('success', 'Cadastro realizado com sucesso!');
+            return redirect()->route('listUser', ['tipo' => $request->tipo])->with('success', 'Cadastro realizado com sucesso!');
+        }
+        
+        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+    }
+
+    public function createUserExternal(Request $request) {
+
+        $rules = [
+            'nome'      => 'required|string',
+            'cpf'       => 'required|unique:users',
+            'email'     => 'required|email|unique:users',
+            'whatsapp'  => 'required'
+        ];
+
+        $messages = [
+            'nome.required'     => 'O campo Nome é obrgatório!',
+            'cpf.required'      => 'O campo CPF é obrigatório!',
+            'cpf.unique'        => 'Já existe uma pessoa com esse CPF!',
+            'email.required'    => 'O campo Email é obrgatório!',
+            'email.email'       => 'Por favor, informe um Email válido',
+            'email.unique'      => 'Já existe uma pessoa com esse Email',
+            'whatsapp.required' => 'Por favor, informe um WhatsApp!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return redirect()->back()->with('errors', $validator->errors());
+        }
+
+        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
+        if($user) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+        }
+
+        $user               = new User();
+        $user->id_lider     = $request->id_lider;
+        $user->nome         = $request->nome;
+        $user->cpf          = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->cpf);
+        $user->dataNasc     = Carbon::parse($request->dataNasc);
+        $user->sexo         = $request->sexo;
+        $user->tipo         = $request->tipo;
+        $user->civil        = $request->civil;
+        $user->email        = $request->email;
+        $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
+        $user->instagram    = $request->instagram;
+        $user->facebook     = $request->facebook;
+        $user->cep          = $request->cep;
+        $user->logradouro   = $request->logradouro;
+        $user->numero       = $request->numero;
+        $user->bairro       = $request->bairro;
+        $user->cidade       = $request->cidade;
+        $user->estado       = $request->estado;
+        $user->zona         = $request->zona;
+        $user->observacao   = $request->observacao;
+        $user->password     = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->cpf));
+
+        if($user->save()) {
+            return redirect()->back()->with('success', 'Cadastro concluído com Sucesso!');
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');

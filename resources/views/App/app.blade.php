@@ -89,6 +89,23 @@
 
             </div>
 
+            <div class="col-12">
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="card bg-dark text-white mb-3">
+                            <div class="card-header">Link para indicação</div>
+                            <div class="card-body">
+                                <a href="{{ route('registerUserExternal', ['code', Auth::user()->id]) }}" target="_blank">
+                                    https://cidadaoplus.thiagoprogramando.com.br/registerUserExternal/{{ Auth::user()->id }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection

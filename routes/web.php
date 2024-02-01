@@ -12,6 +12,10 @@ Route::get('/', function () {
 })->name('login');
 
 Route::get('/forgout-password/{code?}', [AcessController::class, 'forgoutPassword'])->name('forgout-password');
+
+Route::get('/registerUserExternal/{code}', [AcessController::class, 'registerUserExternal'])->name('registerUserExternal');
+Route::post('/createUserExternal', [UserController::class, 'createUserExternal'])->name('createUserExternal');
+
 Route::post('/logon', [AcessController::class, 'logon'])->name('logon');
 
 Route::middleware(['auth'])->group(function () {
@@ -24,8 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/listUser/{tipo?}', [UserController::class, 'listUser'])->name('listUser');
     Route::get('/filterUser', [UserController::class, 'filterUser'])->name('filterUser');
     Route::get('/registrerUser/{tipo?}', [UserController::class, 'registrerUser'])->name('registrerUser');
-    Route::post('/createUser', [UserController::class, 'createUser'])->name('createUser');
     Route::get('/viewUser/{id?}', [UserController::class, 'viewUser'])->name('viewUser');
+    Route::post('/createUser', [UserController::class, 'createUser'])->name('createUser');
     Route::post('/updateUser', [UserController::class, 'updateUser'])->name('updateUser');
     Route::post('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
     Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
