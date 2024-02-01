@@ -119,13 +119,7 @@ class UserController extends Controller {
             'nome'      => 'required|string',
             'cpf'       => 'required|unique:users',
             'email'     => 'required|email|unique:users',
-            'whatsapp.unique'   => [
-                'required',
-                Rule::unique('users', 'whatsapp')->where(function ($query) use ($request) {
-                    $whatsappNumber = preg_replace('/[^0-9]/', '', $request->whatsapp);
-                    return $query->where('whatsapp', $whatsappNumber);
-                }),
-            ]
+            'whatsapp'  => 'required'
         ];
 
         $messages = [
@@ -136,12 +130,16 @@ class UserController extends Controller {
             'email.email'       => 'Por favor, informe um Email válido',
             'email.unique'      => 'Já existe uma pessoa com esse Email',
             'whatsapp.required' => 'Por favor, informe um WhatsApp!',
-            'whatsapp.unique'   => 'Já existe uma pessoa com esse número de WhatsApp!',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return redirect()->back()->with('errors', $validator->errors());
+        }
+
+        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
+        if($user) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
         $user               = new User();
