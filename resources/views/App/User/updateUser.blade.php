@@ -1,4 +1,4 @@
-@extends('app.layout')
+@extends('App.layout')
 @section('app')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
