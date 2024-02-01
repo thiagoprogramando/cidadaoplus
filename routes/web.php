@@ -1,0 +1,48 @@
+<?php
+
+use App\Http\Controllers\Acess\AcessController;
+use App\Http\Controllers\Agenda\AgendaController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Whatsapp\WhatsappController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('index');
+})->name('login');
+
+Route::get('/forgout-password/{code?}', [AcessController::class, 'forgoutPassword'])->name('forgout-password');
+Route::post('/logon', [AcessController::class, 'logon'])->name('logon');
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/app', [DashboardController::class, 'app'])->name('app');
+
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/profileUpdate', [UserController::class, 'profileUpdate'])->name('profileUpdate');
+    
+    Route::get('/listUser/{tipo?}', [UserController::class, 'listUser'])->name('listUser');
+    Route::get('/filterUser', [UserController::class, 'filterUser'])->name('filterUser');
+    Route::get('/registrerUser/{tipo?}', [UserController::class, 'registrerUser'])->name('registrerUser');
+    Route::post('/createUser', [UserController::class, 'createUser'])->name('createUser');
+    Route::get('/viewUser/{id?}', [UserController::class, 'viewUser'])->name('viewUser');
+    Route::post('/updateUser', [UserController::class, 'updateUser'])->name('updateUser');
+    Route::post('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
+    Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
+
+    Route::get('/listEvent', [AgendaController::class, 'listEvent'])->name('listEvent');
+    Route::get('/viewEvent/{id}', [AgendaController::class, 'viewEvent'])->name('viewEvent');
+    Route::get('/filterEvent', [AgendaController::class, 'filterEvent'])->name('filterEvent');
+    Route::post('registrerEvent', [AgendaController::class, 'registrerEvent'])->name('registrerEvent');
+    Route::post('updateEvent', [AgendaController::class, 'updateEvent'])->name('updateEvent');
+    Route::post('deleteEvent', [AgendaController::class, 'deleteEvent'])->name('deleteEvent');
+
+    Route::get('/listWhatsapp', [WhatsappController::class, 'listWhatsapp'])->name('listWhatsapp');
+    Route::post('registrerWhatsapp', [WhatsappController::class, 'registrerWhatsapp'])->name('registrerWhatsapp');
+    Route::post('deleteWhatsapp', [WhatsappController::class, 'deleteWhatsapp'])->name('deleteWhatsapp');
+
+    Route::get('/listMessage', [WhatsappController::class, 'listMessage'])->name('listMessage');
+    Route::post('registrerMessage', [WhatsappController::class, 'registrerMessage'])->name('registrerMessage');
+
+    Route::get('/logout', [AcessController::class, 'logout'])->name('logout');
+});
