@@ -65,7 +65,7 @@
                                         <td class="d-none">{{ $user->cidade }}</td>
                                         <td class="d-none">{{ $user->estado }}</td>
                                         <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
-                                        <td>{{ $user->grupo }}</td>
+                                        <td>@if(isset($user->grupo->nome)) {{ $user->grupo->nome }} @else --- @endif</td>
                                         <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->Type }}</span></td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $user->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
