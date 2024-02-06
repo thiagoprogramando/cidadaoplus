@@ -10,7 +10,6 @@ return new class extends Migration {
         Schema::create('grupo', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_lider')->nullable();
-            $table->foreign('id_lider')->references('id')->on('users');
             $table->string('nome');
             $table->string('code');
             $table->timestamps();
