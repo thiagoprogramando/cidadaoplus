@@ -61,4 +61,5 @@ class User extends Authenticatable {
     public function grupo() {
         return $this->belongsTo(Grupo::class, 'id_grupo');
     }
+    
 }
