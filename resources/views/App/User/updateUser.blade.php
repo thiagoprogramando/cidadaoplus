@@ -16,54 +16,63 @@
                         <div class="row">
                             <input type="hidden" name="id" value="{{ $user->id }}">
 
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
+                            <div class="col-12 col-md-9 col-lg-9 mb-3">
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:" value="{{ $user->nome }}"/>
-                            </div>
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="cpf" placeholder="CPF:" value="{{ $user->cpf }}" oninput="mascaraCpfCnpj(this)"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" value="{{ $user->dataNasc }}" oninput="mascaraData(this)"/>
                             </div>
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="tipo" class="form-control">
-                                    <option value="{{ $user->tipo }}" selected>Tipo</option>
-                                    <option value="1">Master</option>
-                                    <option value="2">Liderança</option>
-                                    <option value="3">Eleitor</option>
-                                </select>
-                            </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="sexo" class="form-control">
-                                    <option value="{{ $user->sexo }}" selected>Sexo</option>
+                                    <option value="{{ $user->sexo }}" selected>{{ $user->sexualidade }}</option>
                                     <option value="1">Masculino</option>
                                     <option value="2">Feminino</option>
                                     <option value="3">Outros</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="civil" class="form-control">
-                                    <option value="{{ $user->civil }}" selected>Estado Civil</option>
-                                    <option value="1">Casado(a)</option>
-                                    <option value="2">Solteiro(a)</option>
-                                    <option value="3">Viúvo(a)</option>
-                                    <option value="4">Divórcio</option>
-                                    <option value="5">Outros</option>
+                                <select name="profissao" class="form-control">
+                                    <option value="{{ $user->profissao }}" selected>{{ $user->profissao }}</option>
+                                    <option value="advogado">Advogado</option>
+                                    <option value="arquiteto">Arquiteto</option>
+                                    <option value="assistente_social">Assistente Social</option>
+                                    <option value="biologo">Biólogo</option>
+                                    <option value="chef_de_cozinha">Chef de Cozinha</option>
+                                    <option value="dentista">Dentista</option>
+                                    <option value="designer_grafico">Designer Gráfico</option>
+                                    <option value="enfermeiro">Enfermeiro</option>
+                                    <option value="engenheiro_civil">Engenheiro Civil</option>
+                                    <option value="escritor">Escritor</option>
+                                    <option value="fisioterapeuta">Fisioterapeuta</option>
+                                    <option value="geologo">Geólogo</option>
+                                    <option value="historiador">Historiador</option>
+                                    <option value="jornalista">Jornalista</option>
+                                    <option value="medico">Médico</option>
+                                    <option value="musico">Músico</option>
+                                    <option value="nutricionista">Nutricionista</option>
+                                    <option value="odontologo">Odontólogo</option>
+                                    <option value="piloto">Piloto</option>
+                                    <option value="psicologo">Psicólogo</option>
+                                    <option value="quimico">Químico</option>
+                                    <option value="radiologista">Radiologista</option>
+                                    <option value="sociologo">Sociólogo</option>
+                                    <option value="tecnico_de_informatica">Técnico de Informática</option>
+                                    <option value="veterinario">Veterinário</option>
+                                    <option value="web_designer">Web Designer</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="escolaridade" class="form-control">
-                                    <option value="{{ $user->escolaridade }}" selected>Escolaridade </option>
-                                    <option value="1">Fundamental</option>
-                                    <option value="2">Médio</option>
-                                    <option value="3">Superior</option>
-                                    <option value="4">Outros</option>
+                                <select name="tipo" class="form-control">
+                                    <option value="{{ $user->tipo }}" selected>{{ $user->Type }}</option>
+                                    <option value="1">Master</option>
+                                    <option value="2">Liderança</option>
+                                    <option value="3">Eleitor</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="id_lider" class="form-control">
-                                    <option value="{{ $user->id_lider }}" selected>Liderança </option>
+                                    <option value="{{ $user->id_lider }}" selected>{{ $user->lider->nome }}</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->nome }}</option>
                                     @endforeach
@@ -97,20 +106,6 @@
                             </div>
                             <input type="hidden" class="form-control" name="cidade" value="{{ $user->cidade }}"/>
                             <input type="hidden" class="form-control" name="estado" value="{{ $user->estado }}"/>
-
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="zona" class="form-control">
-                                    <option value="{{ $user->zona }}" selected>Zona </option>
-                                    <option value="1">Norte</option>
-                                    <option value="2">Sul</option>
-                                    <option value="3">Leste</option>
-                                    <option value="4">Oeste</option>
-                                    <option value="5">Outras</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-9 col-lg-9 mb-3">
-                                <textarea name="observacao" class="form-control" rows="1" placeholder="Observações">{{ $user->observacao }}</textarea>
-                            </div>
                             
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <button class="btn btn-success d-grid w-100" type="submit">Salvar</button>

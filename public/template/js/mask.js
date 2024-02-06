@@ -120,3 +120,18 @@ function geraExcel() {
         URL.revokeObjectURL(url);
     }, 100);
 };
+
+function copyToClipboard(link) {
+    var linkElement = link.getAttribute("data-link"); // Use getAttribute para obter o valor de data-link
+    var linkText = linkElement;
+
+    var tempInput = document.createElement("input");
+    tempInput.setAttribute("value", linkText); // Use setAttribute para definir o valor
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    alert("Link copiado para a área de transferência!");
+}
+

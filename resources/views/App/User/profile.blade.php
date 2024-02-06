@@ -16,9 +16,6 @@
                                         <input type="text" class="form-control" name="nome" placeholder="{{ Auth::user()->nome }}"/>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="cpf" placeholder="{{ Auth::user()->cpf }}" oninput="mascaraCpfCnpj(this)"/>
-                                    </div>
-                                    <div class="mb-3">
                                         <input type="text" class="form-control" name="whatsapp" placeholder="{{ Auth::user()->whatsapp }}" oninput="mascaraTelefone(this)"/>
                                     </div>
                                     <div class="mb-3">

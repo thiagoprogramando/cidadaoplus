@@ -19,19 +19,16 @@ class UsersImport implements ToModel, WithHeadingRow {
                 return new User([
                     'id_lider'    => $row['id_lider'],
                     'nome'        => $row['nome'],
-                    'cpf'         => str_replace(['.', ',', '-', '(', ')'], '', $row['cpf']),
                     'dataNasc'    => \Carbon\Carbon::parse($row['d_nascimento'])->toDateString(),
-                    'whatsapp'    => str_replace(['.', ',', '-', '(', ')'], '', $row['whatsapp']),
+                    'whatsapp'    => str_replace(['.', ' ', ',', '-', '(', ')'], '', $row['whatsapp']),
                     'email'       => $row['email'],
                     'cep'         => $row['cep'],
                     'numero'      => $row['n'],
                     'bairro'      => $row['bairro'],
                     'cidade'      => $row['cidade'],
                     'estado'      => $row['estado'],
-                    'zona'        => $row['identificador_zona'],
                     'tipo'        => $row['tipo'],
-                    'observacao'  => $row['observacao'],
-                    'password'    => bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $row['cpf'])),
+                    'password'    => bcrypt(str_replace(['.', ' ', ',', '-', '(', ')'], '', $row['whatsapp'])),
                 ]);
             }
         

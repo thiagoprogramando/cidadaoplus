@@ -15,12 +15,10 @@ class User extends Authenticatable {
         'id_lider',
         
         'nome',
-        'cpf',
         'foto',
         'dataNasc',
         'sexo',
-        'civil',
-        'escolidade',
+        'profissao',
 
         'email',
         'whatsapp',
@@ -33,10 +31,8 @@ class User extends Authenticatable {
         'bairro',
         'cidade',
         'estado',
-        'zona',
         
         'tipo',
-        'observacao',
         'password',
     ];
 
@@ -52,10 +48,6 @@ class User extends Authenticatable {
 
     public function getTypeAttribute() {
         return $this->attributes['tipo'] == 1 ? 'Master' : ($this->attributes['tipo'] == 2 ? 'Liderança' : 'Eleitor');
-    }
-
-    public function getRegiaoAttribute() {
-        return [ 1 => 'Norte', 2 => 'Sul', 3 => 'Leste',][$this->attributes['zona']] ?? 'Oeste';
     }
 
     public function getSexualidadeAttribute() {

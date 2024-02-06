@@ -13,7 +13,7 @@ Route::get('/', function () {
 
 Route::get('/forgout-password/{code?}', [AcessController::class, 'forgoutPassword'])->name('forgout-password');
 
-Route::get('/registerUserExternal/{code}', [AcessController::class, 'registerUserExternal'])->name('registerUserExternal');
+Route::get('/cadastra-usuario/{code}/{grupo?}', [AcessController::class, 'registerUserExternal'])->name('cadastra-usuario');
 Route::post('/createUserExternal', [UserController::class, 'createUserExternal'])->name('createUserExternal');
 
 Route::post('/logon', [AcessController::class, 'logon'])->name('logon');
@@ -33,6 +33,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/updateUser', [UserController::class, 'updateUser'])->name('updateUser');
     Route::post('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
     Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
+
+    Route::get('/listGrupo', [UserController::class, 'listGrupo'])->name('listGrupo');
+    Route::post('/createGrupo', [UserController::class, 'createGrupo'])->name('createGrupo');
+    Route::post('/deleteGrupo', [UserController::class, 'deleteGrupo'])->name('deleteGrupo');
 
     Route::get('/listEvent', [AgendaController::class, 'listEvent'])->name('listEvent');
     Route::get('/viewEvent/{id}', [AgendaController::class, 'viewEvent'])->name('viewEvent');

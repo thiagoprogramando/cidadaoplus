@@ -27,12 +27,9 @@
                                 <tr>
                                     <th class="d-none">Identificador Líder</th>
                                     <th>Nome</th>
-                                    <th>CPF</th>
                                     <th class="d-none">D. Nascimento</th>
                                     <th>Sexo</th>
-                                    <th class="d-none">E. Civil</th>
-                                    <th class="d-none">Escolaridade</th>
-                                    <th>Região</th>
+                                    <th>Profissão</th>
                                     <th>WhatsApp</th>
                                     <th class="d-none">Email</th>
                                     <th class="d-none">instagram</th>
@@ -42,11 +39,10 @@
                                     <th class="d-none">Bairro</th>
                                     <th class="d-none">Cidade</th>
                                     <th class="d-none">Estado</th>
-                                    <th class="d-none">Identificador Zona</th>
 
                                     <th>Líder</th>
+                                    <th>Grupo</th>
                                     <th class="text-center">Tipo</th>
-                                    <th class="d-none">Observação</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
                             </thead>
@@ -55,12 +51,9 @@
                                     <tr>
                                         <td class="d-none">{{ $user->id_lider }}</td>
                                         <td><strong>{{ $user->nome }}</strong> </td>
-                                        <td>{{ $user->cpf }}</td>
                                         <td class="d-none">{{ $user->dataNasc }}</td>
                                         <td>{{ $user->Sexualidade }}</td>
-                                        <td class="d-none">{{ $user->civil }}</td>
-                                        <td class="d-none">{{ $user->escolaridade }}</td>
-                                        <td>{{ $user->regiao }}</td>
+                                        <td>{{ $user->profissao }}</td>
                                         <td>{{ $user->whatsapp }}</td>
                                         <td class="d-none">{{ $user->email }}</td>
                                         <td class="d-none">{{ $user->instagram }}</td>
@@ -71,10 +64,9 @@
                                         <td class="d-none">{{ $user->bairro }}</td>
                                         <td class="d-none">{{ $user->cidade }}</td>
                                         <td class="d-none">{{ $user->estado }}</td>
-                                        <td class="d-none">{{ $user->zona }}</td>
                                         <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
+                                        <td>{{ $user->grupo }}</td>
                                         <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->Type }}</span></td>
-                                        <td class="d-none">{{ $user->observacao }}</td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $user->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
                                             <a href="{{ route('viewUser', ['id' => $user->id]) }}" class="btn btn-outline-warning"> <i class="tf-icons bx bx-edit-alt"></i> </a>
@@ -135,8 +127,8 @@
                                 <input type="text" class="form-control" name="dataNasc" oninput="mascaraData(this)" placeholder="Data Nascimento:"/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_lider" class="form-control">
-                                    <option value="" selected>Liderança </option>
+                                <select name="id_lider" class="form-control" @if(Auth::user()->type != 1) disabled @endif>
+                                    <option value="{{ Auth::user()->id }}" selected>Liderança </option>
                                     @foreach ($alphas as $alpha)
                                         <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach

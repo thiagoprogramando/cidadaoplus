@@ -59,16 +59,24 @@
                               <div>Eleitores</div>
                             </a>
                         </li>
+                        @if (Auth::user()->tipo == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-user-voice"></i>
+                                <div>Liderança</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-user"></i>
+                                <div>Master</div>
+                                </a>
+                            </li>
+                        @endif
                         <li class="menu-item">
-                            <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
-                              <i class="menu-icon tf-icons bx bx-user-voice"></i>
-                              <div>Liderança</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
-                              <i class="menu-icon tf-icons bx bx-user"></i>
-                              <div>Master</div>
+                            <a href="{{ route('listGrupo') }}" class="menu-link">
+                              <i class="menu-icon tf-icons bx bx-group"></i>
+                              <div>Grupos</div>
                             </a>
                         </li>
 
@@ -79,26 +87,29 @@
                               <div>Eventos</div>
                             </a>
                         </li>
-                        <li class="menu-item">
-                            <a href="{{ route('listMessage') }}" class="menu-link">
-                              <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
-                              <div>Envio em Massa</div>
-                            </a>
-                        </li>
+                        @if (Auth::user()->tipo == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listMessage') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
+                                    <div>Envio em Massa</div>
+                                </a>
+                            </li>
+                        
 
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Integrações</span></li>
-                        <li class="menu-item">
-                            <a href="{{ route('listWhatsapp') }}" class="menu-link">
-                              <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
-                              <div>WhatsApp</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="#" class="menu-link">
-                              <i class="menu-icon tf-icons bx bxs-file-import"></i>
-                              <div>TSE</div>
-                            </a>
-                        </li>
+                            <li class="menu-header small text-uppercase"><span class="menu-header-text">Integrações</span></li>
+                            <li class="menu-item">
+                                <a href="{{ route('listWhatsapp') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
+                                <div>WhatsApp</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="menu-link">
+                                <i class="menu-icon tf-icons bx bxs-file-import"></i>
+                                <div>TSE</div>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </aside>
 
@@ -141,7 +152,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <span class="fw-semibold d-block">{{ Auth::user()->cpf }}</span>
+                                                        <span class="fw-semibold d-block">{{ Auth::user()->whatsapp }}</span>
                                                         <small class="text-muted">{{ Auth::user()->Type }}</small>
                                                     </div>
                                                 </div>

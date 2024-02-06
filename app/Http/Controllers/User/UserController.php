@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
+use App\Models\Grupo;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -59,14 +60,15 @@ class UserController extends Controller {
     public function listUser($tipo = null) {
 
         if($tipo) {
-            $users = User::where('tipo', $tipo)->get();
+            $users = Auth::user()->tipo == 1 ? User::where('tipo', $tipo)->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->get();
         } else {
-            $users = User::all();
+            $users = Auth::user()->tipo == 1 ? User::all() : User::where('id_lider', Auth::user()->id)->get();
         }
 
         $alphas = User::whereIn('tipo', [1, 2])->get();
+        $grupos = Grupo::all();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
+        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas, 'grupos' => $grupos]);
     }
 
     public function filterUser(Request $request) {
@@ -85,6 +87,10 @@ class UserController extends Controller {
             $query->where('id_lider', $request->input('id_lider'));
         }
 
+        if(Auth::user()->tipo != 1) {
+            $query->where('id_lider', Auth::user()->id);
+        }
+
         if ($request->filled('tipo')) {
             $query->where('tipo', $request->input('tipo'));
         }
@@ -93,8 +99,8 @@ class UserController extends Controller {
             $query->where('sexo', $request->input('sexo'));
         }
 
-        if ($request->filled('zona')) {
-            $query->where('zona', $request->input('zona'));
+        if ($request->filled('profissao')) {
+            $query->where('profissao', $request->input('profissao'));
         }
 
         if ($request->filled('cep')) {
@@ -117,16 +123,16 @@ class UserController extends Controller {
 
         $rules = [
             'nome'      => 'required|string',
-            'cpf'       => 'required|unique:users',
-            'email'     => 'required|email|unique:users',
+            'tipo'      => 'required',
+            'id_lider'  => 'required',
+            'email'     => 'email|unique:users',
             'whatsapp'  => 'required'
         ];
 
         $messages = [
             'nome.required'     => 'O campo Nome é obrgatório!',
-            'cpf.required'      => 'O campo CPF é obrigatório!',
-            'cpf.unique'        => 'Já existe uma pessoa com esse CPF!',
-            'email.required'    => 'O campo Email é obrgatório!',
+            'tipo.required'     => 'Informe um tipo de usuário!',
+            'id_lider.required' => 'Informe um Líder!',
             'email.email'       => 'Por favor, informe um Email válido',
             'email.unique'      => 'Já existe uma pessoa com esse Email',
             'whatsapp.required' => 'Por favor, informe um WhatsApp!',
@@ -145,11 +151,9 @@ class UserController extends Controller {
         $user               = new User();
         $user->id_lider     = $request->id_lider;
         $user->nome         = $request->nome;
-        $user->cpf          = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->cpf);
         $user->dataNasc     = Carbon::parse($request->dataNasc);
         $user->sexo         = $request->sexo;
         $user->tipo         = $request->tipo;
-        $user->civil        = $request->civil;
         $user->email        = $request->email;
         $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
         $user->instagram    = $request->instagram;
@@ -160,9 +164,7 @@ class UserController extends Controller {
         $user->bairro       = $request->bairro;
         $user->cidade       = $request->cidade;
         $user->estado       = $request->estado;
-        $user->zona         = $request->zona;
-        $user->observacao   = $request->observacao;
-        $user->password     = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->cpf));
+        $user->password     = bcrypt(str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp));
 
         if($user->save()) {
             return redirect()->route('listUser', ['tipo' => $request->tipo])->with('success', 'Cadastro realizado com sucesso!');
@@ -175,18 +177,11 @@ class UserController extends Controller {
 
         $rules = [
             'nome'      => 'required|string',
-            'cpf'       => 'required|unique:users',
-            'email'     => 'required|email|unique:users',
             'whatsapp'  => 'required'
         ];
 
         $messages = [
             'nome.required'     => 'O campo Nome é obrgatório!',
-            'cpf.required'      => 'O campo CPF é obrigatório!',
-            'cpf.unique'        => 'Já existe uma pessoa com esse CPF!',
-            'email.required'    => 'O campo Email é obrgatório!',
-            'email.email'       => 'Por favor, informe um Email válido',
-            'email.unique'      => 'Já existe uma pessoa com esse Email',
             'whatsapp.required' => 'Por favor, informe um WhatsApp!',
         ];
 
@@ -203,11 +198,10 @@ class UserController extends Controller {
         $user               = new User();
         $user->id_lider     = $request->id_lider;
         $user->nome         = $request->nome;
-        $user->cpf          = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->cpf);
         $user->dataNasc     = Carbon::parse($request->dataNasc);
         $user->sexo         = $request->sexo;
-        $user->tipo         = $request->tipo;
-        $user->civil        = $request->civil;
+        $user->profissao    = $request->profissao;
+        $user->tipo         = 3;
         $user->email        = $request->email;
         $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
         $user->instagram    = $request->instagram;
@@ -218,9 +212,8 @@ class UserController extends Controller {
         $user->bairro       = $request->bairro;
         $user->cidade       = $request->cidade;
         $user->estado       = $request->estado;
-        $user->zona         = $request->zona;
-        $user->observacao   = $request->observacao;
-        $user->password     = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->cpf));
+        $user->id_grupo     = $request->id_grupo;
+        $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
 
         if($user->save()) {
             return redirect()->back()->with('success', 'Cadastro concluído com Sucesso!');
@@ -246,11 +239,10 @@ class UserController extends Controller {
         if($user) {
             $user->id_lider     = $request->id_lider;
             $user->nome         = $request->nome;
-            $user->cpf          = str_replace(['.', ',', '-', '(', ')'], '', $request->cpf);
+            $user->profissao    = $request->profissao;
             $user->dataNasc     = Carbon::parse($request->dataNasc);
             $user->sexo         = $request->sexo;
             $user->tipo         = $request->tipo;
-            $user->civil        = $request->civil;
             $user->email        = $request->email;
             $user->whatsapp     = str_replace(['.', ',', '-', '(', ')'], '', $request->whatsapp);
             $user->instagram    = $request->instagram;
@@ -261,12 +253,12 @@ class UserController extends Controller {
             $user->bairro       = $request->bairro;
             $user->cidade       = $request->cidade;
             $user->estado       = $request->estado;
-            $user->zona         = $request->zona;
-            $user->observacao   = $request->observacao;
-            $user->password     = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->cpf));
+            if($request->password) {
+                $user->password = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->password));
+            }
 
             if($user->save()) {
-                return redirect()->back()->with('success', 'Cadastro realizado com sucesso!');
+                return redirect()->back()->with('success', 'Dados atualizados com sucesso!');
             }
         }
         
@@ -303,7 +295,50 @@ class UserController extends Controller {
         } else {
             return redirect()->back()->with('error', 'Senha inválida!');
         }
+    }
 
+    public function listGrupo( ) {
+
+        $alphas = User::whereIn('tipo', [1, 2])->get();
+        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
+
+        return view('App.User.listGrupo', ['alphas' => $alphas, 'grupos' => $grupos]);
+    }
+
+    public function createGrupo(Request $request) {
+        $password = $request->password;    
+        if (Hash::check($password, auth()->user()->password)) {
+           
+            $grupo = new Grupo();
+            $grupo->nome        = $request->nome;
+            $grupo->code        = strtolower(str_replace(' ', '-', $request->nome));
+            $grupo->id_lider    = $request->id_lider;
+            if($grupo->save()) {
+                return redirect()->back()->with('success', 'Grupo criado com Sucesso!');
+            }
+
+            return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+        } else {
+            return redirect()->back()->with('error', 'Senha inválida!');
+        }
+    }
+
+    public function deleteGrupo(Request $request) {
+
+        $password = $request->password;    
+        if (Hash::check($password, auth()->user()->password)) {
+           
+            $grupo = Grupo::find($request->id);
+            if ($grupo) {
+
+                $grupo->delete();
+                return redirect()->back()->with('success', 'Grupo excluído com sucesso!');
+            } else {
+                return redirect()->back()->with('error', 'Não encontramos dados do Grupo, tente novamente mais tarde!');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Senha incorreta!');
+        }
     }
 
 }

@@ -21,18 +21,14 @@
                             <div class="row">
 
                                 <input type="hidden" name="id_lider" value="{{ $id }}">
-                                <input type="hidden" name="tipo" value="3">
+                                <input type="hidden" name="id_grupo" value="@if(isset($grupo)) {{ $grupo }} @endif">
                                 
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
                                     <input type="text" class="form-control" name="nome" placeholder="Nome:" required/>
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <input type="text" class="form-control" name="cpf" placeholder="CPF:" oninput="mascaraCpfCnpj(this)" required/>
-                                </div>
-                                <div class="col-12 col-md-3 col-lg-3 mb-3">
                                     <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" oninput="mascaraData(this)" required/>
                                 </div>
-    
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
                                     <select name="sexo" class="form-control">
                                         <option value="3" selected>Sexo</option>
@@ -42,36 +38,48 @@
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <select name="civil" class="form-control">
-                                        <option value="5" selected>Estado Civil</option>
-                                        <option value="1">Casado(a)</option>
-                                        <option value="2">Solteiro(a)</option>
-                                        <option value="3">Viúvo(a)</option>
-                                        <option value="4">Divórcio</option>
-                                        <option value="5">Outros</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <select name="escolaridade" class="form-control">
-                                        <option value="4" selected>Escolaridade </option>
-                                        <option value="1">Fundamental</option>
-                                        <option value="2">Médio</option>
-                                        <option value="3">Superior</option>
-                                        <option value="4">Outros</option>
+                                    <select name="profissao" class="form-control">
+                                        <option value="0" selected>Profissão</option>
+                                        <option value="advogado">Advogado</option>
+                                        <option value="arquiteto">Arquiteto</option>
+                                        <option value="assistente_social">Assistente Social</option>
+                                        <option value="biologo">Biólogo</option>
+                                        <option value="chef_de_cozinha">Chef de Cozinha</option>
+                                        <option value="dentista">Dentista</option>
+                                        <option value="designer_grafico">Designer Gráfico</option>
+                                        <option value="enfermeiro">Enfermeiro</option>
+                                        <option value="engenheiro_civil">Engenheiro Civil</option>
+                                        <option value="escritor">Escritor</option>
+                                        <option value="fisioterapeuta">Fisioterapeuta</option>
+                                        <option value="geologo">Geólogo</option>
+                                        <option value="historiador">Historiador</option>
+                                        <option value="jornalista">Jornalista</option>
+                                        <option value="medico">Médico</option>
+                                        <option value="musico">Músico</option>
+                                        <option value="nutricionista">Nutricionista</option>
+                                        <option value="odontologo">Odontólogo</option>
+                                        <option value="piloto">Piloto</option>
+                                        <option value="psicologo">Psicólogo</option>
+                                        <option value="quimico">Químico</option>
+                                        <option value="radiologista">Radiologista</option>
+                                        <option value="sociologo">Sociólogo</option>
+                                        <option value="tecnico_de_informatica">Técnico de Informática</option>
+                                        <option value="veterinario">Veterinário</option>
+                                        <option value="web_designer">Web Designer</option>
                                     </select>
                                 </div>
     
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <input type="email" class="form-control" name="email" placeholder="Email:" required/>
+                                    <input type="email" class="form-control" name="email" placeholder="Email: (Opcional)"/>
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
                                     <input type="text" class="form-control" name="whatsapp" placeholder="WhatsApp:" oninput="mascaraTelefone(this)" required/>
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <input type="text" class="form-control" name="instagram" placeholder="Instagram"/>
+                                    <input type="text" class="form-control" name="instagram" placeholder="Instagram: (Opcional)"/>
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <input type="text" class="form-control" name="facebook" placeholder="Facebook"/>
+                                    <input type="text" class="form-control" name="facebook" placeholder="Facebook: (Opcional)"/>
                                 </div>
     
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
@@ -88,20 +96,6 @@
                                 </div>
                                 <input type="hidden" class="form-control" name="cidade"/>
                                 <input type="hidden" class="form-control" name="estado"/>
-    
-                                <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <select name="zona" class="form-control" required>
-                                        <option value="5" selected>Zona </option>
-                                        <option value="1">Norte</option>
-                                        <option value="2">Sul</option>
-                                        <option value="3">Leste</option>
-                                        <option value="4">Oeste</option>
-                                        <option value="5">Outras</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                    <textarea name="observacao" class="form-control" rows="1" placeholder="Observações"></textarea>
-                                </div>
                                 
                                 <div class="col-12 col-md-12 col-lg-12 mb-3">
                                     <button class="btn btn-success d-grid w-100" type="submit">Salvar</button>
