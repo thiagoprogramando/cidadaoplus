@@ -10,7 +10,6 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_lider');
-            $table->foreign('id_lider')->references('id')->on('users');
             $table->unsignedBigInteger('id_grupo');
             $table->foreign('id_grupo')->references('id')->on('grupo');
 
