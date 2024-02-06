@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>CidadãoPlus - {{ Auth::user()->nome }}</title>
+        <title>#Tô com Kleber - {{ Auth::user()->nome }}</title>
 
         <link rel="icon" type="image/x-icon" href="{{ asset('template/img/favicon/favicon.ico') }}"/>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -33,7 +33,7 @@
                 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                     <div class="app-brand demo">
                         <a href="{{ route('app') }}" class="app-brand-link">
-                            <span class="app-brand-text demo menu-text fw-bolder ms-2">CIDADÃOPLUS</span>
+                            <span class="app-brand-text demo menu-text fw-bolder ms-2">#Tô com Kleber</span>
                         </a>
 
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
