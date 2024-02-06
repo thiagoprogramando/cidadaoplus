@@ -66,7 +66,7 @@ class UserController extends Controller {
         }
 
         $alphas = User::whereIn('tipo', [1, 2])->get();
-        $grupos = Grupo::all();
+        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
         return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas, 'grupos' => $grupos]);
     }
@@ -93,6 +93,10 @@ class UserController extends Controller {
 
         if ($request->filled('tipo')) {
             $query->where('tipo', $request->input('tipo'));
+        }
+
+        if ($request->filled('id_grupo')) {
+            $query->where('id_grupo', $request->input('id_grupo'));
         }
 
         if ($request->filled('sexo')) {

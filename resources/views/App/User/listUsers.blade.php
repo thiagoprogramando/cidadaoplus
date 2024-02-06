@@ -134,6 +134,14 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-12 col-md-12 col-lg-12 mb-3">
+                                <select name="id_grupo" class="form-control">
+                                    <option value="{{ Auth::user()->id }}" selected>Grupo </option>
+                                    @foreach ($grupos as $grupo)
+                                        <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="tipo" class="form-control">
                                     <option value="" selected>Tipo</option>
