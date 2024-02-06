@@ -89,10 +89,10 @@
                         @csrf
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_lider" class="form-control" required>
-                                    <option value="0" selected>Responsável</option>
-                                    @foreach ($alphas as $user)
-                                        <option value="{{ $user->id }}">{{ $user->nome }}</option>
+                                <select name="id_lider" class="form-control" @if(Auth::user()->type != 1) disabled @endif>
+                                    <option value="{{ Auth::user()->id }}" selected>Liderança </option>
+                                    @foreach ($alphas as $alpha)
+                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
