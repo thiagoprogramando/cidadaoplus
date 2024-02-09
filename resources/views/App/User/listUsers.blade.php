@@ -25,7 +25,7 @@
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
-                                    <th class="d-none">Identificador Líder</th>
+                                    <th class="d-none">Identificador Apoiador</th>
                                     <th>Nome</th>
                                     <th class="d-none">D. Nascimento</th>
                                     <th>Sexo</th>
@@ -40,7 +40,7 @@
                                     <th class="d-none">Cidade</th>
                                     <th class="d-none">Estado</th>
 
-                                    <th>Líder</th>
+                                    <th>Apoiador</th>
                                     <th>Grupo</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Opções</th>
@@ -127,8 +127,8 @@
                                 <input type="text" class="form-control" name="dataNasc" oninput="mascaraData(this)" placeholder="Data Nascimento:"/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_lider" class="form-control" @if(Auth::user()->type != 1) disabled @endif>
-                                    <option value="{{ Auth::user()->id }}" selected>Liderança </option>
+                                <select name="id_lider" class="form-control">
+                                    <option value="{{ Auth::user()->id }}" selected>Apoiador</option>
                                     @foreach ($alphas as $alpha)
                                         <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach
@@ -136,7 +136,7 @@
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <select name="id_grupo" class="form-control">
-                                    <option value="{{ Auth::user()->id }}" selected>Grupo </option>
+                                    <option value="" selected>Grupo </option>
                                     @foreach ($grupos as $grupo)
                                         <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
                                     @endforeach
@@ -145,8 +145,8 @@
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="tipo" class="form-control">
                                     <option value="" selected>Tipo</option>
-                                    <option value="1">Master</option>
-                                    <option value="2">Liderança</option>
+                                    @if (Auth::user()->tipo == 1) <option value="1">Master</option> @endif
+                                    <option value="2">Apoiador</option>
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>
@@ -159,13 +159,34 @@
                                 </select>
                             </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <select name="zona" class="form-control">
-                                    <option value="" selected>Zona</option>
-                                    <option value="1">Norte</option>
-                                    <option value="2">Sul</option>
-                                    <option value="3">Leste</option>
-                                    <option value="4">Oeste</option>
-                                    <option value="5">Outras</option>
+                                <select name="profissao" class="form-control">
+                                    <option value="0" selected>Profissão</option>
+                                    <option value="advogado">Advogado</option>
+                                    <option value="arquiteto">Arquiteto</option>
+                                    <option value="assistente_social">Assistente Social</option>
+                                    <option value="biologo">Biólogo</option>
+                                    <option value="chef_de_cozinha">Chef de Cozinha</option>
+                                    <option value="dentista">Dentista</option>
+                                    <option value="designer_grafico">Designer Gráfico</option>
+                                    <option value="enfermeiro">Enfermeiro</option>
+                                    <option value="engenheiro_civil">Engenheiro Civil</option>
+                                    <option value="escritor">Escritor</option>
+                                    <option value="fisioterapeuta">Fisioterapeuta</option>
+                                    <option value="geologo">Geólogo</option>
+                                    <option value="historiador">Historiador</option>
+                                    <option value="jornalista">Jornalista</option>
+                                    <option value="medico">Médico</option>
+                                    <option value="musico">Músico</option>
+                                    <option value="nutricionista">Nutricionista</option>
+                                    <option value="odontologo">Odontólogo</option>
+                                    <option value="piloto">Piloto</option>
+                                    <option value="psicologo">Psicólogo</option>
+                                    <option value="quimico">Químico</option>
+                                    <option value="radiologista">Radiologista</option>
+                                    <option value="sociologo">Sociólogo</option>
+                                    <option value="tecnico_de_informatica">Técnico de Informática</option>
+                                    <option value="veterinario">Veterinário</option>
+                                    <option value="web_designer">Web Designer</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">

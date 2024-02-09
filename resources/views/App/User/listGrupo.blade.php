@@ -25,7 +25,7 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>Código</th>
-                                    <th>Líder</th>
+                                    <th>Apoiador</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
                             </thead>
@@ -38,6 +38,7 @@
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteGrupo{{ $grupo->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
                                             <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}/{{ $grupo->id }}" id="indicationLink" href="#" class="btn btn-outline-info"> <i class="tf-icons bx bx-copy"></i> </a>
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalQrGrupo{{ $grupo->id }}"> <i class="tf-icons bx bx-qr"></i> </button>
                                         </td>
                                     </tr>
 
@@ -67,6 +68,23 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="modal fade" id="modalQrGrupo{{ $grupo->id }}" aria-labelledby="modalQrGrupo{{ $grupo->id }}" tabindex="-1" style="display: none" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalQrGrupo{{ $grupo->id }}">QR CODE</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                 <div class="modal-body">
+                                                    <center><a class="qrcode" href="#" class="text-info" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ $grupo->id_lider }}/{{ $grupo->id }}"></a></center>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> Fechar </button>
+                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </tbody>
                         </table>
@@ -89,11 +107,13 @@
                         @csrf
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_lider" class="form-control" @if(Auth::user()->type != 1) disabled @endif>
-                                    <option value="{{ Auth::user()->id }}" selected>Liderança </option>
-                                    @foreach ($alphas as $alpha)
-                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
-                                    @endforeach
+                                <select name="id_lider" class="form-control">
+                                    <option value="{{ Auth::user()->id }}" selected>Apoiador </option>
+                                    @if(Auth::user()->type == 1)
+                                        @foreach ($alphas as $alpha)
+                                            <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-12 col-md-12 col-md-12 mb-3">

@@ -85,7 +85,7 @@
                                 </select>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input name="password" class="form-control" placeholder="Confirme sua senha:" required></input>
+                                <input type="password" name="password" class="form-control" placeholder="Confirme sua senha:" required>
                             </div>
                         </div>
                     </div>

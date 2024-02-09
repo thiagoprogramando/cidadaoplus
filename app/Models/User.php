@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable {
     use HasApiTokens, HasFactory, Notifiable;
@@ -47,7 +49,7 @@ class User extends Authenticatable {
     ];
 
     public function getTypeAttribute() {
-        return $this->attributes['tipo'] == 1 ? 'Master' : ($this->attributes['tipo'] == 2 ? 'Liderança' : 'Eleitor');
+        return $this->attributes['tipo'] == 1 ? 'Master' : ($this->attributes['tipo'] == 2 ? 'Apoiador' : ($this->attributes['tipo'] == 4 ? 'Coordenador' : 'Eleitor'));
     }
 
     public function getSexualidadeAttribute() {
@@ -61,5 +63,23 @@ class User extends Authenticatable {
     public function grupo() {
         return $this->belongsTo(Grupo::class, 'id_grupo');
     }
+
+    public function getDataFormatadaAttribute() {
+        if ($this->dataNasc) {
+            return Carbon::parse($this->dataNasc)->format('d-m-Y');
+        }
+        
+        return null;
+    }
+
+    public function getWhatsappFormatadoAttribute() {
+        if ($this->whatsapp) {
+            $numero = Str::of($this->whatsapp)->replaceMatches('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3');
+            return $numero;
+        }
+        
+        return null;
+    }
+
     
 }

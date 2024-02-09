@@ -31,7 +31,7 @@ return new class extends Migration {
             $table->string('cidade')->nullable();
             $table->string('estado')->nullable();
 
-            $table->integer('tipo'); // 1 - Master 2 - Liderança 3 - Eleitor
+            $table->integer('tipo'); // 1 - Master 2 - Liderança 3 - Eleitor 4 - Coordenador
             $table->string('password')->nullable();
             
             $table->timestamps();

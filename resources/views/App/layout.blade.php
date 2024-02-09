@@ -59,13 +59,14 @@
                               <div>Eleitores</div>
                             </a>
                         </li>
-                        @if (Auth::user()->tipo == 1)
+                        
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-user-voice"></i>
-                                <div>Liderança</div>
+                                <div>Apoiadores</div>
                                 </a>
                             </li>
+                        @if (Auth::user()->tipo == 1)
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -240,5 +241,46 @@
         <script src="{{ asset('template/js/mask.js') }}"></script>
         <script src="{{ asset('ckeditor/build/ckeditor.js') }}"></script>
 		<script src="{{ asset('ckeditor/script.js') }} "></script>
+
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var elementosQrCode = document.querySelectorAll('.qrcode');
+
+                elementosQrCode.forEach(function(elemento) {
+                    var link = elemento.getAttribute("data-link");
+                    var qrcode = new QRCode(elemento, {
+                        text: link,
+                        width: 128,
+                        height: 128
+                    });
+                    elemento.href = link;
+                });
+
+                var qrCodeLinks = document.querySelectorAll(".qrcode");
+
+                qrCodeLinks.forEach(function(linkElement) {
+                    linkElement.addEventListener("click", function(event) {
+                        event.preventDefault();
+
+                        var link = linkElement.getAttribute("data-link");
+
+                        // Criar o QR Code usando a biblioteca html2canvas
+                        html2canvas(linkElement).then(canvas => {
+                            // Converter o canvas em um URL de imagem
+                            var imageData = canvas.toDataURL("image/png");
+
+                            // Criar um link temporário para o download
+                            var downloadLink = document.createElement("a");
+                            downloadLink.href = imageData;
+                            downloadLink.download = "qrcode.png";
+                            downloadLink.click();
+                        });
+                    });
+                });
+            });
+        </script>
+        
     </body>
 </html>

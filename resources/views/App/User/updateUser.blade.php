@@ -20,7 +20,7 @@
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:" value="{{ $user->nome }}"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" value="{{ $user->dataNasc }}" oninput="mascaraData(this)"/>
+                                <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" oninput="mascaraData(this)" value="{{ $user->DataFormatada }}"/>
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
@@ -66,7 +66,7 @@
                                 <select name="tipo" class="form-control">
                                     <option value="{{ $user->tipo }}" selected>{{ $user->Type }}</option>
                                     <option value="1">Master</option>
-                                    <option value="2">Liderança</option>
+                                    <option value="2">Apoiador</option>
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>

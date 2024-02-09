@@ -66,14 +66,14 @@
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="tipo" class="form-control" required>
                                     <option value="3" selected>Tipo</option>
-                                    <option value="1">Master</option>
-                                    <option value="2">Liderança</option>
+                                    @if (Auth::user()->tipo == 1) <option value="1">Master</option> @endif
+                                    <option value="2">Apoiador</option>
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="id_lider" class="form-control" required>
-                                    <option value="0" selected>Liderança </option>
+                                    <option value="{{ Auth::user()->id }}" selected>Apoiador</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->nome }}</option>
                                     @endforeach
@@ -94,16 +94,16 @@
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="number" class="form-control" name="cep" placeholder="CEP:" onblur="consultaCEP()"/>
+                                <input type="number" class="form-control" name="cep" placeholder="CEP:" onblur="consultaCEP()" required/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="logradouro" placeholder="Endereço:"/>
+                                <input type="text" class="form-control" name="logradouro" placeholder="Endereço:" required/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="numero" placeholder="N°:"/>
+                                <input type="text" class="form-control" name="numero" placeholder="N°:" required/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="bairro" placeholder="Bairro:"/>
+                                <input type="text" class="form-control" name="bairro" placeholder="Bairro:" required/>
                             </div>
                             <input type="hidden" class="form-control" name="cidade"/>
                             <input type="hidden" class="form-control" name="estado"/>

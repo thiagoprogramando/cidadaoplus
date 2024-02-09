@@ -3,15 +3,17 @@
     <div class="container-xxl">
         <div class="container-p-y">
             <div class="authentication-inner">
+
+                <div class="mb-3">
+                    <div class="justify-content-center">
+                        <a href="https://www.instagram.com/kleberfernandesvereador/" target="_blank">
+                            <img style="width: 100%;" src="{{ asset('template/img/background/tocomkleber.png') }}">
+                        </a>
+                    </div>
+                </div>
                 
                 <div class="card">
                     <div class="card-body">
-                        
-                        <div class="app-brand justify-content-center">
-                            <a href="#" class="app-brand-link gap-2">
-                                <span class="app-brand-text demo text-body fw-bolder">CidadãoPlus</span>
-                            </a>
-                        </div>
                         
                         <h4 class="mb-2">Bem-vindo(a)! 👋</h4>
                         <p class="mb-4">Preencha todas às informações abaixo.</p>

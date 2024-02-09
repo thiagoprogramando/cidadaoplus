@@ -107,7 +107,7 @@
 
 .image-container {
   height: 100%; /* Garante que a altura da imagem seja igual à altura do contêiner */
-  background-image: url('../img/background/background_1112.jpg');
+  background-image: url('../img/background/futebol.jpg');
   background-size: cover; /* Cobrir todo o espaço sem distorcer a imagem */
   background-position: center; /* Centralizar a imagem */
   clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);

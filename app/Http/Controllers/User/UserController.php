@@ -60,12 +60,12 @@ class UserController extends Controller {
     public function listUser($tipo = null) {
 
         if($tipo) {
-            $users = Auth::user()->tipo == 1 ? User::where('tipo', $tipo)->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->get();
+            $users = Auth::user()->tipo === 1 ? User::where('tipo', $tipo)->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->get();
         } else {
-            $users = Auth::user()->tipo == 1 ? User::all() : User::where('id_lider', Auth::user()->id)->get();
+            $users = Auth::user()->tipo === 1 ? User::all() : User::where('id_lider', Auth::user()->id)->get();
         }
 
-        $alphas = User::whereIn('tipo', [1, 2])->get();
+        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
         $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
         return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas, 'grupos' => $grupos]);
@@ -75,15 +75,15 @@ class UserController extends Controller {
 
         $query = User::query();
 
-        if ($request->filled('nome')) {
+        if ($request->input('nome')) {
             $query->where('nome', 'like', '%' . $request->input('nome') . '%');
         }
 
-        if ($request->filled('dataNasc')) {
+        if ($request->input('dataNasc')) {
             $query->where('dataNasc', '=', Carbon::parse($request->input('dataNasc')));
         }
 
-        if ($request->filled('id_lider')) {
+        if ($request->input('id_lider')) {
             $query->where('id_lider', $request->input('id_lider'));
         }
 
@@ -91,35 +91,37 @@ class UserController extends Controller {
             $query->where('id_lider', Auth::user()->id);
         }
 
-        if ($request->filled('tipo')) {
+        if ($request->input('tipo')) {
             $query->where('tipo', $request->input('tipo'));
         }
 
-        if ($request->filled('id_grupo')) {
+        if ($request->input('id_grupo')) {
             $query->where('id_grupo', $request->input('id_grupo'));
         }
 
-        if ($request->filled('sexo')) {
+        if ($request->input('sexo')) {
             $query->where('sexo', $request->input('sexo'));
         }
 
-        if ($request->filled('profissao')) {
+        if ($request->input('profissao')) {
             $query->where('profissao', $request->input('profissao'));
         }
 
-        if ($request->filled('cep')) {
+        if ($request->input('cep')) {
             $query->where('cep', $request->input('cep'));
         }
 
         $users = $query->get();
+        
         $alphas = User::whereIn('tipo', [1, 2])->get();
+        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas]);
+        return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas, 'grupos' => $grupos]);
     }
 
     public function registrerUser($tipo) {
 
-        $users = User::whereIn('tipo', [1, 2])->get();
+        $users = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
         return view('App.User.registrerUser', ['tipo' => $tipo, 'users' => $users]);
     }
 
@@ -159,6 +161,7 @@ class UserController extends Controller {
         $user->sexo         = $request->sexo;
         $user->tipo         = $request->tipo;
         $user->email        = $request->email;
+        $user->profissao    = $request->profissao;
         $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
         $user->instagram    = $request->instagram;
         $user->facebook     = $request->facebook;
