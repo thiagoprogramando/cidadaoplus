@@ -69,7 +69,7 @@
 
                         <li class="menu-item">
                             <a href="{{ route('listUser', ['tipo' => 4]) }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-user-voice"></i>
+                                <i class="menu-icon tf-icons bx bx-user-detail"></i>
                                 <div>Coordenadores</div>
                             </a>
                         </li>
