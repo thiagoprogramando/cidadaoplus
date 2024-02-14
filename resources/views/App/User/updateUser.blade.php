@@ -75,7 +75,9 @@
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="id_lider" class="form-control">
-                                    <option value="{{ $user->id_lider }}" selected>{{ isset($user->lider->nome) }}</option>
+                                    <option value="{{ $user->id_lider }}" selected>
+                                        @if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif
+                                    </option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->nome }}</option>
                                     @endforeach
