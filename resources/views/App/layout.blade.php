@@ -60,12 +60,20 @@
                             </a>
                         </li>
                         
-                            <li class="menu-item">
-                                <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
+                        <li class="menu-item">
+                            <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-user-voice"></i>
                                 <div>Apoiadores</div>
-                                </a>
-                            </li>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('listUser', ['tipo' => 4]) }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-user-voice"></i>
+                                <div>Coordenadores</div>
+                            </a>
+                        </li>
+
                         @if (Auth::user()->tipo == 1)
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
@@ -100,14 +108,14 @@
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Integrações</span></li>
                             <li class="menu-item">
                                 <a href="{{ route('listWhatsapp') }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
-                                <div>WhatsApp</div>
+                                    <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
+                                    <div>WhatsApp</div>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="#" class="menu-link">
-                                <i class="menu-icon tf-icons bx bxs-file-import"></i>
-                                <div>TSE</div>
+                                    <i class="menu-icon tf-icons bx bxs-file-import"></i>
+                                    <div>TSE</div>
                                 </a>
                             </li>
                         @endif
