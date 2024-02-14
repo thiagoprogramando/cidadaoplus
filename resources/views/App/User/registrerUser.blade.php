@@ -66,7 +66,10 @@
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="tipo" class="form-control" required>
                                     <option value="3" selected>Tipo</option>
-                                    @if (Auth::user()->tipo == 1) <option value="1">Master</option> @endif
+                                    @if (Auth::user()->tipo == 1) 
+                                        <option value="1">Master</option>  
+                                        <option value="4">Coordenador</option>
+                                    @endif
                                     <option value="2">Apoiador</option>
                                     <option value="3">Eleitor</option>
                                 </select>
