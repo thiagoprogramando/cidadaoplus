@@ -34,7 +34,7 @@
                                     <tr>
                                         <td>{{ $grupo->nome }}</td>
                                         <td><strong>{{ $grupo->code }}</strong> </td>
-                                        <td>{{ $grupo->lider->nome }}</td>
+                                        <td>{{ $grupo->lider()->nome }}</td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteGrupo{{ $grupo->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
                                             <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}/{{ $grupo->id }}" id="indicationLink" href="#" class="btn btn-outline-info"> <i class="tf-icons bx bx-copy"></i> </a>
