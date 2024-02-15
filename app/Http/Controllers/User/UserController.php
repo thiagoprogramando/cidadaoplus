@@ -232,9 +232,9 @@ class UserController extends Controller {
     public function viewUser($id) {
 
         $user = User::where('id', $id)->first();
-        $users = User::whereIn('tipo', [1, 2])->get();
+        $alphas = User::whereIn('tipo', [1, 2, 4])->get();
         if($user) {
-            return view('App.User.updateUser', ['user' => $user, 'users' => $users]);
+            return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');

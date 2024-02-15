@@ -78,8 +78,8 @@
                                     <option value="{{ $user->id_lider }}" selected>
                                         @if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif
                                     </option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->nome }}</option>
+                                    @foreach ($alphas as $alpha)
+                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
