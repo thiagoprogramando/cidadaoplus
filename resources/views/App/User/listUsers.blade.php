@@ -160,7 +160,10 @@
                             </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="profissao" class="form-control">
-                                    <option value="0" selected>Profissão</option>
+                                    <option value="---" selected>Profissão</option>
+                                    <option value="outros">Outros</option>
+                                    <option value="do_lar">Do lar</option>
+                                    <option value="autonomo">Autônomo</option>
                                     <option value="advogado">Advogado</option>
                                     <option value="arquiteto">Arquiteto</option>
                                     <option value="assistente_social">Assistente Social</option>

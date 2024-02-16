@@ -41,7 +41,7 @@ class UserController extends Controller {
                 $user->whatsapp = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
             }
             if($request->email) {
-                $user->email = $request->email;
+                $user->email = strtolower($request->email);
             }
             if($request->password) {
                 $user->password = bcrypt($request->password);
@@ -160,7 +160,7 @@ class UserController extends Controller {
         $user->dataNasc     = Carbon::parse($request->dataNasc);
         $user->sexo         = $request->sexo;
         $user->tipo         = $request->tipo;
-        $user->email        = $request->email;
+        $user->email        = strtolower($request->email);
         $user->profissao    = $request->profissao;
         $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
         $user->instagram    = $request->instagram;
@@ -209,7 +209,7 @@ class UserController extends Controller {
         $user->sexo         = $request->sexo;
         $user->profissao    = $request->profissao;
         $user->tipo         = 3;
-        $user->email        = $request->email;
+        $user->email        = strtolower($request->email);
         $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
         $user->instagram    = $request->instagram;
         $user->facebook     = $request->facebook;
@@ -250,7 +250,7 @@ class UserController extends Controller {
             $user->dataNasc     = Carbon::parse($request->dataNasc);
             $user->sexo         = $request->sexo;
             $user->tipo         = $request->tipo;
-            $user->email        = $request->email;
+            $user->email        = strtolower($request->email);
             $user->whatsapp     = str_replace(['.', ',', '-', '(', ')'], '', $request->whatsapp);
             $user->instagram    = $request->instagram;
             $user->facebook     = $request->facebook;
