@@ -85,10 +85,6 @@ class UserController extends Controller {
             $query->where('id_lider', $request->input('id_lider'));
         }
 
-        if(Auth::user()->tipo != 1) {
-            $query->where('id_lider', Auth::user()->id);
-        }
-
         if ($request->input('tipo')) {
             $query->where('tipo', $request->input('tipo'));
         }
@@ -107,7 +103,7 @@ class UserController extends Controller {
 
         $users = $query->get();
         
-        $alphas = User::whereIn('tipo', [1, 2])->get();
+        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
 
         return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas]);
     }

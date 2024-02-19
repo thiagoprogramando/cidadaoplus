@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
                                     <select name="profissao" class="form-control">
-                                        <option selected>Profissão</option>
+                                        <option value="" selected>Profissão</option>
                                         <option value="outros">Outros</option>
                                         <option value="do_lar">Do lar</option>
                                         <option value="autonomo">Autônomo</option>
