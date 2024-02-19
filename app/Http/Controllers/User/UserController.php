@@ -242,11 +242,6 @@ class UserController extends Controller {
 
     public function updateUser(Request $request) {
 
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if($user) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
-        }
-
         if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
             return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta! Formato correto: DD-MM-AAAA');
         }
