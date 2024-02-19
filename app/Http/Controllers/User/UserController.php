@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
-use App\Models\Grupo;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -66,9 +65,8 @@ class UserController extends Controller {
         }
 
         $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas, 'grupos' => $grupos]);
+        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
     }
 
     public function filterUser(Request $request) {
@@ -95,10 +93,6 @@ class UserController extends Controller {
             $query->where('tipo', $request->input('tipo'));
         }
 
-        if ($request->input('id_grupo')) {
-            $query->where('id_grupo', $request->input('id_grupo'));
-        }
-
         if ($request->input('sexo')) {
             $query->where('sexo', $request->input('sexo'));
         }
@@ -114,9 +108,8 @@ class UserController extends Controller {
         $users = $query->get();
         
         $alphas = User::whereIn('tipo', [1, 2])->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas, 'grupos' => $grupos]);
+        return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas]);
     }
 
     public function registrerUser($tipo) {
@@ -154,6 +147,10 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
+        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
+            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta!');
+        }
+
         $user               = new User();
         $user->id_lider     = $request->id_lider;
         $user->nome         = $request->nome;
@@ -183,7 +180,7 @@ class UserController extends Controller {
     public function createUserExternal(Request $request) {
 
         $rules = [
-            'nome'      => 'required|string',
+            'nome'      => 'required',
             'whatsapp'  => 'required'
         ];
 
@@ -200,6 +197,10 @@ class UserController extends Controller {
         $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
         if($user) {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+        }
+
+        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
+            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta!');
         }
 
         $user               = new User();
@@ -219,7 +220,6 @@ class UserController extends Controller {
         $user->bairro       = $request->bairro;
         $user->cidade       = $request->cidade;
         $user->estado       = $request->estado;
-        $user->id_grupo     = $request->id_grupo;
         $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
 
         if($user->save()) {
@@ -242,7 +242,16 @@ class UserController extends Controller {
 
     public function updateUser(Request $request) {
 
-        $user               = User::where('id', $request->id)->first();
+        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
+        if($user) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+        }
+
+        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
+            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta! Formato correto: DD-MM-AAAA');
+        }
+
+        $user = User::where('id', $request->id)->first();
         if($user) {
             $user->id_lider     = $request->id_lider;
             $user->nome         = $request->nome;
@@ -303,49 +312,4 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Senha inválida!');
         }
     }
-
-    public function listGrupo( ) {
-
-        $alphas = User::whereIn('tipo', [1, 2])->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
-
-        return view('App.User.listGrupo', ['alphas' => $alphas, 'grupos' => $grupos]);
-    }
-
-    public function createGrupo(Request $request) {
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $grupo = new Grupo();
-            $grupo->nome        = $request->nome;
-            $grupo->code        = strtolower(str_replace(' ', '-', $request->nome));
-            $grupo->id_lider    = $request->id_lider;
-            if($grupo->save()) {
-                return redirect()->back()->with('success', 'Grupo criado com Sucesso!');
-            }
-
-            return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-        } else {
-            return redirect()->back()->with('error', 'Senha inválida!');
-        }
-    }
-
-    public function deleteGrupo(Request $request) {
-
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $grupo = Grupo::find($request->id);
-            if ($grupo) {
-
-                $grupo->delete();
-                return redirect()->back()->with('success', 'Grupo excluído com sucesso!');
-            } else {
-                return redirect()->back()->with('error', 'Não encontramos dados do Grupo, tente novamente mais tarde!');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Senha incorreta!');
-        }
-    }
-
 }

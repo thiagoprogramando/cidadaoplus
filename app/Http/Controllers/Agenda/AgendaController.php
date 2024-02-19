@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Agenda;
 use App\Http\Controllers\Controller;
 
 use App\Models\Agenda;
-use App\Models\Grupo;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -19,9 +18,8 @@ class AgendaController extends Controller {
 
         $events = Auth::user()->tipo == 1 ? Agenda::all() : Agenda::where('id_lider', Auth::user()->id)->orWhere('id_criador', Auth::user()->id)->get();
         $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 3])->get() : User::whereIn('tipo', [1, 2, 3])->where('id_lider', Auth::user()->id)->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
-        return view('App.Agenda.listEvent', ['events' => $events, 'alphas' => $alphas, 'grupos' => $grupos]);
+        return view('App.Agenda.listEvent', ['events' => $events, 'alphas' => $alphas]);
     }
 
     public function registrerEvent(Request $request) {
@@ -29,7 +27,6 @@ class AgendaController extends Controller {
         $event              = new Agenda();
         $event->id_criador  = Auth::user()->id;
         $event->id_lider    = $request->id_lider;
-        $event->id_grupo    = $request->id_grupo;
         $event->nome        = $request->nome;
         $event->descricao   = $request->descricao;
         $event->data        = Carbon::parse($request->data);
@@ -62,15 +59,10 @@ class AgendaController extends Controller {
             $query->where('id_lider', $request->input('id_lider'));
         }
 
-        if ($request->filled('id_grupo')) {
-            $query->where('id_grupo', $request->input('id_grupo'));
-        }
-
         $events = $query->get();
         $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 3])->get() : User::whereIn('tipo', [1, 2, 3])->where('id_lider', Auth::user()->id)->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
 
-        return view('App.Agenda.listEvent', ['events' => $events, 'alphas' => $alphas, 'grupos' => $grupos]);
+        return view('App.Agenda.listEvent', ['events' => $events, 'alphas' => $alphas]);
     }
 
     public function updateEvent(Request $request) {
@@ -80,7 +72,6 @@ class AgendaController extends Controller {
             $event->nome        = $request->nome;
             $event->descricao   = $request->descricao;
             $event->id_lider    = $request->id_lider;
-            $event->id_grupo    = $request->id_grupo;
             $event->data        =  Carbon::parse($request->data);
             $event->hora        = $request->hora;
 

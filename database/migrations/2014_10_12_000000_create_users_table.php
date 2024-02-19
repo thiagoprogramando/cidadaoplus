@@ -10,8 +10,6 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_lider')->nullable();
-            $table->unsignedBigInteger('id_grupo')->nullable();
-            $table->foreign('id_grupo')->references('id')->on('grupo');
 
             $table->string('nome');
             $table->string('foto')->nullable();

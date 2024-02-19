@@ -29,7 +29,6 @@
                                     <th>Nome</th>
                                     <th>Data | Hora</th>
                                     <th>Apoiador</th>
-                                    <th>Grupo</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
                             </thead>
@@ -39,7 +38,6 @@
                                         <td><strong>{{ $event->nome }}</strong> </td>
                                         <td>{{ \Carbon\Carbon::parse($event->data)->format('d/m/Y') }} | {{ $event->hora }} </td>
                                         <td>{{ $event->lider?->nome }}</td>
-                                        <td>{{ $event->grupo?->nome }}</td>
                                         <td class="text-center">
                                             @if (Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
                                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $event->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
@@ -79,14 +77,6 @@
                                                                     <option value="{{ Auth::user()->tipo }}">{{ Auth::user()->nome }}</option>
                                                                     @foreach ($alphas as $alpha)
                                                                         <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                                                <select name="id_grupo" class="form-control">
-                                                                    <option value="{{ $event->id_grupo }}" selected>Grupo </option>
-                                                                    @foreach ($grupos as $grupo)
-                                                                        <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -144,7 +134,7 @@
                                                             </div>
                                                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                                                 <center>
-                                                                    <a class="qrcode" href="#" class="text-info" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ $event->id_lider }}/{{ $event->id_grupo }}"></a>
+                                                                    <a class="qrcode" href="#" class="text-info" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ $event->id_lider }}"></a>
                                                                 </center>
                                                             </div>
                                                         </div>
@@ -191,17 +181,9 @@
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <select name="id_lider" class="form-control">
-                                    <option value="{{ Auth::user()->tipo }}" selected>Apoiador</option>
+                                    <option value="{{ Auth::user()->id }}" selected>Apoiador</option>
                                     @foreach ($alphas as $alpha)
                                         <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_grupo" class="form-control">
-                                    <option value="" selected>Grupo </option>
-                                    @foreach ($grupos as $grupo)
-                                        <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -242,14 +224,6 @@
                                     <option value="{{ Auth::user()->tipo }}">{{ Auth::user()->nome }}</option>
                                     @foreach ($alphas as $alpha)
                                         <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_grupo" class="form-control">
-                                    <option value="" selected>Grupo </option>
-                                    @foreach ($grupos as $grupo)
-                                        <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -41,7 +41,6 @@
                                     <th class="d-none">Estado</th>
 
                                     <th>Apoiador</th>
-                                    <th>Grupo</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -65,7 +64,6 @@
                                         <td class="d-none">{{ $user->cidade }}</td>
                                         <td class="d-none">{{ $user->estado }}</td>
                                         <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
-                                        <td>@if(isset($user->grupo->nome)) {{ $user->grupo->nome }} @else --- @endif</td>
                                         <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->Type }}</span></td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $user->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
@@ -134,14 +132,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_grupo" class="form-control">
-                                    <option value="" selected>Grupo </option>
-                                    @foreach ($grupos as $grupo)
-                                        <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="tipo" class="form-control">
                                     <option value="" selected>Tipo</option>
@@ -160,7 +150,7 @@
                             </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="profissao" class="form-control">
-                                    <option value="" selected>Profissão</option>
+                                    <option selected>Profissão</option>
                                     <option value="outros">Outros</option>
                                     <option value="do_lar">Do lar</option>
                                     <option value="autonomo">Autônomo</option>

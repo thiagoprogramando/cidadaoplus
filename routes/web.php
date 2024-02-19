@@ -7,6 +7,8 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Whatsapp\WhatsappController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Middleware\CheckUserType;
+
 Route::get('/', function () {
     return view('index');
 })->name('login');
@@ -18,7 +20,7 @@ Route::post('/createUserExternal', [UserController::class, 'createUserExternal']
 
 Route::post('/logon', [AcessController::class, 'logon'])->name('logon');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'check.type:3'])->group(function () {
 
     Route::get('/app', [DashboardController::class, 'app'])->name('app');
 

@@ -60,10 +60,6 @@ class User extends Authenticatable {
         return $this->belongsTo(User::class, 'id_lider');
     }
 
-    public function grupo() {
-        return $this->belongsTo(Grupo::class, 'id_grupo');
-    }
-
     public function getDataFormatadaAttribute() {
         if ($this->dataNasc) {
             return Carbon::parse($this->dataNasc)->format('d-m-Y');

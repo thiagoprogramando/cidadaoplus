@@ -34,8 +34,4 @@ class Agenda extends Model {
     public function lider() {
         return $this->belongsTo(User::class, 'id_lider');
     }
-
-    public function grupo() {
-        return $this->belongsTo(Grupo::class, 'id_grupo');
-    }
 }

@@ -87,16 +87,16 @@
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="email" class="form-control" name="email" placeholder="Email: (Opcional)"/>
+                                <input type="email" class="form-control" name="email" placeholder="Email:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <input type="text" class="form-control" name="whatsapp" placeholder="WhatsApp:" oninput="mascaraTelefone(this)" required/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="instagram" placeholder="Instagram: (Opcional)"/>
+                                <input type="text" class="form-control" name="instagram" placeholder="Instagram:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="facebook" placeholder="Facebook: (Opcional)"/>
+                                <input type="text" class="form-control" name="facebook" placeholder="Facebook:"/>
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">

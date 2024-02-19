@@ -11,7 +11,6 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('id_criador');
             $table->unsignedBigInteger('id_lider')->nullable();
-            $table->unsignedBigInteger('id_grupo')->nullable();
 
             $table->string('nome');
             $table->longText('descricao');

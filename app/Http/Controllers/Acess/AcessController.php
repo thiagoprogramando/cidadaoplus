@@ -13,6 +13,10 @@ class AcessController extends Controller {
     
     public function logon(Request $request) {
 
+        if(empty($request->email) || empty($request->password)) {
+            return redirect()->back()->with('error', 'Informe Email e Senha!');
+        }
+
         $credentials = $request->only(['email', 'password']);
         $credentials['password'] = $credentials['password'];
         if (Auth::attempt($credentials)) {
