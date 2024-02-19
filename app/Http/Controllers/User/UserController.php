@@ -147,6 +147,11 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
+        $user = User::where('email', $request->email)->first();
+        if($user) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
+        }
+
         if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
             return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta!');
         }
@@ -197,6 +202,11 @@ class UserController extends Controller {
         $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
         if($user) {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if($user) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
         }
 
         if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
