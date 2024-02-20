@@ -140,7 +140,7 @@ class UserController extends Controller {
         }
 
         $user = User::where('email', $request->email)->first();
-        if($user) {
+        if($user && !empty($request->email)) {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
         }
 
@@ -197,7 +197,7 @@ class UserController extends Controller {
         }
 
         $user = User::where('email', $request->email)->first();
-        if($user) {
+        if($user && !empty($request->email)) {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
         }
 
