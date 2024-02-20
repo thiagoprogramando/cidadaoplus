@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller {
     
@@ -120,7 +119,6 @@ class UserController extends Controller {
             'nome'      => 'required|string',
             'tipo'      => 'required',
             'id_lider'  => 'required',
-            'email'     => 'email|unique:users',
             'whatsapp'  => 'required'
         ];
 
@@ -128,8 +126,6 @@ class UserController extends Controller {
             'nome.required'     => 'O campo Nome é obrgatório!',
             'tipo.required'     => 'Informe um tipo de usuário!',
             'id_lider.required' => 'Informe um Líder!',
-            'email.email'       => 'Por favor, informe um Email válido',
-            'email.unique'      => 'Já existe uma pessoa com esse Email',
             'whatsapp.required' => 'Por favor, informe um WhatsApp!',
         ];
 
