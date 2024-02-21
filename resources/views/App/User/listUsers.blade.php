@@ -19,27 +19,46 @@
                 </div>
             </div>
 
+            <div class="row">
+
+                <div class="col-lg-3 col-md-3 col-6 mb-4">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                                <span class="fw-semibold d-block mb-1">Total de registros</span>
+                            </div>
+                            
+                            <h3 class="card-title text-white mb-2"> {{ $users->count() }} </h3>
+                            <small class="text-dark fw-semibold">
+                                Atualização em tempo real.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
             <div class="col-12">
                 <div class="card p-3"> 
-                    <div class="table-responsive text-nowrap">
+                    <div class="table-responsive">
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
                                     <th class="d-none">Identificador Apoiador</th>
                                     <th>Nome</th>
                                     <th class="d-none">D. Nascimento</th>
-                                    <th>Sexo</th>
+                                    <th class="d-none">Sexo</th>
                                     <th>Profissão</th>
                                     <th>WhatsApp</th>
                                     <th class="d-none">Email</th>
                                     <th class="d-none">instagram</th>
                                     <th class="d-none">facebook</th>
                                     <th class="d-none">CEP</th>
+                                    <th class="d-none">Endereço</th>
                                     <th class="d-none">N°</th>
                                     <th class="d-none">Bairro</th>
                                     <th class="d-none">Cidade</th>
                                     <th class="d-none">Estado</th>
-
                                     <th>Apoiador</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Opções</th>
@@ -51,7 +70,7 @@
                                         <td class="d-none">{{ $user->id_lider }}</td>
                                         <td><strong>{{ $user->nome }}</strong> </td>
                                         <td class="d-none">{{ $user->dataNasc }}</td>
-                                        <td>{{ $user->Sexualidade }}</td>
+                                        <td class="d-none">{{ $user->Sexualidade }}</td>
                                         <td>{{ $user->profissao }}</td>
                                         <td>{{ $user->whatsapp }}</td>
                                         <td class="d-none">{{ $user->email }}</td>

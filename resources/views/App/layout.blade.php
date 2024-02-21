@@ -6,7 +6,6 @@
 
         <title>#Tô com Kleber - {{ Auth::user()->nome }}</title>
 
-        <link rel="icon" type="image/x-icon" href="{{ asset('template/img/favicon/favicon.ico') }}"/>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
@@ -17,6 +16,8 @@
         <link rel="stylesheet" href="{{ asset('template/css/demo.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/apex-charts/apex-charts.css') }}"/>
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" />
+        
 
         <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
         <script src="{{ asset('template/js/config.js') }}"></script>
@@ -246,6 +247,8 @@
 
         <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 var elementosQrCode = document.querySelectorAll('.qrcode');
@@ -280,6 +283,18 @@
                             downloadLink.click();
                         });
                     });
+                });
+            });
+
+            $(document).ready( function () {
+                $('#tabela').DataTable({
+                    "paging": true,
+                    "pageLength": 25,
+                    "responsive": true,
+                    "language": {
+                        "url": "http://cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                    },
+                    "autoWidth": false
                 });
             });
         </script>
