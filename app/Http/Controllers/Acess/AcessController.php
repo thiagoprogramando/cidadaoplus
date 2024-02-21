@@ -58,7 +58,7 @@ class AcessController extends Controller {
 
             Mail::to($user->email, $user->nome)->send(new Forgout([
                 'fromName'      => 'Kleber Fernandes',
-                'fromEmail'     => 'suporte@kleberfernandes.com.br',
+                'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
                 'subject'       => 'Recuperação de Senha',
                 'message'       => 'Olá,'.$user->nome.'! Gerei um código de segurança para você redefinir sua senha de acesso, basta clicar no código e escolher uma nova senha!',
                 'code'          => $code->code

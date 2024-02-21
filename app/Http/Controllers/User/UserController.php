@@ -174,7 +174,7 @@ class UserController extends Controller {
             if(!empty($request->email)) {
                 Mail::to($request->email, $request->nome)->send(new Welcome([
                     'fromName'      => 'Kleber Fernandes',
-                    'fromEmail'     => 'suporte@kleberfernandes.com.br',
+                    'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
                     'subject'       => 'Boas vindas',
                 ]));
             }
@@ -240,7 +240,7 @@ class UserController extends Controller {
             if(!empty($request->email)) {
                 Mail::to($request->email, $request->nome)->send(new Welcome([
                     'fromName'      => 'Kleber Fernandes',
-                    'fromEmail'     => 'suporte@kleberfernandes.com.br',
+                    'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
                     'subject'       => 'Boas vindas',
                 ]));
             }
