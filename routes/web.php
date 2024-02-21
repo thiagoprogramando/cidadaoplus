@@ -13,7 +13,9 @@ Route::get('/', function () {
     return view('index');
 })->name('login');
 
-Route::get('/forgout-password/{code?}', [AcessController::class, 'forgoutPassword'])->name('forgout-password');
+Route::get('/forgout/{code?}', [AcessController::class, 'forgout'])->name('forgout');
+Route::post('/forgout-password', [AcessController::class, 'forgoutPassword'])->name('forgout-password');
+Route::post('/recoverPassword', [AcessController::class, 'recoverPassword'])->name('recoverPassword');
 
 Route::get('/cadastra-usuario/{code}/{grupo?}', [AcessController::class, 'registerUserExternal'])->name('cadastra-usuario');
 Route::post('/createUserExternal', [UserController::class, 'createUserExternal'])->name('createUserExternal');

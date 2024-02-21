@@ -14,10 +14,10 @@
                         </div>
                         
                         @if($code)
-                            <form id="formAuthentication" class="mb-3" action="#" method="POST">
+                            <form class="mb-3" action="{{ route('recoverPassword') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" name="code" placeholder="Código" value="{{ $code }}" readonly/>
+                                    <input type="text" class="form-control" name="code" placeholder="Código"/>
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control" name="password" placeholder="Nova senha:" autofocus/>
@@ -33,10 +33,10 @@
                             <h4 class="mb-2">Esqueceu algo? 🔒</h4>
                             <p class="mb-4">Não tem problema, vamos recuperar!</p>
 
-                            <form id="formAuthentication" class="mb-3" action="#" method="POST">
+                            <form class="mb-3" action="{{ route('forgout-password') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" name="email" placeholder="Email:" autofocus/>
+                                    <input type="text" class="form-control" name="whatsapp" placeholder="WhatsApp:" oninput="mascaraTelefone(this)" autofocus/>
                                 </div>
                                 <div class="mb-3">
                                     <button class="btn btn-primary d-grid w-100" type="submit">Recuperar</button>

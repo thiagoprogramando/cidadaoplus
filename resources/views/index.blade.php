@@ -40,7 +40,7 @@
                         </form>
 
                         <p class="text-center"> 
-                            <a href="{{ route('forgout-password') }}"> <small>Esqueceu a senha?</small> </a>
+                            <a href="{{ route('forgout') }}"> <small>Esqueceu a senha?</small> </a>
                         </p>
                     </div>
                 </div>
