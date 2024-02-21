@@ -48,11 +48,15 @@ class AcessController extends Controller {
             return redirect()->back()->with('error', 'Não encontramos dados relacionados ao número de telefone!');
         }
 
+        if(empty($user->email)) {
+            return redirect()->back()->with('error', 'Usuário sem Email, verifique com o suporte!');
+        }
+
         $code = new Code();
         $code->id_user = $user->id;
         if($code->save()) {
 
-            Mail::to('thiago.or.code@gmail.com', 'Thiago César')->send(new Forgout([
+            Mail::to($user->email, $user->nome)->send(new Forgout([
                 'fromName'      => 'Kleber Fernandes',
                 'fromEmail'     => 'suporte@kleberfernandes.com.br',
                 'subject'       => 'Recuperação de Senha',

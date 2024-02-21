@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
+use App\Mail\Welcome;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller {
     
@@ -168,6 +170,15 @@ class UserController extends Controller {
         $user->password     = bcrypt(str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp));
 
         if($user->save()) {
+
+            if(!empty($request->email)) {
+                Mail::to($request->email, $request->nome)->send(new Welcome([
+                    'fromName'      => 'Kleber Fernandes',
+                    'fromEmail'     => 'suporte@kleberfernandes.com.br',
+                    'subject'       => 'Boas vindas',
+                ]));
+            }
+
             return redirect()->route('listUser', ['tipo' => $request->tipo])->with('success', 'Cadastro realizado com sucesso!');
         }
         
@@ -225,7 +236,16 @@ class UserController extends Controller {
         $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
 
         if($user->save()) {
-            return redirect()->back()->with('success', 'Cadastro concluído com Sucesso!');
+
+            if(!empty($request->email)) {
+                Mail::to($request->email, $request->nome)->send(new Welcome([
+                    'fromName'      => 'Kleber Fernandes',
+                    'fromEmail'     => 'suporte@kleberfernandes.com.br',
+                    'subject'       => 'Boas vindas',
+                ]));
+            }
+
+            return redirect('https://contate.me/kleberfernandes');
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
