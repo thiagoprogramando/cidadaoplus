@@ -64,7 +64,7 @@ class AcessController extends Controller {
                 'code'          => $code->code
             ]));
 
-            return redirect()->route('forgout', ['code' => 123]);
+            return redirect()->route('forgout', ['code' => 123])->with('success', 'Foi enviado um código para o seu Email, informe-o com sua nova senha!');
         }
 
         return redirect()->back()->with('error', 'Não foi possível realizar essa operação!');
