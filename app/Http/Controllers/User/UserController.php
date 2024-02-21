@@ -60,12 +60,12 @@ class UserController extends Controller {
     public function listUser($tipo = null) {
 
         if($tipo) {
-            $users = Auth::user()->tipo === 1 ? User::where('tipo', $tipo)->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->get();
+            $users = Auth::user()->tipo === 1 ? User::where('tipo', $tipo)->orderBy('created_at', 'desc')->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         } else {
-            $users = Auth::user()->tipo === 1 ? User::all() : User::where('id_lider', Auth::user()->id)->get();
+            $users = Auth::user()->tipo === 1 ? User::all() : User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         }
 
-        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
+        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
     }
@@ -102,16 +102,16 @@ class UserController extends Controller {
             $query->where('cep', $request->input('cep'));
         }
 
-        $users = $query->get();
+        $users = $query->orderBy('created_at', 'desc')->get();
         
-        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
+        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas]);
     }
 
     public function registrerUser($tipo) {
 
-        $users = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2])->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->get();
+        $users = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2])->orderBy('created_at', 'desc')->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         return view('App.User.registrerUser', ['tipo' => $tipo, 'users' => $users]);
     }
 
@@ -254,7 +254,7 @@ class UserController extends Controller {
     public function viewUser($id) {
 
         $user = User::where('id', $id)->first();
-        $alphas = User::whereIn('tipo', [1, 2, 4])->get();
+        $alphas = User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get();
         if($user) {
             return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
         }
