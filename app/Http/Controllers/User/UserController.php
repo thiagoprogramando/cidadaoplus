@@ -202,7 +202,7 @@ class UserController extends Controller {
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return redirect()->back()->with('errors', $validator->errors());
         }
 
@@ -220,7 +220,7 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
         }
 
-        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
+        if(!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
             return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta!');
         }
 
