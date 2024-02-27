@@ -79,11 +79,35 @@ class UserController extends Controller {
         }
 
         if ($request->input('dataNasc')) {
-            $query->where('dataNasc', '=', Carbon::parse($request->input('dataNasc')));
+            $dataNasc = $request->input('dataNasc');
+            $dataNascParts = explode('-', $dataNasc);
+
+            if (count($dataNascParts) === 2) {
+                $dia = $dataNascParts[0];
+                $mes = $dataNascParts[1];
+
+                $query->whereRaw("DAY(dataNasc) = $dia")
+                    ->whereRaw("MONTH(dataNasc) = $mes");
+            } elseif (count($dataNascParts) === 3) {
+                $dia = $dataNascParts[0];
+                $mes = $dataNascParts[1];
+                $ano = $dataNascParts[2];
+
+                $query->whereRaw("DAY(dataNasc) = $dia")
+                    ->whereRaw("MONTH(dataNasc) = $mes")
+                    ->whereRaw("YEAR(dataNasc) = $ano");
+            } else {
+                $dia = $dataNascParts[0];
+                $query->whereRaw("DAY(dataNasc) = $dia");
+            }
         }
 
-        if ($request->input('id_lider')) {
-            $query->where('id_lider', $request->input('id_lider'));
+        if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
+            if ($request->input('id_lider')) {
+                $query->where('id_lider', $request->input('id_lider'));
+            }
+        } else {
+            $query->where('id_lider', Auth::user()->id);
         }
 
         if ($request->input('tipo')) {

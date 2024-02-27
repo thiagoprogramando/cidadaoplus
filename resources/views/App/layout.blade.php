@@ -16,13 +16,8 @@
         <link rel="stylesheet" href="{{ asset('template/css/demo.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/apex-charts/apex-charts.css') }}"/>
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" />
-        
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css"/>
 
-        <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
-        <script src="{{ asset('template/js/config.js') }}"></script>
-        <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
@@ -220,7 +215,7 @@
             </div>
         @endif
 
-        @if (session('infor'))
+        @if(session('infor'))
             <div class="bs-toast toast toast-placement-ex m-2 fade bg-warning bottom-0 start-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
                 <div class="toast-header">
                     <i class="bx bx-bell me-2"></i>
@@ -238,21 +233,25 @@
         <script src="{{ asset('template/vendor/js/bootstrap.js') }}"></script>
         <script src="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
         <script src="{{ asset('template/vendor/js/menu.js') }}"></script>
+        <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
 
         <script src="{{ asset('template/js/main.js') }}"></script>
         <script src="{{ asset('template/js/ui-toasts.js') }}"></script>
         <script src="{{ asset('template/js/mask.js') }}"></script>
+        <script src="{{ asset('template/js/config.js') }}"></script>
         <script src="{{ asset('ckeditor/build/ckeditor.js') }}"></script>
 		<script src="{{ asset('ckeditor/script.js') }} "></script>
 
+        <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
         <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                var elementosQrCode = document.querySelectorAll('.qrcode');
 
+                var elementosQrCode = document.querySelectorAll('.qrcode');
                 elementosQrCode.forEach(function(elemento) {
                     var link = elemento.getAttribute("data-link");
                     var qrcode = new QRCode(elemento, {
@@ -264,19 +263,13 @@
                 });
 
                 var qrCodeLinks = document.querySelectorAll(".qrcode");
-
                 qrCodeLinks.forEach(function(linkElement) {
                     linkElement.addEventListener("click", function(event) {
                         event.preventDefault();
 
                         var link = linkElement.getAttribute("data-link");
-
-                        // Criar o QR Code usando a biblioteca html2canvas
                         html2canvas(linkElement).then(canvas => {
-                            // Converter o canvas em um URL de imagem
                             var imageData = canvas.toDataURL("image/png");
-
-                            // Criar um link temporário para o download
                             var downloadLink = document.createElement("a");
                             downloadLink.href = imageData;
                             downloadLink.download = "qrcode.png";
@@ -284,9 +277,7 @@
                         });
                     });
                 });
-            });
 
-            $(document).ready( function () {
                 $('#tabela').DataTable({
                     "paging": true,
                     "pageLength": 25,

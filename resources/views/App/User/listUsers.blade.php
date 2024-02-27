@@ -11,7 +11,7 @@
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <a class="dropdown-item" href="{{ route('registrerUser', ['tipo' => $tipo]) }}">Cadastrar</a>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalImport">Importar Registros</a>
+                                <!--<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalImport">Importar Registros</a>-->
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalFilter">Filtrar</a>
                             </div>
                         </div>
@@ -20,7 +20,6 @@
             </div>
 
             <div class="row">
-
                 <div class="col-lg-3 col-md-3 col-6 mb-4">
                     <div class="card bg-info text-white">
                         <div class="card-body">
@@ -35,7 +34,6 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
 
             <div class="col-12">
@@ -144,13 +142,14 @@
                                 <input type="text" class="form-control" name="dataNasc" oninput="mascaraData(this)" placeholder="Data Nascimento:"/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="id_lider" class="form-control">
-                                    <option value="{{ Auth::user()->id }}" selected>Apoiador</option>
+                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+                                <select name="id_lider" id="selectSearch" class="form-control selectSearch">
+                                    <option value="" selected>Apoiador</option>
                                     @foreach ($alphas as $alpha)
                                         <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div>                                                     
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="tipo" class="form-control">
                                     <option value="" selected>Tipo</option>
@@ -215,7 +214,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalImport" aria-labelledby="modalImport" tabindex="-1" style="display: none" aria-hidden="true">
+    {{-- <div class="modal fade" id="modalImport" aria-labelledby="modalImport" tabindex="-1" style="display: none" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ route('importUser') }}" method="POST" enctype="multipart/form-data">
@@ -242,5 +241,40 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
+    
+    <script>
+        $(document).ready(function() {
+            
+            var alphas = {!! json_encode($alphas) !!};
+            function filterOptions(searchQuery) {
+                var filteredAlphas = alphas.filter(function(alpha) {
+                    return alpha.nome.toLowerCase().includes(searchQuery.toLowerCase());
+                });
+                populateOptions(filteredAlphas);
+            }
+        
+            function populateOptions(options) {
+                var selectElement = $('#selectSearch');
+                selectElement.empty();
+                selectElement.append($('<option>', {
+                    value: " ",
+                    text: "Apoiador",
+                    selected: true
+                }));
+                $.each(options, function(index, option) {
+                    selectElement.append($('<option>', {
+                        value: option.id,
+                        text: option.nome
+                    }));
+                });
+            }
+        
+            $('#searchInput').on('input', function() {
+                filterOptions($(this).val());
+            });
+        
+            populateOptions(alphas);
+        });
+        </script>
 @endsection
