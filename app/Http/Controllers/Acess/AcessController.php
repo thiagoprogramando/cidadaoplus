@@ -98,9 +98,9 @@ class AcessController extends Controller {
         return redirect()->back()->with('error', 'Código não encontrado!');
     }
 
-    public function registerUserExternal($id, $grupo = null) {
+    public function registerUserExternal($id) {
 
-        return view('Form.registerUser', ['id' => $id, 'grupo' => $grupo]);
+        return view('Form.registerUser', ['id' => $id]);
     }
 
 }

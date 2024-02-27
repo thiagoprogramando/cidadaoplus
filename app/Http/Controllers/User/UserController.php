@@ -141,6 +141,10 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
+        if(!empty($request->email) && $this->validarEmail($request->email) == false) {
+            return redirect()->back()->with('error', 'Email enviado incorretamente!');
+        }
+
         $user = User::where('email', $request->email)->first();
         if($user && !empty($request->email)) {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
@@ -171,7 +175,7 @@ class UserController extends Controller {
 
         if($user->save()) {
 
-            if(!empty($request->email)) {
+            if(!empty($request->email) && $this->validarEmail($request->email) != false) {
                 Mail::to($request->email, $request->nome)->send(new Welcome([
                     'fromName'      => 'Kleber Fernandes',
                     'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
@@ -207,8 +211,8 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
-        if(!empty($request->email) && $this->validarEmail($request->email)) {
-            return redirect()->back()->with('error', 'Email formatado incorretamente, !');
+        if(!empty($request->email) && $this->validarEmail($request->email) == false) {
+            return redirect()->back()->with('error', 'Email enviado incorretamente!');
         }
 
         $user = User::where('email', $request->email)->first();
@@ -241,7 +245,7 @@ class UserController extends Controller {
 
         if($user->save()) {
 
-            if(!empty($request->email)) {
+            if(!empty($request->email) && $this->validarEmail($request->email) != false) {
                 Mail::to($request->email, $request->nome)->send(new Welcome([
                     'fromName'      => 'Kleber Fernandes',
                     'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
