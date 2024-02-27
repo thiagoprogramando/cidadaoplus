@@ -253,7 +253,7 @@ class UserController extends Controller {
                 ]));
             }
 
-            return redirect('https://contate.me/kleberfernandes');
+            return redirect('https://api.whatsapp.com/send?phone=5584987674348&text=Ol%C3%A1,%20acabei%20de%20cadastrar-me%20via%20site%20e%20gostaria%20de%20conhecer%20os%20Projetos%20do%20Vereador%20Kleber%20Fernandes!');
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
