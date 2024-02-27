@@ -203,8 +203,12 @@ class UserController extends Controller {
         }
 
         $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if($user) {
+        if($user && !empty($request->whatsapp)) {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+        }
+
+        if(!empty($request->email) && $this->validarEmail($request->email)) {
+            return redirect()->back()->with('error', 'Email formatado incorretamente, !');
         }
 
         $user = User::where('email', $request->email)->first();
@@ -251,6 +255,10 @@ class UserController extends Controller {
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
     }
 
+    private function validarEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+    }
+    
     public function viewUser($id) {
 
         $user = User::where('id', $id)->first();
