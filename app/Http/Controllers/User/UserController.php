@@ -145,24 +145,22 @@ class UserController extends Controller {
             'nome'      => 'required|string',
             'tipo'      => 'required',
             'id_lider'  => 'required',
-            'whatsapp'  => 'required'
+            'whatsapp'  => 'required',
+            'dataNasc'  => 'required|date_format:d-m-Y'
         ];
 
         $messages = [
-            'nome.required'     => 'O campo Nome é obrgatório!',
-            'tipo.required'     => 'Informe um tipo de usuário!',
-            'id_lider.required' => 'Informe um Líder!',
-            'whatsapp.required' => 'Por favor, informe um WhatsApp!',
+            'nome.required'         => 'O campo Nome é obrgatório!',
+            'tipo.required'         => 'Informe um tipo de usuário!',
+            'id_lider.required'     => 'Informe um Líder!',
+            'whatsapp.required'     => 'Por favor, informe um WhatsApp!',
+            'dataNasc.required'     => 'O campo Data de Nascimento é obrigatório!',
+            'dataNasc.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!'
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors());
-        }
-
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if($user) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+            return redirect()->back()->with('error', $validator->errors());
         }
 
         if(!empty($request->email) && $this->validarEmail($request->email) == false) {
@@ -174,8 +172,9 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
         }
 
-        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
-            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta!');
+        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
+        if($user && $request->whatsapp) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
         $user               = new User();
@@ -217,22 +216,20 @@ class UserController extends Controller {
 
         $rules = [
             'nome'      => 'required',
-            'whatsapp'  => 'required'
+            'whatsapp'  => 'required',
+            'dataNasc'  => 'required|date_format:d-m-Y'
         ];
 
         $messages = [
-            'nome.required'     => 'O campo Nome é obrgatório!',
-            'whatsapp.required' => 'Por favor, informe um WhatsApp!',
+            'nome.required'         => 'O campo Nome é obrgatório!',
+            'whatsapp.required'     => 'Por favor, informe um WhatsApp!',
+            'dataNasc.required'     => 'O campo Data de Nascimento é obrigatório!',
+            'dataNasc.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!'
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors());
-        }
-
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if($user && !empty($request->whatsapp)) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
+            return redirect()->back()->with('error', $validator->errors());
         }
 
         if(!empty($request->email) && $this->validarEmail($request->email) == false) {
@@ -244,8 +241,9 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
         }
 
-        if(!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
-            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta!');
+        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
+        if($user && $request->whatsapp) {
+            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
         }
 
         $user               = new User();
@@ -293,6 +291,28 @@ class UserController extends Controller {
         $alphas = User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get();
         if($user) {
             return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
+        }
+        
+        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+    }
+
+    public function view($id) {
+
+        $user           = User::where('id', $id)->first();
+        if($user) {
+
+            $eleitores      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
+            $apoiadores     = User::where('id_lider', $user->id)->where('tipo', 2)->count();
+            $coordenadores  = User::where('id_lider', $user->id)->where('tipo', 4)->count();
+            $todos          = User::where('id_lider', $user->id)->orderBy('created_at', 'desc')->get();
+
+            return view('App.User.viewUser', [
+                'user'          => $user, 
+                'eleitores'     => $eleitores, 
+                'apoiadores'    => $apoiadores, 
+                'coordenadores' => $coordenadores, 
+                'todos'         => $todos
+            ]);
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');

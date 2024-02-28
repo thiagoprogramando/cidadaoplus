@@ -17,7 +17,7 @@
                         @csrf
                         <div class="row">
                             
-                            <div class="col-12 col-md-9 col-lg-9 mb-3">
+                            <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:" required/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
@@ -78,7 +78,10 @@
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="id_lider" class="form-control" required>
+                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+                            </div>
+                            <div class="col-12 col-md-3 col-lg-3 mb-3">
+                                <select name="id_lider" id="selectSearch" class="form-control" required>
                                     <option value="{{ Auth::user()->id }}" selected>Apoiador</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->nome }}</option>
@@ -124,4 +127,39 @@
 
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            
+            var users = {!! json_encode($users) !!};
+            function filterOptions(searchQuery) {
+                var filteredusers = users.filter(function(user) {
+                    return user.nome.toLowerCase().includes(searchQuery.toLowerCase());
+                });
+                populateOptions(filteredusers);
+            }
+        
+            function populateOptions(options) {
+                var selectElement = $('#selectSearch');
+                selectElement.empty();
+                selectElement.append($('<option>', {
+                    value: " ",
+                    text: "Apoiador",
+                    selected: true
+                }));
+                $.each(options, function(index, option) {
+                    selectElement.append($('<option>', {
+                        value: option.id,
+                        text: option.nome
+                    }));
+                });
+            }
+        
+            $('#searchInput').on('input', function() {
+                filterOptions($(this).val());
+            });
+        
+            populateOptions(users);
+        });
+    </script>
 @endsection

@@ -16,7 +16,7 @@
                         <div class="row">
                             <input type="hidden" name="id" value="{{ $user->id }}">
 
-                            <div class="col-12 col-md-9 col-lg-9 mb-3">
+                            <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:" value="{{ $user->nome }}"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
@@ -77,7 +77,10 @@
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="id_lider" class="form-control">
+                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+                            </div>
+                            <div class="col-12 col-md-3 col-lg-3 mb-3">
+                                <select name="id_lider" id="selectSearch" class="form-control">
                                     <option value="{{ $user->id_lider }}" selected>
                                         @if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif
                                     </option>
@@ -125,4 +128,39 @@
 
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            
+            var alphas = {!! json_encode($alphas) !!};
+            function filterOptions(searchQuery) {
+                var filteredAlphas = alphas.filter(function(alpha) {
+                    return alpha.nome.toLowerCase().includes(searchQuery.toLowerCase());
+                });
+                populateOptions(filteredAlphas);
+            }
+        
+            function populateOptions(options) {
+                var selectElement = $('#selectSearch');
+                selectElement.empty();
+                selectElement.append($('<option>', {
+                    value: "{!! $user->id_lider !!}",
+                    text: "@if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif",
+                    selected: true
+                }));
+                $.each(options, function(index, option) {
+                    selectElement.append($('<option>', {
+                        value: option.id,
+                        text: option.nome
+                    }));
+                });
+            }
+        
+            $('#searchInput').on('input', function() {
+                filterOptions($(this).val());
+            });
+        
+            populateOptions(alphas);
+        });
+    </script>
 @endsection

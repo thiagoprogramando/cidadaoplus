@@ -12,6 +12,8 @@
                             <div class="card-header">Links para indicação</div>
                             <div class="card-body">
                                 <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}" href="#" class="text-info"> {{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }} </a>
+                                <br>
+                                <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}" href="#" class="btn btn-success mt-2">Copiar Link</a>
                             </div>
                         </div>
                     </div>

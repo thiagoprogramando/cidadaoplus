@@ -31,7 +31,7 @@
                             <div class="mb-3">
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" name="password" placeholder="Senha"/>
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    <span class="input-group-text cursor-pointer toggle-password"><i class="bx bx-lock-alt"></i></span>
                                 </div>
                             </div>
                             <div class="mb-3">

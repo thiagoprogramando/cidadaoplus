@@ -46,7 +46,7 @@
                                     <th>Nome</th>
                                     <th class="d-none">D. Nascimento</th>
                                     <th class="d-none">Sexo</th>
-                                    <th>Profissão</th>
+                                    <th class="d-none">Profissão</th>
                                     <th>WhatsApp</th>
                                     <th class="d-none">Email</th>
                                     <th class="d-none">instagram</th>
@@ -66,10 +66,10 @@
                                 @foreach ($users as $key => $user)
                                     <tr>
                                         <td class="d-none">{{ $user->id_lider }}</td>
-                                        <td><strong>{{ $user->nome }}</strong> </td>
+                                        <td><strong><a href="{{ route('view', ['id' => $user->id]) }}">{{ $user->nome }}</a></strong> </td>
                                         <td class="d-none">{{ $user->dataNasc }}</td>
                                         <td class="d-none">{{ $user->Sexualidade }}</td>
-                                        <td>{{ $user->profissao }}</td>
+                                        <td class="d-none">{{ $user->profissao }}</td>
                                         <td>{{ $user->whatsapp }}</td>
                                         <td class="d-none">{{ $user->email }}</td>
                                         <td class="d-none">{{ $user->instagram }}</td>
@@ -103,7 +103,7 @@
                                                             <p>Para confirmar a exclusão, confirme sua senha:</p>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <input type="text" class="form-control" name="password" placeholder="Confirme sua senha:" autofocus/>
+                                                            <input type="password" class="form-control" name="password" placeholder="Confirme sua senha:" autofocus/>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -276,5 +276,5 @@
         
             populateOptions(alphas);
         });
-        </script>
+    </script>
 @endsection
