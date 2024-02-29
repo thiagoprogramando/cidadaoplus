@@ -73,7 +73,9 @@
                                         <option value="1">Master</option>  
                                         <option value="4">Coordenador</option>
                                     @endif
-                                    <option value="2">Apoiador</option>
+                                    @if(Auth::user()->tipo == 4) {
+                                        <option value="2">Apoiador</option>
+                                    }
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>
