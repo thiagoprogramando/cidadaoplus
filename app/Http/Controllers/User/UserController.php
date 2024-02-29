@@ -214,71 +214,48 @@ class UserController extends Controller {
 
     public function createUserExternal(Request $request) {
 
-        $rules = [
+        $validator = Validator::make($request->all(), [
             'nome'      => 'required',
-            'whatsapp'  => 'required',
-            'dataNasc'  => 'required|date_format:d-m-Y'
-        ];
-
-        $messages = [
-            'nome.required'         => 'O campo Nome é obrgatório!',
+            'whatsapp'  => 'required|unique:users,whatsapp',
+            'dataNasc'  => 'required|date_format:d-m-Y',
+            'email'     => 'nullable|email|unique:users,email',
+        ], [
+            'nome.required'         => 'Por favor, informe um Nome!',
             'whatsapp.required'     => 'Por favor, informe um WhatsApp!',
-            'dataNasc.required'     => 'O campo Data de Nascimento é obrigatório!',
-            'dataNasc.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!'
-        ];
+            'whatsapp.unique'       => 'Já existe uma Pessoa com esse WhatsApp!',
+            'dataNasc.required'     => 'Por favor, informe uma Data de Nascimento!',
+            'dataNasc.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!',
+            'email.email'           => 'Formato de e-mail inválido!',
+            'email.unique'          => 'Já existe uma Pessoa com esse E-mail!'
+        ]);        
 
-        $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()) {
-            return redirect()->back()->with('error', $validator->errors());
-        }
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        } else {
+            $user               = new User();
+            $user->id_lider     = $request->id_lider;
+            $user->nome         = $request->nome;
+            $user->dataNasc     = Carbon::parse($request->dataNasc);
+            $user->sexo         = $request->sexo;
+            $user->profissao    = $request->profissao;
+            $user->tipo         = 3;
+            $user->email        = strtolower($request->email);
+            $user->whatsapp     = $request->whatsapp;
+            $user->instagram    = $request->instagram;
+            $user->facebook     = $request->facebook;
+            $user->cep          = $request->cep;
+            $user->logradouro   = $request->logradouro;
+            $user->numero       = $request->numero;
+            $user->bairro       = $request->bairro;
+            $user->cidade       = $request->cidade;
+            $user->estado       = $request->estado;
+            $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
 
-        if(!empty($request->email) && $this->validarEmail($request->email) == false) {
-            return redirect()->back()->with('error', 'Email enviado incorretamente!');
-        }
+            if($user->save()) {
 
-        $user = User::where('email', $request->email)->first();
-        if($user && !empty($request->email)) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Email!');
-        }
-
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if($user && $request->whatsapp) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
-        }
-
-        $user               = new User();
-        $user->id_lider     = $request->id_lider;
-        $user->nome         = $request->nome;
-        $user->dataNasc     = Carbon::parse($request->dataNasc);
-        $user->sexo         = $request->sexo;
-        $user->profissao    = $request->profissao;
-        $user->tipo         = 3;
-        $user->email        = strtolower($request->email);
-        $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
-        $user->instagram    = $request->instagram;
-        $user->facebook     = $request->facebook;
-        $user->cep          = $request->cep;
-        $user->logradouro   = $request->logradouro;
-        $user->numero       = $request->numero;
-        $user->bairro       = $request->bairro;
-        $user->cidade       = $request->cidade;
-        $user->estado       = $request->estado;
-        $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
-
-        if($user->save()) {
-
-            if(!empty($request->email) && $this->validarEmail($request->email) != false) {
-                Mail::to($request->email, $request->nome)->send(new Welcome([
-                    'fromName'      => 'Kleber Fernandes',
-                    'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
-                    'subject'       => 'Boas vindas',
-                ]));
+                return redirect('https://api.whatsapp.com/send?phone=5584987674348&text=Ol%C3%A1,%20acabei%20de%20cadastrar-me%20via%20site%20e%20gostaria%20de%20conhecer%20os%20Projetos%20do%20Vereador%20Kleber%20Fernandes!');
             }
-
-            return redirect('https://api.whatsapp.com/send?phone=5584987674348&text=Ol%C3%A1,%20acabei%20de%20cadastrar-me%20via%20site%20e%20gostaria%20de%20conhecer%20os%20Projetos%20do%20Vereador%20Kleber%20Fernandes!');
         }
-        
-        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
     }
 
     private function validarEmail($email) {

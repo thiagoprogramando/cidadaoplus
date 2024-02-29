@@ -52,6 +52,21 @@
       </div>
     @endif
 
+    @if ($errors->any())
+        <div class="bs-toast toast toast-placement-ex m-2 fade bg-danger bottom-0 start-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+            <div class="toast-header">
+                <i class="bx bx-bell me-2"></i>
+                <div class="me-auto fw-semibold">Erro!</div>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     <script src="{{ asset('template/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('template/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ asset('template/vendor/js/bootstrap.js') }}"></script>
@@ -60,18 +75,5 @@
     <script src="{{ asset('template/vendor/js/menu.js') }}"></script>
     <script src="{{ asset('template/js/main.js') }}"></script>
     <script src="{{ asset('template/js/mask.js') }}"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-          const passwordField = document.getElementById('password');
-          const togglePassword = document.querySelector('.toggle-password');
-          
-          togglePassword.addEventListener('click', function () {
-              const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-              passwordField.setAttribute('type', type);
-              togglePassword.querySelector('i').classList.toggle('bx-lock-alt');
-              togglePassword.querySelector('i').classList.toggle('bx-lock-open-alt')
-          });
-      });
-  </script>
   </body>
 </html>

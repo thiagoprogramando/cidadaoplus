@@ -3,11 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Mail\Welcome;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable {
@@ -77,5 +80,23 @@ class User extends Authenticatable {
         return null;
     }
 
+    protected static function boot() {
+
+        parent::boot();
+
+        static::created(function ($user) {
+            if (!empty($user->email) && $user->validarEmail($user->email) != false) {
+                Mail::to($user->email, $user->nome)->send(new Welcome([
+                    'fromName'  => 'Kleber Fernandes',
+                    'fromEmail' => 'suporte@tocomkleberfernandes.com.br',
+                    'subject'   => 'Boas vindas',
+                ]));
+            }
+        });
+    }
+
+    private function validarEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+    }
     
 }

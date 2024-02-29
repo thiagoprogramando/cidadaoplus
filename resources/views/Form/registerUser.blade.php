@@ -18,7 +18,7 @@
                         <h4 class="mb-2">Bem-vindo(a)! 👋</h4>
                         <p class="mb-4">Preencha todas às informações abaixo.</p>
 
-                        <form id="formAuthentication" class="mb-3" action="{{ route('createUserExternal') }}" method="POST">
+                        <form id="myForm" class="mb-3" action="{{ route('createUserExternal') }}" method="POST">
                             @csrf
                             <div class="row">
 
@@ -103,7 +103,7 @@
                                 <input type="hidden" class="form-control" name="estado"/>
                                 
                                 <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                    <button class="btn btn-success d-grid w-100" type="submit">Salvar</button>
+                                    <button id="submitButton" class="btn btn-success d-grid w-100" type="submit">Salvar</button>
                                 </div>
                             </div>
                         </form>
@@ -113,4 +113,20 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Selecione o formulário pelo seu ID
+        const form = document.getElementById('myForm');
+    
+        // Adicione um ouvinte de evento para o envio do formulário
+        form.addEventListener('submit', function() {
+            // Selecione o botão de envio pelo seu ID
+            const submitButton = document.getElementById('submitButton');
+    
+            // Desative o botão de envio após o envio do formulário
+            submitButton.disabled = true;
+            // Adicione uma classe CSS opcional para mostrar visualmente que o botão está desativado
+            submitButton.classList.add('disabled');
+        });
+    </script>
 @endsection

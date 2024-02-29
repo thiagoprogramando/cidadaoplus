@@ -48,4 +48,17 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password');
+            const togglePassword = document.querySelector('.toggle-password');
+            
+            togglePassword.addEventListener('click', function () {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('bx-lock-alt');
+                togglePassword.querySelector('i').classList.toggle('bx-lock-open-alt')
+            });
+        });
+    </script>
 @endsection
