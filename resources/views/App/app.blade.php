@@ -32,7 +32,7 @@
             <div class="col-12">
 
                 <div class="row">
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-2">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                         <a href="{{ route('listUser', ['tipo' => 3]) }}">
                             <div class="card bg-dark text-white text-center mb-3">
                                 <div class="card-header">Eleitores</div>
@@ -43,7 +43,7 @@
                         </a>
                     </div>
 
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-2">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                         <a href="{{ route('listEvent') }}">
                             <div class="card bg-dark text-white text-center mb-3">
                                 <div class="card-header">Eventos</div>
@@ -54,19 +54,30 @@
                         </a>
                     </div>
 
-                    @if (Auth::user()->tipo == 1)
-                        <div class="col-6 col-6 col-sm-6 col-md-4 col-lg-2">
-                            <a href="{{ route('listUser', ['tipo' => 2]) }}">
-                                <div class="card bg-dark text-white text-center mb-3">
-                                    <div class="card-header">Apoiador</div>
-                                    <div class="card-body">
-                                        <i class="menu-icon tf-icons bx-lg bx bx-user-voice"></i>
-                                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['tipo' => 2]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Apoiador</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user-voice"></i>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
+                    </div>
 
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-2">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['tipo' => 4]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Coordenador</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    @if (Auth::user()->tipo == 1)
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                             <a href="{{ route('listUser', ['tipo' => 1]) }}">
                                 <div class="card bg-dark text-white text-center mb-3">
                                     <div class="card-header">Master</div>
@@ -77,7 +88,7 @@
                             </a>
                         </div>
                 
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-2">
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                             <a href="{{ route('listWhatsapp') }}">
                                 <div class="card bg-dark text-white text-center mb-3">
                                     <div class="card-header">WhatsApp</div>
@@ -88,7 +99,7 @@
                             </a>
                         </div>
 
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-2">
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                             <div class="card bg-dark text-white text-center mb-3">
                                 <div class="card-header">TSE</div>
                                 <div class="card-body">

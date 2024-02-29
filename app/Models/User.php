@@ -80,6 +80,22 @@ class User extends Authenticatable {
         return null;
     }
 
+    public function subUsers() {
+        return $this->hasMany(User::class, 'id_lider', 'id');
+    }
+
+    public function totalUsers() {
+
+        $total = 1;
+        $subUsers = $this->subUsers;
+
+        foreach ($subUsers as $subUser) {
+            $total += $subUser->totalUsers();
+        }
+    
+        return $total;
+    }
+
     protected static function boot() {
 
         parent::boot();

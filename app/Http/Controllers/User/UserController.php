@@ -105,6 +105,11 @@ class UserController extends Controller {
         if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
             if ($request->input('id_lider')) {
                 $query->where('id_lider', $request->input('id_lider'));
+
+                $eleitores      = User::where('id_lider', $request->input('id_lider'))->where('tipo', 3)->count();
+                $apoiadores     = User::where('id_lider', $request->input('id_lider'))->where('tipo', 2)->count();
+                $coordenadores  = User::where('id_lider', $request->input('id_lider'))->where('tipo', 4)->count();
+                $totalUsers     = User::where('id', $request->input('id_lider'))->first()->totalUsers();
             }
         } else {
             $query->where('id_lider', Auth::user()->id);
@@ -130,7 +135,15 @@ class UserController extends Controller {
         
         $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas]);
+        return view('App.User.listUsers', [
+            'users'             => $users, 
+            'tipo'              => 1, 
+            'alphas'            => $alphas,
+            'eleitores'         => $eleitores,
+            'apoiadores'        => $apoiadores,
+            'coordenadores'     => $coordenadores,
+            'totalUsers'        => $totalUsers
+        ]);
     }
 
     public function registrerUser($tipo) {

@@ -20,7 +20,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-6 mb-4">
+                <div class="col-6 col-md-3 col-lg-3 mb-4">
                     <div class="card bg-info text-white">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
@@ -28,12 +28,57 @@
                             </div>
                             
                             <h3 class="card-title text-white mb-2"> {{ $users->count() }} </h3>
-                            <small class="text-dark fw-semibold">
-                                Atualização em tempo real.
-                            </small>
                         </div>
                     </div>
                 </div>
+
+                @if(isset($coordenadores))
+                    <div class="col-6 col-md-3 col-lg-2 mb-4">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <span class="fw-semibold d-block mb-1">Eleitores</span>
+                                </div>
+                                
+                                <h3 class="card-title text-white mb-2"> @if(isset($eleitores)) {{ $eleitores }} @endif </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2 mb-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <span class="fw-semibold d-block mb-1">Apoiadores</span>
+                                </div>
+                                
+                                <h3 class="card-title text-white mb-2"> @if(isset($apoiadores)) {{ $apoiadores }} @endif </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2 mb-4">
+                        <div class="card bg-dark text-white">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <span class="fw-semibold d-block mb-1">Coordenadores</span>
+                                </div>
+                                <h3 class="card-title text-white mb-2"> @if(isset($coordenadores)) {{ $coordenadores }} @endif </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2 mb-4">
+                        <div class="card bg-dark text-white">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <span class="fw-semibold d-block mb-1">Geral</span>
+                                </div>
+                                <h3 class="card-title text-white mb-2"> @if(isset($totalUsers)) {{ $totalUsers }} @endif </h3>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="col-12">
