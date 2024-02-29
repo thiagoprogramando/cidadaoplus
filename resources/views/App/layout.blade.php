@@ -6,9 +6,10 @@
 
         <title>#Tô com Kleber - {{ Auth::user()->nome }}</title>
 
+        <link rel="icon" type="image/x-icon" href="{{ asset('template/img/background/icon.png') }}" />
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-        <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
 
         <link rel="stylesheet" href="{{ asset('template/vendor/fonts/boxicons.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/css/core.css') }}" class="template-customizer-core-css"/>
@@ -239,10 +240,7 @@
         <script src="{{ asset('template/js/ui-toasts.js') }}"></script>
         <script src="{{ asset('template/js/mask.js') }}"></script>
         <script src="{{ asset('template/js/config.js') }}"></script>
-        <script src="{{ asset('ckeditor/build/ckeditor.js') }}"></script>
-		<script src="{{ asset('ckeditor/script.js') }} "></script>
-
-        <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+    
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
         <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>

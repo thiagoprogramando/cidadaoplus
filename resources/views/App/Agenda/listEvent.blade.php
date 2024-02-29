@@ -63,7 +63,7 @@
                                                                 <input type="text" class="form-control" name="nome" placeholder="Nome:" value="{{ $event->nome }}"/>
                                                             </div>
                                                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                                                <textarea name="descricao" class="form-control editor" rows="5">{{ $event->descricao }}</textarea>
+                                                                <textarea name="descricao" class="form-control" rows="5" placeholder="Detalhes do evento:">{{ $event->descricao }}</textarea>
                                                             </div>
                                                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                                                 <input type="text" class="form-control" name="data" oninput="mascaraData(this)" placeholder="Data:" value="{{ $event->DataFormatada }}"/>
@@ -171,7 +171,7 @@
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:"/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <textarea name="descricao" class="form-control editor" rows="5"></textarea>
+                                <textarea name="descricao" class="form-control" rows="5" placeholder="Detalhes do evento:"></textarea>
                             </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <input type="text" class="form-control" name="data" oninput="mascaraData(this)" placeholder="Data:"/>

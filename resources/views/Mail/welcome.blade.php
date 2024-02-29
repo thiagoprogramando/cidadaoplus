@@ -223,8 +223,8 @@
 
                                                             <div
                                                                 style="font-family: inherit; font-size: 13px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                                <p style="line-height: 140%;">Acompanhe às ações e
-                                                                    trabalhos do Vereador Kleber Fernandes nas redes
+                                                                <p style="line-height: 140%;">Acompanhe as ações e
+                                                                    trabalhos do vereador Kleber Fernandes nas redes
                                                                     sociais. Sua participação é fundamental para
                                                                     construirmos juntos um mandato participativo e
                                                                     eficiente.</p>
