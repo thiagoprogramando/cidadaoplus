@@ -57,21 +57,23 @@
                             </a>
                         </li>
                         
-                        <li class="menu-item">
-                            <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-user-voice"></i>
-                                <div>Apoiadores</div>
-                            </a>
-                        </li>
-
-                        <li class="menu-item">
-                            <a href="{{ route('listUser', ['tipo' => 4]) }}" class="menu-link">
-                                <i class='menu-icon tf-icons bx bx-user-check'></i>
-                                <div>Coordenadores</div>
-                            </a>
-                        </li>
+                        @if (Auth::user()->tipo == 4 || Auth::user()->tipo == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-user-voice"></i>
+                                    <div>Apoiadores</div>
+                                </a>
+                            </li>
+                        @endif
 
                         @if (Auth::user()->tipo == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['tipo' => 4]) }}" class="menu-link">
+                                    <i class='menu-icon tf-icons bx bx-user-check'></i>
+                                    <div>Coordenadores</div>
+                                </a>
+                            </li>
+
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-user"></i>

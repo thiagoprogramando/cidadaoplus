@@ -54,29 +54,31 @@
                         </a>
                     </div>
 
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listUser', ['tipo' => 2]) }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">Apoiador</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bx-user-voice"></i>
+                    @if (Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                            <a href="{{ route('listUser', ['tipo' => 2]) }}">
+                                <div class="card bg-dark text-white text-center mb-3">
+                                    <div class="card-header">Apoiador</div>
+                                    <div class="card-body">
+                                        <i class="menu-icon tf-icons bx-lg bx bx-user-voice"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listUser', ['tipo' => 4]) }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">Coordenador</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    @endif
 
                     @if (Auth::user()->tipo == 1)
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                            <a href="{{ route('listUser', ['tipo' => 4]) }}">
+                                <div class="card bg-dark text-white text-center mb-3">
+                                    <div class="card-header">Coordenador</div>
+                                    <div class="card-body">
+                                        <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                             <a href="{{ route('listUser', ['tipo' => 1]) }}">
                                 <div class="card bg-dark text-white text-center mb-3">
