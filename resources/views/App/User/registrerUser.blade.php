@@ -73,7 +73,7 @@
                                         <option value="1">Master</option>  
                                         <option value="4">Coordenador</option>
                                     @endif
-                                    @if(Auth::user()->tipo == 4)
+                                    @if(Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
                                         <option value="2">Apoiador</option>
                                     @endif
                                     <option value="3">Eleitor</option>
