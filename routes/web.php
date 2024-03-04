@@ -39,6 +39,8 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::post('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
     Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
 
+    Route::get('/listReport', [UserController::class, 'listReport'])->name('listReport');
+
     Route::get('/listGrupo', [UserController::class, 'listGrupo'])->name('listGrupo');
     Route::post('/createGrupo', [UserController::class, 'createGrupo'])->name('createGrupo');
     Route::post('/deleteGrupo', [UserController::class, 'deleteGrupo'])->name('deleteGrupo');

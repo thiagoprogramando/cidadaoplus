@@ -70,6 +70,37 @@ class UserController extends Controller {
         return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
     }
 
+    public function listReport(Request $request) {
+
+        $eleitores      = User::where('tipo', 3);
+        $apoiadores     = User::where('tipo', 2);
+        $coordenadores  = User::where('tipo', 4);
+        $master         = User::where('tipo', 1);
+
+        if($request->input('id_lider')) {
+            $id_lider = $request->input('id_lider');
+            $eleitores->where('id_lider', $id_lider);
+            $apoiadores->where('id_lider', $id_lider);
+            $coordenadores->where('id_lider', $id_lider);
+            $master->where('id_lider', $id_lider);
+        }
+
+        $eleitores      = $eleitores->get();
+        $apoiadores     = $apoiadores->get();
+        $coordenadores  = $coordenadores->get();
+        $master         = $master->get();
+
+        $alphas = User::where('tipo', 4)->get();
+
+        return view('App.User.listReport', [
+            'eleitores'     => $eleitores,
+            'apoiadores'    => $apoiadores,
+            'coordenadores' => $coordenadores,
+            'master'        => $master,
+            'alphas'        => $alphas
+        ]);
+    }
+
     public function filterUser(Request $request) {
 
         $query = User::query();
