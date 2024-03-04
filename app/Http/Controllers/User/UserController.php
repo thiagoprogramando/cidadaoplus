@@ -113,6 +113,10 @@ class UserController extends Controller {
             }
         } else {
             $query->where('id_lider', Auth::user()->id);
+            $eleitores      = 0;
+            $apoiadores     = 0;
+            $coordenadores  = 0;
+            $totalUsers     = 0;
         }
 
         if ($request->input('tipo')) {
