@@ -23,7 +23,6 @@
                             <div class="row">
 
                                 <input type="hidden" name="id_lider" value="{{ $id }}">
-                                <input type="hidden" name="id_grupo" value="@if(isset($grupo)) {{ $grupo }} @endif">
                                 
                                 <div class="col-12 col-md-3 col-lg-3 mb-3">
                                     <input type="text" class="form-control" name="nome" placeholder="Nome:" required/>

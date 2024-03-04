@@ -58,4 +58,4 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::post('registrerMessage', [WhatsappController::class, 'registrerMessage'])->name('registrerMessage');
 
     Route::get('/logout', [AcessController::class, 'logout'])->name('logout');
-});
+})->middleware(\App\Http\Middleware\NoCacheMiddleware::class);
