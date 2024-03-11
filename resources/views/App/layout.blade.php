@@ -81,6 +81,12 @@
                                 </a>
                             </li>
                         @endif
+                        <li class="menu-item">
+                            <a href="{{ route('listReport') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-data"></i>
+                                <div>Relatórios</div>
+                            </a>
+                        </li>
 
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Agenda & Comunicação</span></li>
                         <li class="menu-item">
@@ -99,12 +105,6 @@
                         
 
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Integrações</span></li>
-                            <li class="menu-item">
-                                <a href="{{ route('listReport') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bx-data"></i>
-                                    <div>Relatórios</div>
-                                </a>
-                            </li>
                             <li class="menu-item">
                                 <a href="{{ route('listWhatsapp') }}" class="menu-link">
                                     <i class="menu-icon tf-icons bx bxl-whatsapp"></i>

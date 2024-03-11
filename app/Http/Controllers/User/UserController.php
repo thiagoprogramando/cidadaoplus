@@ -77,27 +77,49 @@ class UserController extends Controller {
         $coordenadores  = User::where('tipo', 4);
         $master         = User::where('tipo', 1);
 
+        
         if($request->input('id_lider')) {
             $id_lider = $request->input('id_lider');
+
             $eleitores->where('id_lider', $id_lider);
             $apoiadores->where('id_lider', $id_lider);
             $coordenadores->where('id_lider', $id_lider);
             $master->where('id_lider', $id_lider);
-        }
 
+            $rede = User::where('id', $id_lider)->first();
+            $rede = $rede->totalUsers();
+        } else {
+            if(Auth::user()->tipo != 1) {
+                $eleitores->where('id_lider', Auth::user()->id);
+                $apoiadores->where('id_lider', Auth::user()->id);
+                $coordenadores->where('id_lider', Auth::user()->id);
+                $master->where('id_lider', Auth::user()->id);
+
+                $rede = User::where('id', Auth::user()->id)->first();
+                $rede = $rede->totalUsers();
+            } else {
+                $rede = 0;
+            }
+        }
+        
         $eleitores      = $eleitores->get();
         $apoiadores     = $apoiadores->get();
         $coordenadores  = $coordenadores->get();
         $master         = $master->get();
 
-        $alphas = User::where('tipo', 4)->get();
-
+        if(Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
+            $alphas = User::whereIn('tipo', [2, 4])->where('id_lider', Auth::user()->id)->get();
+        } else {
+            $alphas = User::whereIn('tipo', [4, 2])->get();
+        }
+        
         return view('App.User.listReport', [
             'eleitores'     => $eleitores,
             'apoiadores'    => $apoiadores,
             'coordenadores' => $coordenadores,
             'master'        => $master,
-            'alphas'        => $alphas
+            'alphas'        => $alphas,
+            'rede'          => $rede
         ]);
     }
 
@@ -136,18 +158,9 @@ class UserController extends Controller {
         if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
             if ($request->input('id_lider')) {
                 $query->where('id_lider', $request->input('id_lider'));
-
-                $eleitores      = User::where('id_lider', $request->input('id_lider'))->where('tipo', 3)->count();
-                $apoiadores     = User::where('id_lider', $request->input('id_lider'))->where('tipo', 2)->count();
-                $coordenadores  = User::where('id_lider', $request->input('id_lider'))->where('tipo', 4)->count();
-                $totalUsers     = User::where('id', $request->input('id_lider'))->first()->totalUsers();
             }
         } else {
             $query->where('id_lider', Auth::user()->id);
-            $eleitores      = 0;
-            $apoiadores     = 0;
-            $coordenadores  = 0;
-            $totalUsers     = 0;
         }
 
         if ($request->input('tipo')) {
@@ -174,10 +187,6 @@ class UserController extends Controller {
             'users'             => $users, 
             'tipo'              => 1, 
             'alphas'            => $alphas,
-            'eleitores'         => $eleitores,
-            'apoiadores'        => $apoiadores,
-            'coordenadores'     => $coordenadores,
-            'totalUsers'        => $totalUsers
         ]);
     }
 

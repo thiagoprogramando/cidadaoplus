@@ -18,10 +18,10 @@
             </div>
 
             <div class="row">
-                <div class="col-6 col-md-3 col-lg-4 mb-4">
-                    <div class="card bg-info text-white">
+                <div class="col-6 col-md-3 col-lg-2 mb-4">
+                    <div class="card bg-info text-white text-center">
                         <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="card-title d-flex align-items-start justify-content-center">
                                 <span class="fw-semibold d-block mb-1">Total de registros</span>
                             </div>
                             
@@ -30,10 +30,10 @@
                     </div>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-4 mb-4">
-                    <div class="card bg-warning text-white">
+                <div class="col-6 col-md-3 col-lg-2 mb-4">
+                    <div class="card bg-warning text-white text-center">
                         <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="card-title d-flex align-items-start justify-content-center">
                                 <span class="fw-semibold d-block mb-1">Eleitores</span>
                             </div>
                             
@@ -42,10 +42,10 @@
                     </div>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-4 mb-4">
-                    <div class="card bg-primary text-white">
+                <div class="col-6 col-md-3 col-lg-2 mb-4">
+                    <div class="card bg-primary text-white text-center">
                         <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="card-title d-flex align-items-start justify-content-center">
                                 <span class="fw-semibold d-block mb-1">Apoiadores</span>
                             </div>
                             
@@ -54,10 +54,10 @@
                     </div>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-4 mb-4">
-                    <div class="card bg-dark text-white">
+                <div class="col-6 col-md-3 col-lg-2 mb-4">
+                    <div class="card bg-dark text-white text-center">
                         <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="card-title d-flex align-items-start justify-content-center">
                                 <span class="fw-semibold d-block mb-1">Coordenadores</span>
                             </div>
                             <h3 class="card-title text-white mb-2"> {{ $coordenadores->count() }} </h3>
@@ -65,13 +65,24 @@
                     </div>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-4 mb-4">
-                    <div class="card bg-danger text-white">
+                <div class="col-6 col-md-3 col-lg-2 mb-4">
+                    <div class="card bg-danger text-white text-center">
                         <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="card-title d-flex align-items-start justify-content-center">
                                 <span class="fw-semibold d-block mb-1">Masters</span>
                             </div>
                             <h3 class="card-title text-white mb-2"> {{ $master->count() }} </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2 mb-4">
+                    <div class="card bg-secondary text-white text-center">
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-center">
+                                <span class="fw-semibold d-block mb-1">Rede</span>
+                            </div>
+                            <h3 class="card-title text-white mb-2"> {{ $rede }} </h3>
                         </div>
                     </div>
                 </div>
@@ -95,8 +106,8 @@
                                 <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
                                 <select name="id_lider" id="selectSearch" class="form-control selectSearch">
                                     <option value="" selected>Coordenador</option>
-                                    @foreach ($coordenadores as $coordenador)
-                                        <option value="{{ $coordenador->id }}">{{ $coordenador->nome }}</option>
+                                    @foreach ($alphas as $alpha)
+                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>

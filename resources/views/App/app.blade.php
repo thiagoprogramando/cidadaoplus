@@ -1,6 +1,5 @@
 @extends('App.layout')
 @section('app')
-
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
 
@@ -29,89 +28,96 @@
                 </div>
             </div>
 
-            <div class="col-12">
-
-                <div class="row">
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listUser', ['tipo' => 3]) }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">Eleitores</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bx-user-pin"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listEvent') }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">Eventos</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bx-calendar-star"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    @if (Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ route('listUser', ['tipo' => 2]) }}">
-                                <div class="card bg-dark text-white text-center mb-3">
-                                    <div class="card-header">Apoiador</div>
-                                    <div class="card-body">
-                                        <i class="menu-icon tf-icons bx-lg bx bx-user-voice"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-
-                    @if (Auth::user()->tipo == 1)
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ route('listUser', ['tipo' => 4]) }}">
-                                <div class="card bg-dark text-white text-center mb-3">
-                                    <div class="card-header">Coordenador</div>
-                                    <div class="card-body">
-                                        <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ route('listUser', ['tipo' => 1]) }}">
-                                <div class="card bg-dark text-white text-center mb-3">
-                                    <div class="card-header">Master</div>
-                                    <div class="card-body">
-                                        <i class="menu-icon tf-icons bx-lg bx bx-user"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ route('listWhatsapp') }}">
-                                <div class="card bg-dark text-white text-center mb-3">
-                                    <div class="card-header">WhatsApp</div>
-                                    <div class="card-body">
-                                        <i class="menu-icon tf-icons bx-lg bx bxl-whatsapp"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">TSE</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bxs-file-import"></i>
-                                </div>
+            <div class="col-12 row">
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{{ route('listEvent') }}">
+                        <div class="card bg-dark text-white text-center mb-3">
+                            <div class="card-header">Eventos</div>
+                            <div class="card-body">
+                                <i class="menu-icon tf-icons bx-lg bx bx-calendar-star"></i>
                             </div>
                         </div>
-                    @endif
+                    </a>
                 </div>
 
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{{ route('listUser', ['tipo' => 3]) }}">
+                        <div class="card bg-dark text-white text-center mb-3">
+                            <div class="card-header">Eleitores</div>
+                            <div class="card-body">
+                                <i class="menu-icon tf-icons bx-lg bx bx-user-pin"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                @if (Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['tipo' => 2]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Apoiador</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user-voice"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endif
+
+                @if (Auth::user()->tipo == 1)
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['tipo' => 4]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Coordenador</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['tipo' => 1]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Master</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+            
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listWhatsapp') }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">WhatsApp</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bxl-whatsapp"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card bg-dark text-white text-center mb-3">
+                            <div class="card-header">TSE</div>
+                            <div class="card-body">
+                                <i class="menu-icon tf-icons bx-lg bx bxs-file-import"></i>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{{ route('listReport') }}">
+                        <div class="card bg-dark text-white text-center mb-3">
+                            <div class="card-header">Relatórios</div>
+                            <div class="card-body">
+                                <i class="menu-icon tf-icons bx-lg bx bx-data"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
 
         </div>
