@@ -10,8 +10,6 @@
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <a class="dropdown-item" href="{{ route('registrerUser', ['tipo' => $tipo]) }}">Cadastrar</a>
-                                <!--<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalImport">Importar Registros</a>-->
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalFilter">Filtrar</a>
                             </div>
                         </div>
@@ -211,35 +209,6 @@
         </div>
     </div>
 
-    {{-- <div class="modal fade" id="modalImport" aria-labelledby="modalImport" tabindex="-1" style="display: none" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form action="{{ route('importUser') }}" method="POST" enctype="multipart/form-data">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalImport">Importar Registros</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        @csrf
-                        <p>Faça o download do <a download href="{{ asset('template/archive/modelo_importar_usuarios.xlsx') }}">Modelo</a></p>
-                        <div class="row">
-                            <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input type="file" class="form-control" name="arquivo" accept=".xlsx" placeholder="Arquivo XLSX:"/>
-                            </div>
-                            <div class="col-12 col-md-12 col-md-12 mb-3">
-                                <input type="password" class="form-control" name="password" placeholder="Confirme sua senha:"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> Cancelar </button>
-                        <button type="submit" class="btn btn-success"> Confirmar </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-    
     <script>
         $(document).ready(function() {
             

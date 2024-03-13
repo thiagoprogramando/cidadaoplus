@@ -31,7 +31,6 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     
     Route::get('/listUser/{tipo?}', [UserController::class, 'listUser'])->name('listUser');
     Route::get('/filterUser', [UserController::class, 'filterUser'])->name('filterUser');
-    Route::get('/registrerUser/{tipo?}', [UserController::class, 'registrerUser'])->name('registrerUser');
     Route::get('/viewUser/{id?}', [UserController::class, 'viewUser'])->name('viewUser');
     Route::get('/view/{id}', [UserController::class, 'view'])->name('view');
     Route::post('/createUser', [UserController::class, 'createUser'])->name('createUser');
