@@ -77,13 +77,16 @@ class WhatsappController extends Controller {
         $code = $whatsapp->id.rand(0, 999999);
 
         $phoneNumbers = Excel::toCollection(new PhoneNumbersImport, $request->file('numero'))[0]->skip(1);
+        
+        if ($request->hasFile('base64')) {
+            $file      = $request->file('base64');
+            $fileName  = rand(0, 5689).rand(0, 99999).$file->getClientOriginalName();
+            $path      = $file->storeAs('whatsapp', $fileName);
+        }
+
         foreach ($phoneNumbers as $phoneNumber) {
             $number = preg_replace('/\s+/', '', $phoneNumber[0]);
             if ($request->hasFile('base64')) {
-
-                $file      = $request->file('base64');
-                $fileName  = rand(0, 5689).rand(0, 99999).$file->getClientOriginalName();
-                $path      = $file->storeAs('whatsapp', $fileName);
 
                 if($number) {
                     $base64 = base64_encode(file_get_contents($request->file('base64')->path()));
@@ -94,7 +97,7 @@ class WhatsappController extends Controller {
                     } else {
                         $status = "success";
                         $message = "Disparo concluído com Sucesso!";
-                        $this->createLog($number, $message, $code, $status);
+                        $this->createLog($number, env('APP_URL').$path, $code, $status);
                     }
                 }
             } else {
