@@ -90,7 +90,7 @@ class WhatsappController extends Controller {
 
                 if($number) {
                     // $base64 = base64_encode(file_get_contents($request->file('base64')->path()));
-                    $send = $this->sendMidia($number, env('APP_URL').$path, $whatsapp->phone_number_id, $whatsapp->user_access_token);
+                    $send = $this->sendMidia($number, env('APP_URL').'storage/'.$path, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
                         $status = "error";
                         $this->createLog($number, $send['error'], $code, $status);
