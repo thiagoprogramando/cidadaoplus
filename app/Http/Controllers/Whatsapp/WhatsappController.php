@@ -98,7 +98,7 @@ class WhatsappController extends Controller {
                         $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
                     }
                 }
-            } 
+            }
 
             if ($request->texto) {
                 if($number) {
@@ -209,6 +209,12 @@ class WhatsappController extends Controller {
         } catch (RequestException $e) {
             return ['error' => $e->getMessage()];
         }
+    }
+
+    public function log($code) {
+
+        $logs = MensagemLog::where('code', $code)->get();
+        return view('App.Whatsapp.listLog', ['logs' => $logs]);
     }
 
 }

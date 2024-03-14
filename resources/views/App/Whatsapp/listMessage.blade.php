@@ -25,7 +25,6 @@
                             <thead>
                                 <tr>
                                     <th>Texto</th>
-                                    <th class="text-center">Mídia</th>
                                     <th class="text-center">Lote</th>
                                     <th>Status</th>
                                     <th class="text-center">Opções</th>
@@ -35,11 +34,10 @@
                                 @foreach ($messages as $key => $message)
                                     <tr>
                                         <td title="{{ $message->texto }}"><strong>{{ strlen($message->texto) > 20 ? substr($message->texto, 0, 20) . '...' : $message->texto }}</strong></td>
-                                        <td class="text-center"><a download href="{{ url("storage/{$message->base64}") }}">Arquivo</a></td>
-                                        <td class="text-center"><a download href="{{ url("storage/{$message->numero}") }}">Arquivo</a></td>
+                                        <td class="text-center">{{ $message->code }}</td>
                                         <td>{{ $message->status }}</td>
                                         <td class="text-center">
-                                            <a href="" target="_blank" class="btn btn-outline-success"> <i class="tf-icons bx bx-list-check"></i> </a>
+                                            <a href="{{ route('log', ['code' => $message->code]) }}" class="btn btn-outline-success"> <i class="tf-icons bx bx-list-check"></i> </a>
                                         </td>
                                     </tr>
                                 @endforeach
