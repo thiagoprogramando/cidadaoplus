@@ -80,7 +80,7 @@ class WhatsappController extends Controller {
         
         if ($request->hasFile('base64')) {
             $file      = $request->file('base64');
-            $fileName  = rand(0, 5689).rand(0, 99999).$file->getClientOriginalName();
+            $fileName  = rand(0, 5689).rand(0, 99999).$file->getClientOriginalExtension();
             $path      = $file->storeAs('whatsapp', $fileName);
         }
 
@@ -89,7 +89,7 @@ class WhatsappController extends Controller {
             if ($request->hasFile('base64')) {
 
                 if($number) {
-                    $base64 = base64_encode(file_get_contents($request->file('base64')->path()));
+                    // $base64 = base64_encode(file_get_contents($request->file('base64')->path()));
                     $send = $this->sendMidia($number, env('APP_URL').$path, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
                         $status = "error";
