@@ -91,40 +91,40 @@ class WhatsappController extends Controller {
             if ($request->hasFile('base64')) {
                 if($number) {
                     $img = env('APP_URL').'storage/'.$path;
-                    return $send = $this->sendMidia($number, $img, $whatsapp->phone_number_id, $whatsapp->user_access_token);
-                    // if(!empty($send['error'])) {
-                    //     $this->createLog($number, $send['error'], $code, 'error');
-                    // } else {
-                    //     $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
-                    // }
+                    $send = $this->sendMidia($number, $img, $whatsapp->phone_number_id, $whatsapp->user_access_token);
+                    if(!empty($send['error'])) {
+                        $this->createLog($number, $send['error'], $code, 'error');
+                    } else {
+                        $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
+                    }
                 }
             } 
 
-            // if ($request->texto) {
-            //     if($number) {
-            //         $send = $this->sendMessage($number, $request->texto, $whatsapp->phone_number_id, $whatsapp->user_access_token);
-            //         if(!empty($send['error'])) {
-            //             $this->createLog($number, $send['error'], $code, 'error');
-            //         } else {
-            //             $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
-            //         }
-            //     }
-            // }
+            if ($request->texto) {
+                if($number) {
+                    $send = $this->sendMessage($number, $request->texto, $whatsapp->phone_number_id, $whatsapp->user_access_token);
+                    if(!empty($send['error'])) {
+                        $this->createLog($number, $send['error'], $code, 'error');
+                    } else {
+                        $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
+                    }
+                }
+            }
         }
 
-        // $message = new Mensagem();
-        // $message->id_whatsapp        = $whatsapp->id;
-        // $message->code               = $code;
-        // $message->texto              = $request->texto;
-        // $message->phone_number_id    = $whatsapp->phone_number_id;
-        // $message->user_access_token  = $whatsapp->user_access_token;
-        // $message->status             = 'Operação Finalizada';
-        // $message->base64             = !empty($base64) ? $base64 : '';
-        // if($message->save()) {
-        //     return redirect()->back()->with('success', 'Disparos enviados com sucesso, confira o Log!');
-        // }
+        $message = new Mensagem();
+        $message->id_whatsapp        = $whatsapp->id;
+        $message->code               = $code;
+        $message->texto              = $request->texto;
+        $message->phone_number_id    = $whatsapp->phone_number_id;
+        $message->user_access_token  = $whatsapp->user_access_token;
+        $message->status             = 'Operação Finalizada';
+        $message->base64             = !empty($base64) ? $base64 : '';
+        if($message->save()) {
+            return redirect()->back()->with('success', 'Disparos enviados com sucesso, confira o Log!');
+        }
 
-        // return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
     }
 
     private function createLog($number, $retorno, $code, $status) {
