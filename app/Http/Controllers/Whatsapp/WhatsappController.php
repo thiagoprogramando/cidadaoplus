@@ -97,7 +97,7 @@ class WhatsappController extends Controller {
                     } else {
                         $status = "success";
                         $message = "Disparo concluído com Sucesso!";
-                        $this->createLog($number, env('APP_URL').$path, $code, $status);
+                        $this->createLog($number, env('APP_URL').'storage/'.$path, $code, $status);
                     }
                 }
             } else {
