@@ -166,7 +166,8 @@ class WhatsappController extends Controller {
             $response = $client->post('https://graph.facebook.com/v18.0/'.$phone_number_id.'/messages', $options);
     
             if ($response->getStatusCode() === 200) {
-                return $response;
+                $body = (string) $response->getBody();
+                return $data = json_decode($body, true);
             } else {
                 return ['error' => 'API não enviou status'];
             }
