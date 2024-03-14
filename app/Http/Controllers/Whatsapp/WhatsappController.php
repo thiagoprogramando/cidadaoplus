@@ -85,31 +85,28 @@ class WhatsappController extends Controller {
         }
 
         foreach ($phoneNumbers as $phoneNumber) {
-            $number = preg_replace('/\s+/', '', $phoneNumber[0]);
-            if ($request->hasFile('base64')) {
 
+            $number = preg_replace('/\s+/', '', $phoneNumber[0]);
+
+            if ($request->hasFile('base64')) {
                 if($number) {
-                    // $base64 = base64_encode(file_get_contents($request->file('base64')->path()));
-                    $send = $this->sendMidia($number, env('APP_URL').'storage/'.$path, $whatsapp->phone_number_id, $whatsapp->user_access_token);
+                    $img = env('APP_URL').'storage/'.$path;
+                    $send = $this->sendMidia($number, $img, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
-                        $status = "error";
-                        $this->createLog($number, $send['error'], $code, $status);
+                        $this->createLog($number, $send['error'], $code, 'error');
                     } else {
-                        $status = "success";
-                        $message = "Disparo concluído com Sucesso!";
-                        $this->createLog($number, env('APP_URL').'storage/'.$path, $code, $status);
+                        $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
                     }
                 }
-            } else {
+            } 
+
+            if ($request->texto) {
                 if($number) {
                     $send = $this->sendMessage($number, $request->texto, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
-                        $status = "error";
-                        $this->createLog($number, $send['error'], $code, $status);
+                        $this->createLog($number, $send['error'], $code, 'error');
                     } else {
-                        $status = "success";
-                        $message = "Disparo concluído com Sucesso!";
-                        $this->createLog($number, $message, $code, $status);
+                        $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
                     }
                 }
             }
