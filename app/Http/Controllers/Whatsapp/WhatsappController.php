@@ -90,7 +90,7 @@ class WhatsappController extends Controller {
 
             if ($request->hasFile('base64')) {
                 if($number) {
-                    $img = env('APP_URL').'storage/'.$path;
+                    $img = env('APP_URL').'/storage/'.$path;
                     $send = $this->sendMidia($number, $img, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
                         $this->createLog($number, $send['error'], $code, 'error');
@@ -213,7 +213,7 @@ class WhatsappController extends Controller {
 
     public function log($code) {
 
-        $logs = MensagemLog::where('code', $code)->get();
+        $logs = MensagemLog::where('code', $code)->orderBy('created_at', 'desc')->get();
         return view('App.Whatsapp.listLog', ['logs' => $logs]);
     }
 

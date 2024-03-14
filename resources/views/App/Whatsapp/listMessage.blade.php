@@ -11,7 +11,6 @@
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalMessage">Cadastrar</a>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalFilter">Filtrar</a>
                             </div>
                         </div>
                     </div>
@@ -27,6 +26,7 @@
                                     <th>Texto</th>
                                     <th class="text-center">Lote</th>
                                     <th>Status</th>
+                                    <th class="text-center">Enviado:</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
                             </thead>
@@ -36,6 +36,7 @@
                                         <td title="{{ $message->texto }}"><strong>{{ strlen($message->texto) > 20 ? substr($message->texto, 0, 20) . '...' : $message->texto }}</strong></td>
                                         <td class="text-center">{{ $message->code }}</td>
                                         <td>{{ $message->status }}</td>
+                                        <td class="text-center">{{ $message->created_at->format('d/m/Y H:i:s') }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('log', ['code' => $message->code]) }}" class="btn btn-outline-success"> <i class="tf-icons bx bx-list-check"></i> </a>
                                         </td>
