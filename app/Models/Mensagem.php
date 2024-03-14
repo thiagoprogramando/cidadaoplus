@@ -12,10 +12,11 @@ class Mensagem extends Model {
     protected $table = 'mensagem';
 
     protected $fillable = [
+        'id_whatsapp',
         'texto',
-        'tokenKey',
         'base64',
-        'numero',
+        'phone_number_id',
+        'user_access_token',
         'status',
     ];
 }

@@ -26,7 +26,6 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>Webhook</th>
-                                    <th>Token</th>
                                     <th>Status</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -34,13 +33,11 @@
                             <tbody class="table-border-bottom-0">
                                 @foreach ($whatsapps as $key => $whatsapp)
                                     <tr>
-                                        <td><strong>{{ $whatsapp->instanceName }}</strong> </td>
+                                        <td><strong>{{ $whatsapp->name }}</strong> </td>
                                         <td>{{ $whatsapp->webhookUrl }}</td>
-                                        <td>{{ $whatsapp->tokenKey }}</td>
                                         <td>{{ $whatsapp->status }}</td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $whatsapp->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
-                                            <a href="https://api.apizap.me/v1/instance/qrcode?tokenKey={{$whatsapp->tokenKey}}&online=true" target="_blank" class="btn btn-outline-success"> <i class="tf-icons bx bx-qr"></i> </a>
                                         </td>
                                     </tr>
 
@@ -92,10 +89,16 @@
                         @csrf
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input type="text" class="form-control" name="instanceName" placeholder="Nome:" required/>
+                                <input type="text" class="form-control" name="name" placeholder="Nome:" required/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <input type="text" class="form-control" name="webhookUrl" placeholder="WebHook:" value="{{ env('APP_WHATSAPP_URL') }}" readonly/>
+                            </div>
+                            <div class="col-12 col-md-12 col-lg-12 mb-3">
+                                <input type="text" class="form-control" name="phone_number_id" placeholder="Identificação do número de telefone:" required/>
+                            </div>
+                            <div class="col-12 col-md-12 col-lg-12 mb-3">
+                                <input type="text" class="form-control" name="user_access_token" placeholder="Token de acesso:" required/>
                             </div>
                         </div>
                     </div>

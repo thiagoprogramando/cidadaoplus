@@ -65,7 +65,9 @@ class UserController extends Controller {
             $users = Auth::user()->tipo === 1 ? User::all() : User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         }
 
-        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
     }
@@ -107,11 +109,9 @@ class UserController extends Controller {
         $coordenadores  = $coordenadores->get();
         $master         = $master->get();
 
-        if(Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
-            $alphas = User::whereIn('tipo', [2, 4])->where('id_lider', Auth::user()->id)->get();
-        } else {
-            $alphas = User::whereIn('tipo', [4, 2])->get();
-        }
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [2, 4])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         
         return view('App.User.listReport', [
             'eleitores'     => $eleitores,
@@ -181,7 +181,9 @@ class UserController extends Controller {
 
         $users = $query->orderBy('created_at', 'desc')->get();
         
-        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('App.User.listUsers', [
             'users'             => $users, 
@@ -235,15 +237,14 @@ class UserController extends Controller {
             }
         }
     }
-
-    private function validarEmail($email) {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-    }
     
     public function viewUser($id) {
 
         $user = User::where('id', $id)->first();
-        $alphas = User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get();
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
         if($user) {
             return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
         }
@@ -253,7 +254,7 @@ class UserController extends Controller {
 
     public function view($id) {
 
-        $user           = User::where('id', $id)->first();
+        $user = User::where('id', $id)->first();
         if($user) {
 
             $eleitores      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
@@ -266,7 +267,8 @@ class UserController extends Controller {
                 'eleitores'     => $eleitores, 
                 'apoiadores'    => $apoiadores, 
                 'coordenadores' => $coordenadores, 
-                'todos'         => $todos
+                'todos'         => $todos,
+                'rede'          => $user->totalUsers()
             ]);
         }
         

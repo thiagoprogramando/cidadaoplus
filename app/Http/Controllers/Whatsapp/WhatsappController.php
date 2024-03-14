@@ -25,55 +25,17 @@ class WhatsappController extends Controller {
 
     public function registrerWhatsapp(Request $request) {
 
-        $data = $this->createInstance($request->instanceName, $request->webhookUrl);
-        if($data && $data['statusCode'] == 201) {
+        $whatsapp = new Whatsappp();
+        $whatsapp->name                = $request->name;
+        $whatsapp->webhookUrl          = $request->webhookUrl;
+        $whatsapp->phone_number_id     = $request->phone_number_id;
+        $whatsapp->user_access_token   = $request->user_access_token;
 
-            $whatsapp = new Whatsappp();
-            $whatsapp->instanceName = $request->instanceName;
-            $whatsapp->webhookUrl   = $request->webhookUrl;
-            $whatsapp->tokenKey     = $data['tokenKey'];
-            $whatsapp->statusCode   = $data['statusCode'];
-            $whatsapp->status       = $data['status'];
-
-            if($whatsapp->save()) {
-                return redirect()->back()->with('success', 'WhatsApp criado com sucesso. Agora conecte-o!');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+        if($whatsapp->save()) {
+            return redirect()->back()->with('success', 'WhatsApp criado com sucesso!');
         }
 
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-    }
-
-    private function createInstance($instanceName, $webhookUrl) {
-        
-        $client = new Client();
-
-        $options = [
-            'headers' => [
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer 3517973E-B10FA892-767468D4-D1748981-02212FD7 ',
-            ],
-            'json' => [
-                'instanceName'      => $instanceName,
-                'webhookUrl'        => $webhookUrl,
-            ],
-            'verify' => false
-        ];
-
-        $response = $client->post('https://api.apizap.me/v1/manager/create', $options);
-        $body = (string) $response->getBody();
-
-        if ($response->getStatusCode() === 201) {
-            $data = json_decode($body, true);
-            return $dados['json'] = [
-                'tokenKey'      => $data['tokenKey'],
-                'status'        => $data['status'],
-                'statusCode'    => $data['statusCode'],
-            ];
-        } else {
-            return false;
-        }
     }
 
     public function deleteWhatsapp(Request $request) {
@@ -98,29 +60,6 @@ class WhatsappController extends Controller {
         }
     }
 
-    private function deleteInstance($token) {
-
-        $client = new Client();
-
-        $options = [
-            'headers' => [
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer 3517973E-B10FA892-767468D4-D1748981-02212FD7 ',
-            ],
-            'verify' => false
-        ];
-
-        $response = $client->delete('https://api.apizap.me/v1/manager/delete?tokenKey='.$token, $options);
-        $body = (string) $response->getBody();
-
-        if ($response->getStatusCode() === 200) {
-            $data = json_decode($body, true);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function listMessage() {
 
         $messages = Mensagem::all();
@@ -130,56 +69,71 @@ class WhatsappController extends Controller {
 
     public function registrerMessage(Request $request) {
 
-        $message = new Mensagem();
+        $whatsapp = Whatsappp::find($request->whatsapp_id);
+        if(!$whatsapp) {
+            return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+        }
+
+        $code = $whatsapp->id.rand(0, 999999);
 
         $phoneNumbers = Excel::toCollection(new PhoneNumbersImport, $request->file('numero'))[0]->skip(1);
         foreach ($phoneNumbers as $phoneNumber) {
-            
             $number = preg_replace('/\s+/', '', $phoneNumber[0]);
             if ($request->hasFile('base64')) {
 
+                $file      = $request->file('base64');
+                $fileName  = rand(0, 5689).rand(0, 99999).$file->getClientOriginalName();
+                $path      = $file->storeAs('whatsapp', $fileName);
+
                 if($number) {
                     $base64 = base64_encode(file_get_contents($request->file('base64')->path()));
-                    $send = $this->sendMidia($number, $request->texto, $base64, $request->tokenKey);
+                    $send = $this->sendMidia($number, env('APP_URL').$path, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
-                        $this->createLog($number, $send['error']);
+                        $status = "error";
+                        $this->createLog($number, $send['error'], $code, $status);
+                    } else {
+                        $status = "success";
+                        $message = "Disparo concluído com Sucesso!";
+                        $this->createLog($number, $message, $code, $status);
                     }
                 }
-
             } else {
-
                 if($number) {
-                    $send = $this->sendMessage($number, $request->texto, $request->tokenKey);
+                    $send = $this->sendMessage($number, $request->texto, $whatsapp->phone_number_id, $whatsapp->user_access_token);
                     if(!empty($send['error'])) {
-                        $this->createLog($number, $send['error']);
+                        $status = "error";
+                        $this->createLog($number, $send['error'], $code, $status);
+                    } else {
+                        $status = "success";
+                        $message = "Disparo concluído com Sucesso!";
+                        $this->createLog($number, $message, $code, $status);
                     }
                 }
-
             }
-
         }
 
-        $message->texto     = $request->texto;
-        $message->tokenKey  = $request->tokenKey;
-        $message->status    = 'Operação concluída';
-        $message->numero    = $request->numero->store('numero');
-        if ($request->hasFile('base64')) { $message->base64    = $request->base64->store('midia'); }
-
+        $message = new Mensagem();
+        $message->id_whatsapp        = $whatsapp->id;
+        $message->code               = $code;
+        $message->texto              = $request->texto;
+        $message->phone_number_id    = $whatsapp->phone_number_id;
+        $message->user_access_token  = $whatsapp->user_access_token;
+        $message->status             = 'Operação Finalizada';
+        $message->base64             = !empty($base64) ? $base64 : '';
         if($message->save()) {
-            return redirect()->back()->with('success', 'Disparos concluídos com Sucesso, confira o Log!');
+            return redirect()->back()->with('success', 'Disparos enviados com sucesso, confira o Log!');
         }
 
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
     }
 
-    private function createLog($number, $retorno) {
+    private function createLog($number, $retorno, $code, $status) {
 
-        $ultimaMensagem = Mensagem::latest()->first();
         $log                = new MensagemLog();
+        $log->code          = $code;
         $log->numero        = $number;
-        $log->retorno       = $retorno;
-        $log->status        = 'Finalizado';
-
+        $log->resposta      = $retorno;
+        $log->status        = $status;
         if($log->save()) {
             return true;
         }
@@ -187,29 +141,29 @@ class WhatsappController extends Controller {
         return false;
     }
 
-    private function sendMidia($numero, $texto, $base64, $tokenKey) {
+    private function sendMidia($number, $base64, $phone_number_id, $user_access_token) {
 
         $client = new Client();
 
         $options = [
             'headers' => [
                 'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer 3517973E-B10FA892-767468D4-D1748981-02212FD7 ',
+                'Authorization' => 'Bearer '.$user_access_token,
             ],
             'json' => [
-                'tokenKey'     => $tokenKey,
-                'envioGrupo'   => false,
-                'numero'       => '55'.$numero,
-                'caption'      => $texto,
-                'base64'       => $base64,
-                'originalname' => 'Promocional',
-                'mimetype'     => 'image/png'
+                'messaging_product' => "whatsapp",
+                'recipient_type'    => "individual",
+                'to'                => '55'.$number,
+                'type'              => "image",
+                'image'             => [
+                    'link' => $base64
+                ],
             ],
             'verify' => false
         ];
 
         try {
-            $response = $client->post('https://api.apizap.me/v1/message/mediaBase64', $options);
+            $response = $client->post('https://graph.facebook.com/v18.0/'.$phone_number_id.'/messages', $options);
     
             if ($response->getStatusCode() === 200) {
                 return true;
@@ -221,26 +175,30 @@ class WhatsappController extends Controller {
         }
     }
 
-    private function sendMessage($numero, $texto, $tokenKey) {
+    private function sendMessage($number, $text, $phone_number_id, $user_access_token) {
 
         $client = new Client();
 
         $options = [
             'headers' => [
                 'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer 3517973E-B10FA892-767468D4-D1748981-02212FD7 ',
+                'Authorization' => 'Bearer '.$user_access_token,
             ],
             'json' => [
-                'tokenKey'     => $tokenKey,
-                'envioGrupo'   => false,
-                'numero'       => '55'.$numero,
-                'texto'         => $texto,
+                'messaging_product' => "whatsapp",
+                'recipient_type'    => "individual",
+                'to'                => '55'.$number,
+                'type'              => "text",
+                'text'             => [
+                    'preview_url' => false,
+                    'body'        => $text
+                ],
             ],
             'verify' => false
         ];
 
         try {
-            $response = $client->post('https://api.apizap.me/v1/message/text', $options);
+            $response = $client->post('https://graph.facebook.com/v18.0/'.$phone_number_id.'/messages', $options);
     
             if ($response->getStatusCode() === 200) {
                 return true;

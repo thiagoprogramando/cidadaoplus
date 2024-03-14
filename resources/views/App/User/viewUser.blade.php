@@ -4,11 +4,11 @@
         <div class="row">
 
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-6 mb-4">
+                <div class="col-lg-4 col-md-3 col-6 mb-4">
                     <div class="card bg-info text-white">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
-                                <span class="fw-semibold d-block mb-1">Total de registros</span>
+                                <span class="fw-semibold d-block mb-1">Total de Registros</span>
                             </div>
                             
                             <h3 class="card-title text-white mb-2"> {{ $todos->count() }} </h3>
@@ -16,11 +16,11 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-3 col-6 mb-4">
+                <div class="col-lg-2 col-md-3 col-6 mb-4">
                     <div class="card bg-warning text-white">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
-                                <span class="fw-semibold d-block mb-1">Total de Eleitores</span>
+                                <span class="fw-semibold d-block mb-1">Eleitores</span>
                             </div>
                             
                             <h3 class="card-title text-white mb-2"> {{ $eleitores }} </h3>
@@ -28,11 +28,11 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-3 col-6 mb-4">
+                <div class="col-lg-2 col-md-3 col-6 mb-4">
                     <div class="card bg-primary text-white">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
-                                <span class="fw-semibold d-block mb-1">Total de Apoiadores</span>
+                                <span class="fw-semibold d-block mb-1">Apoiadores</span>
                             </div>
                             
                             <h3 class="card-title text-white mb-2"> {{ $apoiadores }} </h3>
@@ -40,14 +40,26 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-3 col-6 mb-4">
+                <div class="col-lg-2 col-md-3 col-6 mb-4">
                     <div class="card bg-dark text-white">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
-                                <span class="fw-semibold d-block mb-1">Total de Coordenadores</span>
+                                <span class="fw-semibold d-block mb-1">Coordenadores</span>
                             </div>
                             
                             <h3 class="card-title text-white mb-2"> {{ $coordenadores }} </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-6 mb-4">
+                    <div class="card bg-secondary  text-white">
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                                <span class="fw-semibold d-block mb-1">Rede</span>
+                            </div>
+                            
+                            <h3 class="card-title text-white mb-2"> {{ $rede }} </h3>
                         </div>
                     </div>
                 </div>

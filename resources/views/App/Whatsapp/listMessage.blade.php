@@ -25,7 +25,6 @@
                             <thead>
                                 <tr>
                                     <th>Texto</th>
-                                    <th>tokenKey</th>
                                     <th class="text-center">Mídia</th>
                                     <th class="text-center">Lote</th>
                                     <th>Status</th>
@@ -36,7 +35,6 @@
                                 @foreach ($messages as $key => $message)
                                     <tr>
                                         <td title="{{ $message->texto }}"><strong>{{ strlen($message->texto) > 20 ? substr($message->texto, 0, 20) . '...' : $message->texto }}</strong></td>
-                                        <td>{{ $message->tokenKey }}</td>
                                         <td class="text-center"><a download href="{{ url("storage/{$message->base64}") }}">Arquivo</a></td>
                                         <td class="text-center"><a download href="{{ url("storage/{$message->numero}") }}">Arquivo</a></td>
                                         <td>{{ $message->status }}</td>
@@ -77,10 +75,10 @@
                                 <input type="file" class="form-control" name="numero" accept=".xlsx" placeholder="CSV com os Números:" required/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="tokenKey" class="form-control" required>
+                                <select name="whatsapp_id" class="form-control" required>
                                     <option value="">WhatsApp</option>
                                     @foreach ($whatsapps as $whatsapp)
-                                        <option value="{{ $whatsapp->tokenKey }}">{{ $whatsapp->instanceName }}</option>
+                                        <option value="{{ $whatsapp->id }}">{{ $whatsapp->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -9,11 +9,16 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('mensagem', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_whatsapp');
+
             $table->longText('texto');
-            $table->longText('tokenKey');
             $table->longText('base64')->nullable();
-            $table->string('numero');
+
+            $table->longText('phone_number_id');
+            $table->longText('user_access_token');
+
             $table->string('status');
+            $table->string('code');
             $table->timestamps();
         });
     }
