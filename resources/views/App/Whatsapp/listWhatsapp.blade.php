@@ -11,7 +11,7 @@
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalWhatsapp">Cadastrar</a>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalFilter">Envio em Massa</a>
+                                <a class="dropdown-item" href="{{ route('listMessage') }}">Envio em Massa</a>
                             </div>
                         </div>
                     </div>

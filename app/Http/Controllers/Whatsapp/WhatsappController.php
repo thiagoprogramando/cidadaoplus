@@ -45,13 +45,8 @@ class WhatsappController extends Controller {
            
             $whatsapp = Whatsappp::find($request->id);
             if ($whatsapp) {
-
-                if($this->deleteInstance($whatsapp->tokenKey)){
-                    $whatsapp->delete();
-                    return redirect()->back()->with('success', 'Whatsapp excluído com sucesso!');
-                }
-                
-                return redirect()->back()->with('error', 'Não encontramos dados do Whatsapp, tente novamente mais tarde!');
+                $whatsapp->delete();
+                return redirect()->back()->with('success', 'Whatsapp excluído com sucesso!');
             } else {
                 return redirect()->back()->with('error', 'Não encontramos dados do Whatsapp, tente novamente mais tarde!');
             }
@@ -166,8 +161,7 @@ class WhatsappController extends Controller {
             $response = $client->post('https://graph.facebook.com/v18.0/'.$phone_number_id.'/messages', $options);
     
             if ($response->getStatusCode() === 200) {
-                $body = (string) $response->getBody();
-                return $data = json_decode($body, true);
+                return true;
             } else {
                 return ['error' => 'API não enviou status'];
             }
