@@ -86,8 +86,8 @@ class WhatsappController extends Controller {
 
         foreach ($phoneNumbers as $phoneNumber) {
 
-            $number = preg_replace('/\s+/', '', $phoneNumber[0]);
-
+            $number = preg_replace('/\D/', '', $phoneNumber[5]);
+            
             if ($request->hasFile('base64')) {
                 if($number) {
                     $img = env('APP_URL').'/storage/'.$path;
