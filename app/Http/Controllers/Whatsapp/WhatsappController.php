@@ -57,7 +57,7 @@ class WhatsappController extends Controller {
 
     public function listMessage() {
 
-        $messages = Mensagem::all();
+        $messages = Mensagem::orderBy('created_at', 'desc')->get();
         $whatsapps = Whatsappp::all();
         return view('App.Whatsapp.listMessage', ['messages' => $messages, 'whatsapps' => $whatsapps]);
     }
