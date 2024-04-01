@@ -89,13 +89,13 @@
                             </a>
                         </li>
 
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Agenda & Comunicação</span></li>
-                        <li class="menu-item">
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Comunicação</span></li>
+                        {{-- <li class="menu-item">
                             <a href="{{ route('listEvent') }}" class="menu-link">
                               <i class="menu-icon tf-icons bx bx-calendar-star"></i>
                               <div>Eventos</div>
                             </a>
-                        </li>
+                        </li> --}}
                         @if (Auth::user()->tipo == 1)
                             <li class="menu-item">
                                 <a href="{{ route('listMessage') }}" class="menu-link">
