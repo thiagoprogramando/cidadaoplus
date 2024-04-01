@@ -257,6 +257,8 @@
         <script>
             document.addEventListener("DOMContentLoaded", function () {
 
+                $('#divComEstilo svg').addClass('d-none');
+
                 var elementosQrCode = document.querySelectorAll('.qrcode');
                 elementosQrCode.forEach(function(elemento) {
                     var link = elemento.getAttribute("data-link");
