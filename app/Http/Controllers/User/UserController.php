@@ -316,20 +316,14 @@ class UserController extends Controller {
     }
 
     public function deleteUser(Request $request) {
+    
+        $user = User::find($request->id);
+        if ($user) {
 
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $user = User::find($request->id);
-            if ($user) {
-
-                $user->delete();
-                return redirect()->back()->with('success', 'Usuário excluído com sucesso!');
-            } else {
-                return redirect()->back()->with('error', 'Não encontramos dados do Usuário, tente novamente mais tarde!');
-            }
+            $user->delete();
+            return redirect()->back()->with('success', 'Usuário excluído com sucesso!');
         } else {
-            return redirect()->back()->with('error', 'Senha incorreta!');
+            return redirect()->back()->with('error', 'Não encontramos dados do Usuário, tente novamente mais tarde!');
         }
     }
 

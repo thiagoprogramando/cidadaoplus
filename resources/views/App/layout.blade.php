@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css"/>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('template/vendor/js/sweetalert.js')}}"></script>
     </head>
 
     <body>
@@ -282,6 +283,28 @@
                             downloadLink.href = imageData;
                             downloadLink.download = "qrcode.png";
                             downloadLink.click();
+                        });
+                    });
+                });
+
+                const deleteForms = document.querySelectorAll('form.delete');
+                deleteForms.forEach(form => {
+                    form.addEventListener('submit', function (event) {
+                        
+                        event.preventDefault();
+                        Swal.fire({
+                            title: 'Tem certeza?',
+                            text: 'Você realmente deseja excluir este registro?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sim',
+                            confirmButtonColor: '#008000',
+                            cancelButtonText: 'Não',
+                            cancelButtonColor: '#FF0000',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
                         });
                     });
                 });

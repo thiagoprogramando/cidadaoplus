@@ -64,39 +64,14 @@
                                         <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
                                         <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->Type }}</span></td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $user->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
-                                            <a href="{{ route('viewUser', ['id' => $user->id]) }}" class="btn btn-outline-warning"> <i class="tf-icons bx bx-edit-alt"></i> </a>
+                                            <form action="{{ route('deleteUser') }}" method="POST" class="delete">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $user->id }}">
+                                                <button type="submit" class="btn btn-outline-danger"> <i class="tf-icons bx bx-trash"></i> </button>
+                                                <a href="{{ route('viewUser', ['id' => $user->id]) }}" class="btn btn-outline-warning"> <i class="tf-icons bx bx-edit-alt"></i> </a>
+                                            </form>
                                         </td>
                                     </tr>
-
-                                    <div class="modal fade" id="modalDelete{{ $user->id }}" aria-labelledby="modalDelete{{ $user->id }}" tabindex="1" style="display: none" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalDelete{{ $user->id }}">Excluir {{ $user->name }}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('deleteUser') }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{ $user->id }}">
-                                                        <div class="mb-3">
-                                                            <p>Para confirmar a exclusão, confirme sua senha:</p>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <input type="password" class="form-control" name="password" placeholder="Confirme sua senha:" autofocus/>
-                                                        </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> Cancelar </button>
-                                                        <button type="submit" class="btn btn-success"> Confirmar </button>
-                                                    </form>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
                                 @endforeach
                             </tbody>
                         </table>
