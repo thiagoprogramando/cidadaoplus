@@ -5,22 +5,28 @@ namespace App\Http\Controllers\Agenda;
 use App\Http\Controllers\Controller;
 
 use App\Models\Agenda;
+use App\Models\User;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AgendaController extends Controller {
     
     public function listEvent() {
 
-        $events = Agenda::all();
-        return view('App.Agenda.listEvent', ['events' => $events]);
+        $events = Auth::user()->tipo == 1 ? Agenda::all() : Agenda::where('id_lider', Auth::user()->id)->orWhere('id_criador', Auth::user()->id)->get();
+        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 3])->get() : User::whereIn('tipo', [1, 2, 3])->where('id_lider', Auth::user()->id)->get();
+
+        return view('App.Agenda.listEvent', ['events' => $events, 'alphas' => $alphas]);
     }
 
     public function registrerEvent(Request $request) {
 
         $event              = new Agenda();
+        $event->id_criador  = Auth::user()->id;
+        $event->id_lider    = $request->id_lider;
         $event->nome        = $request->nome;
         $event->descricao   = $request->descricao;
         $event->data        = Carbon::parse($request->data);
@@ -49,9 +55,14 @@ class AgendaController extends Controller {
             $query->where('hora', $request->input('hora'));
         }
 
-        $events = $query->get();
+        if ($request->filled('id_lider')) {
+            $query->where('id_lider', $request->input('id_lider'));
+        }
 
-        return view('App.Agenda.listEvent', ['events' => $events]);
+        $events = $query->get();
+        $alphas = Auth::user()->tipo == 1 ? User::whereIn('tipo', [1, 2, 3])->get() : User::whereIn('tipo', [1, 2, 3])->where('id_lider', Auth::user()->id)->get();
+
+        return view('App.Agenda.listEvent', ['events' => $events, 'alphas' => $alphas]);
     }
 
     public function updateEvent(Request $request) {
@@ -60,6 +71,7 @@ class AgendaController extends Controller {
         if($event) {
             $event->nome        = $request->nome;
             $event->descricao   = $request->descricao;
+            $event->id_lider    = $request->id_lider;
             $event->data        =  Carbon::parse($request->data);
             $event->hora        = $request->hora;
 

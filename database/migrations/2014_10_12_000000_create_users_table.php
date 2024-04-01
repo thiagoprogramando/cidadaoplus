@@ -10,8 +10,6 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_lider')->nullable();
-            $table->unsignedBigInteger('id_grupo')->nullable();
-            $table->foreign('id_grupo')->references('id')->on('grupo');
 
             $table->string('nome');
             $table->string('foto')->nullable();
@@ -31,7 +29,7 @@ return new class extends Migration {
             $table->string('cidade')->nullable();
             $table->string('estado')->nullable();
 
-            $table->integer('tipo'); // 1 - Master 2 - Liderança 3 - Eleitor
+            $table->integer('tipo'); // 1 - Master 2 - Liderança 3 - Eleitor 4 - Coordenador
             $table->string('password')->nullable();
             
             $table->timestamps();

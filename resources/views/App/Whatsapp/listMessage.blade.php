@@ -11,7 +11,6 @@
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalMessage">Cadastrar</a>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalFilter">Filtrar</a>
                             </div>
                         </div>
                     </div>
@@ -25,10 +24,9 @@
                             <thead>
                                 <tr>
                                     <th>Texto</th>
-                                    <th>tokenKey</th>
-                                    <th class="text-center">Mídia</th>
                                     <th class="text-center">Lote</th>
                                     <th>Status</th>
+                                    <th class="text-center">Enviado:</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
                             </thead>
@@ -36,12 +34,11 @@
                                 @foreach ($messages as $key => $message)
                                     <tr>
                                         <td title="{{ $message->texto }}"><strong>{{ strlen($message->texto) > 20 ? substr($message->texto, 0, 20) . '...' : $message->texto }}</strong></td>
-                                        <td>{{ $message->tokenKey }}</td>
-                                        <td class="text-center"><a download href="{{ url("storage/{$message->base64}") }}">Arquivo</a></td>
-                                        <td class="text-center"><a download href="{{ url("storage/{$message->numero}") }}">Arquivo</a></td>
+                                        <td class="text-center">{{ $message->code }}</td>
                                         <td>{{ $message->status }}</td>
+                                        <td class="text-center">{{ $message->created_at->format('d/m/Y H:i:s') }}</td>
                                         <td class="text-center">
-                                            <a href="" target="_blank" class="btn btn-outline-success"> <i class="tf-icons bx bx-list-check"></i> </a>
+                                            <a href="{{ route('log', ['code' => $message->code]) }}" class="btn btn-outline-success"> <i class="tf-icons bx bx-list-check"></i> </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -77,15 +74,15 @@
                                 <input type="file" class="form-control" name="numero" accept=".xlsx" placeholder="CSV com os Números:" required/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <select name="tokenKey" class="form-control" required>
+                                <select name="whatsapp_id" class="form-control" required>
                                     <option value="">WhatsApp</option>
                                     @foreach ($whatsapps as $whatsapp)
-                                        <option value="{{ $whatsapp->tokenKey }}">{{ $whatsapp->instanceName }}</option>
+                                        <option value="{{ $whatsapp->id }}">{{ $whatsapp->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input name="password" class="form-control" placeholder="Confirme sua senha:" required></input>
+                                <input type="password" name="password" class="form-control" placeholder="Confirme sua senha:" required>
                             </div>
                         </div>
                     </div>

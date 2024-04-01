@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
-use App\Models\Grupo;
+use App\Mail\Welcome;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller {
     
@@ -41,7 +41,7 @@ class UserController extends Controller {
                 $user->whatsapp = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
             }
             if($request->email) {
-                $user->email = $request->email;
+                $user->email = strtolower($request->email);
             }
             if($request->password) {
                 $user->password = bcrypt($request->password);
@@ -60,178 +60,220 @@ class UserController extends Controller {
     public function listUser($tipo = null) {
 
         if($tipo) {
-            $users = Auth::user()->tipo == 1 ? User::where('tipo', $tipo)->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->get();
+            $users = Auth::user()->tipo === 1 ? 
+                User::where('tipo', $tipo)->orderBy('created_at', 'desc')->paginate(100) : 
+                User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
         } else {
-            $users = Auth::user()->tipo == 1 ? User::all() : User::where('id_lider', Auth::user()->id)->get();
+            $users = Auth::user()->tipo === 1 ? 
+                User::orderBy('created_at', 'desc')->paginate(100) : 
+                User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
         }
 
-        $alphas = User::whereIn('tipo', [1, 2])->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas, 'grupos' => $grupos]);
+        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
+    }
+
+    public function listReport(Request $request) {
+
+        $eleitores      = User::where('tipo', 3);
+        $apoiadores     = User::where('tipo', 2);
+        $coordenadores  = User::where('tipo', 4);
+        $master         = User::where('tipo', 1);
+
+        
+        if($request->input('id_lider')) {
+            $id_lider = $request->input('id_lider');
+
+            $eleitores->where('id_lider', $id_lider);
+            $apoiadores->where('id_lider', $id_lider);
+            $coordenadores->where('id_lider', $id_lider);
+            $master->where('id_lider', $id_lider);
+
+            $rede = User::where('id', $id_lider)->first();
+            $rede = $rede->totalUsers();
+        } else {
+            if(Auth::user()->tipo != 1) {
+                $eleitores->where('id_lider', Auth::user()->id);
+                $apoiadores->where('id_lider', Auth::user()->id);
+                $coordenadores->where('id_lider', Auth::user()->id);
+                $master->where('id_lider', Auth::user()->id);
+
+                $rede = User::where('id', Auth::user()->id)->first();
+                $rede = $rede->totalUsers();
+            } else {
+                $rede = 0;
+            }
+        }
+        
+        $eleitores      = $eleitores->get();
+        $apoiadores     = $apoiadores->get();
+        $coordenadores  = $coordenadores->get();
+        $master         = $master->get();
+
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [2, 4])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        
+        return view('App.User.listReport', [
+            'eleitores'     => $eleitores,
+            'apoiadores'    => $apoiadores,
+            'coordenadores' => $coordenadores,
+            'master'        => $master,
+            'alphas'        => $alphas,
+            'rede'          => $rede
+        ]);
     }
 
     public function filterUser(Request $request) {
 
         $query = User::query();
 
-        if ($request->filled('nome')) {
+        if ($request->input('nome')) {
             $query->where('nome', 'like', '%' . $request->input('nome') . '%');
         }
 
-        if ($request->filled('dataNasc')) {
-            $query->where('dataNasc', '=', Carbon::parse($request->input('dataNasc')));
+        if ($request->input('dataNasc')) {
+            $dataNasc = $request->input('dataNasc');
+            $dataNascParts = explode('-', $dataNasc);
+
+            if (count($dataNascParts) === 2) {
+                $dia = $dataNascParts[0];
+                $mes = $dataNascParts[1];
+
+                $query->whereRaw("DAY(dataNasc) = $dia")
+                    ->whereRaw("MONTH(dataNasc) = $mes");
+            } elseif (count($dataNascParts) === 3) {
+                $dia = $dataNascParts[0];
+                $mes = $dataNascParts[1];
+                $ano = $dataNascParts[2];
+
+                $query->whereRaw("DAY(dataNasc) = $dia")
+                    ->whereRaw("MONTH(dataNasc) = $mes")
+                    ->whereRaw("YEAR(dataNasc) = $ano");
+            } else {
+                $dia = $dataNascParts[0];
+                $query->whereRaw("DAY(dataNasc) = $dia");
+            }
         }
 
-        if ($request->filled('id_lider')) {
-            $query->where('id_lider', $request->input('id_lider'));
-        }
-
-        if(Auth::user()->tipo != 1) {
+        if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
+            if ($request->input('id_lider')) {
+                $query->where('id_lider', $request->input('id_lider'));
+            }
+        } else {
             $query->where('id_lider', Auth::user()->id);
         }
 
-        if ($request->filled('tipo')) {
+        if ($request->input('tipo')) {
             $query->where('tipo', $request->input('tipo'));
         }
 
-        if ($request->filled('id_grupo')) {
-            $query->where('id_grupo', $request->input('id_grupo'));
-        }
-
-        if ($request->filled('sexo')) {
+        if ($request->input('sexo')) {
             $query->where('sexo', $request->input('sexo'));
         }
 
-        if ($request->filled('profissao')) {
+        if ($request->input('profissao')) {
             $query->where('profissao', $request->input('profissao'));
         }
 
-        if ($request->filled('cep')) {
+        if ($request->input('cep')) {
             $query->where('cep', $request->input('cep'));
         }
 
-        $users = $query->get();
-        $alphas = User::whereIn('tipo', [1, 2])->get();
-
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => 1, 'alphas' => $alphas]);
-    }
-
-    public function registrerUser($tipo) {
-
-        $users = User::whereIn('tipo', [1, 2])->get();
-        return view('App.User.registrerUser', ['tipo' => $tipo, 'users' => $users]);
-    }
-
-    public function createUser(Request $request) {
-
-        $rules = [
-            'nome'      => 'required|string',
-            'tipo'      => 'required',
-            'id_lider'  => 'required',
-            'email'     => 'email|unique:users',
-            'whatsapp'  => 'required'
-        ];
-
-        $messages = [
-            'nome.required'     => 'O campo Nome é obrgatório!',
-            'tipo.required'     => 'Informe um tipo de usuário!',
-            'id_lider.required' => 'Informe um Líder!',
-            'email.email'       => 'Por favor, informe um Email válido',
-            'email.unique'      => 'Já existe uma pessoa com esse Email',
-            'whatsapp.required' => 'Por favor, informe um WhatsApp!',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors());
-        }
-
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if($user) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
-        }
-
-        $user               = new User();
-        $user->id_lider     = $request->id_lider;
-        $user->nome         = $request->nome;
-        $user->dataNasc     = Carbon::parse($request->dataNasc);
-        $user->sexo         = $request->sexo;
-        $user->tipo         = $request->tipo;
-        $user->email        = $request->email;
-        $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
-        $user->instagram    = $request->instagram;
-        $user->facebook     = $request->facebook;
-        $user->cep          = $request->cep;
-        $user->logradouro   = $request->logradouro;
-        $user->numero       = $request->numero;
-        $user->bairro       = $request->bairro;
-        $user->cidade       = $request->cidade;
-        $user->estado       = $request->estado;
-        $user->password     = bcrypt(str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp));
-
-        if($user->save()) {
-            return redirect()->route('listUser', ['tipo' => $request->tipo])->with('success', 'Cadastro realizado com sucesso!');
-        }
+        $users = $query->orderBy('created_at', 'desc')->paginate(100);
         
-        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+        return view('App.User.listUsers', [
+            'users'             => $users, 
+            'tipo'              => 1, 
+            'alphas'            => $alphas,
+        ]);
     }
 
     public function createUserExternal(Request $request) {
 
-        $rules = [
-            'nome'      => 'required|string',
-            'whatsapp'  => 'required'
-        ];
+        $validator = Validator::make($request->all(), [
+            'nome'      => 'required',
+            'whatsapp'  => 'required|unique:users,whatsapp',
+            'dataNasc'  => 'required|date_format:d-m-Y',
+            'email'     => 'nullable|email|unique:users,email',
+        ], [
+            'nome.required'         => 'Por favor, informe um Nome!',
+            'whatsapp.required'     => 'Por favor, informe um WhatsApp!',
+            'whatsapp.unique'       => 'Já existe uma Pessoa com esse WhatsApp!',
+            'dataNasc.required'     => 'Por favor, informe uma Data de Nascimento!',
+            'dataNasc.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!',
+            'email.email'           => 'Formato de e-mail inválido!',
+            'email.unique'          => 'Já existe uma Pessoa com esse E-mail!'
+        ]);        
 
-        $messages = [
-            'nome.required'     => 'O campo Nome é obrgatório!',
-            'whatsapp.required' => 'Por favor, informe um WhatsApp!',
-        ];
+        if($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        } else {
+            $user               = new User();
+            $user->id_lider     = $request->id_lider;
+            $user->nome         = $request->nome;
+            $user->dataNasc     = Carbon::parse($request->dataNasc);
+            $user->sexo         = $request->sexo;
+            $user->profissao    = $request->profissao;
+            $user->tipo         = 3;
+            $user->email        = strtolower($request->email);
+            $user->whatsapp     = $request->whatsapp;
+            $user->instagram    = $request->instagram;
+            $user->facebook     = $request->facebook;
+            $user->cep          = $request->cep;
+            $user->logradouro   = $request->logradouro;
+            $user->numero       = $request->numero;
+            $user->bairro       = $request->bairro;
+            $user->cidade       = $request->cidade;
+            $user->estado       = $request->estado;
+            $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
 
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors());
+            if($user->save()) {
+
+                return redirect('https://api.whatsapp.com/send?phone=5584987674348&text=Ol%C3%A1,%20acabei%20de%20me%20cadastrar%20via%20site%20e%20gostaria%20de%20conhecer%20os%20projetos%20do%20vereador%20Kleber%C2%A0Fernandes!');
+            }
         }
+    }
+    
+    public function viewUser($id) {
 
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
+        $user = User::where('id', $id)->first();
+        $alphas = Auth::user()->tipo == 1 ? 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
         if($user) {
-            return redirect()->back()->with('error', 'Já existe uma Pessoa com esse Whatsapp!');
-        }
-
-        $user               = new User();
-        $user->id_lider     = $request->id_lider;
-        $user->nome         = $request->nome;
-        $user->dataNasc     = Carbon::parse($request->dataNasc);
-        $user->sexo         = $request->sexo;
-        $user->profissao    = $request->profissao;
-        $user->tipo         = 3;
-        $user->email        = $request->email;
-        $user->whatsapp     = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
-        $user->instagram    = $request->instagram;
-        $user->facebook     = $request->facebook;
-        $user->cep          = $request->cep;
-        $user->logradouro   = $request->logradouro;
-        $user->numero       = $request->numero;
-        $user->bairro       = $request->bairro;
-        $user->cidade       = $request->cidade;
-        $user->estado       = $request->estado;
-        $user->id_grupo     = $request->id_grupo;
-        $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
-
-        if($user->save()) {
-            return redirect()->back()->with('success', 'Cadastro concluído com Sucesso!');
+            return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
     }
 
-    public function viewUser($id) {
+    public function view($id) {
 
         $user = User::where('id', $id)->first();
-        $users = User::whereIn('tipo', [1, 2])->get();
         if($user) {
-            return view('App.User.updateUser', ['user' => $user, 'users' => $users]);
+
+            $eleitores      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
+            $apoiadores     = User::where('id_lider', $user->id)->where('tipo', 2)->count();
+            $coordenadores  = User::where('id_lider', $user->id)->where('tipo', 4)->count();
+            $todos          = User::where('id_lider', $user->id)->orderBy('created_at', 'desc')->get();
+
+            return view('App.User.viewUser', [
+                'user'          => $user, 
+                'eleitores'     => $eleitores, 
+                'apoiadores'    => $apoiadores, 
+                'coordenadores' => $coordenadores, 
+                'todos'         => $todos,
+                'rede'          => $user->totalUsers()
+            ]);
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
@@ -239,7 +281,11 @@ class UserController extends Controller {
 
     public function updateUser(Request $request) {
 
-        $user               = User::where('id', $request->id)->first();
+        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
+            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta! Formato correto: DD-MM-AAAA');
+        }
+
+        $user = User::where('id', $request->id)->first();
         if($user) {
             $user->id_lider     = $request->id_lider;
             $user->nome         = $request->nome;
@@ -247,7 +293,7 @@ class UserController extends Controller {
             $user->dataNasc     = Carbon::parse($request->dataNasc);
             $user->sexo         = $request->sexo;
             $user->tipo         = $request->tipo;
-            $user->email        = $request->email;
+            $user->email        = strtolower($request->email);
             $user->whatsapp     = str_replace(['.', ',', '-', '(', ')'], '', $request->whatsapp);
             $user->instagram    = $request->instagram;
             $user->facebook     = $request->facebook;
@@ -270,20 +316,14 @@ class UserController extends Controller {
     }
 
     public function deleteUser(Request $request) {
+    
+        $user = User::find($request->id);
+        if ($user) {
 
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $user = User::find($request->id);
-            if ($user) {
-
-                $user->delete();
-                return redirect()->back()->with('success', 'Usuário excluído com sucesso!');
-            } else {
-                return redirect()->back()->with('error', 'Não encontramos dados do Usuário, tente novamente mais tarde!');
-            }
+            $user->delete();
+            return redirect()->back()->with('success', 'Usuário excluído com sucesso!');
         } else {
-            return redirect()->back()->with('error', 'Senha incorreta!');
+            return redirect()->back()->with('error', 'Não encontramos dados do Usuário, tente novamente mais tarde!');
         }
     }
 
@@ -300,49 +340,4 @@ class UserController extends Controller {
             return redirect()->back()->with('error', 'Senha inválida!');
         }
     }
-
-    public function listGrupo( ) {
-
-        $alphas = User::whereIn('tipo', [1, 2])->get();
-        $grupos = Auth::user()->tipo == 1 ? Grupo::all() : Grupo::where('id_lider', Auth::user()->id)->get();
-
-        return view('App.User.listGrupo', ['alphas' => $alphas, 'grupos' => $grupos]);
-    }
-
-    public function createGrupo(Request $request) {
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $grupo = new Grupo();
-            $grupo->nome        = $request->nome;
-            $grupo->code        = strtolower(str_replace(' ', '-', $request->nome));
-            $grupo->id_lider    = $request->id_lider;
-            if($grupo->save()) {
-                return redirect()->back()->with('success', 'Grupo criado com Sucesso!');
-            }
-
-            return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-        } else {
-            return redirect()->back()->with('error', 'Senha inválida!');
-        }
-    }
-
-    public function deleteGrupo(Request $request) {
-
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $grupo = Grupo::find($request->id);
-            if ($grupo) {
-
-                $grupo->delete();
-                return redirect()->back()->with('success', 'Grupo excluído com sucesso!');
-            } else {
-                return redirect()->back()->with('error', 'Não encontramos dados do Grupo, tente novamente mais tarde!');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Senha incorreta!');
-        }
-    }
-
 }

@@ -16,11 +16,11 @@
                         <div class="row">
                             <input type="hidden" name="id" value="{{ $user->id }}">
 
-                            <div class="col-12 col-md-9 col-lg-9 mb-3">
+                            <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:" value="{{ $user->nome }}"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" value="{{ $user->dataNasc }}" oninput="mascaraData(this)"/>
+                                <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" oninput="mascaraData(this)" value="{{ $user->DataFormatada }}"/>
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
@@ -34,6 +34,9 @@
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="profissao" class="form-control">
                                     <option value="{{ $user->profissao }}" selected>{{ $user->profissao }}</option>
+                                    <option value="outros">Outros</option>
+                                    <option value="do_lar">Do lar</option>
+                                    <option value="autonomo">Autônomo</option>
                                     <option value="advogado">Advogado</option>
                                     <option value="arquiteto">Arquiteto</option>
                                     <option value="assistente_social">Assistente Social</option>
@@ -65,22 +68,32 @@
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <select name="tipo" class="form-control">
                                     <option value="{{ $user->tipo }}" selected>{{ $user->Type }}</option>
-                                    <option value="1">Master</option>
-                                    <option value="2">Liderança</option>
+                                    @if (Auth::user()->tipo == 1) 
+                                        <option value="1">Master</option>  
+                                        <option value="4">Coordenador</option>
+                                    @endif
+                                    @if(Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
+                                        <option value="2">Apoiador</option>
+                                    @endif
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="id_lider" class="form-control">
-                                    <option value="{{ $user->id_lider }}" selected>{{ $user->lider->nome }}</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->nome }}</option>
+                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+                            </div>
+                            <div class="col-12 col-md-3 col-lg-3 mb-3">
+                                <select name="id_lider" id="selectSearch" class="form-control">
+                                    <option value="{{ $user->id_lider }}" selected>
+                                        @if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif
+                                    </option>
+                                    @foreach ($alphas as $alpha)
+                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="email" class="form-control" name="email" value="{{ $user->email }}" placeholder="Email:"/>
+                                <input type="text" class="form-control" name="email" value="{{ $user->email }}" placeholder="Email:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <input type="text" class="form-control" name="whatsapp" value="{{ $user->whatsapp }}" placeholder="WhatsApp:" oninput="mascaraTelefone(this)"/>
@@ -117,4 +130,39 @@
 
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            
+            var alphas = {!! json_encode($alphas) !!};
+            function filterOptions(searchQuery) {
+                var filteredAlphas = alphas.filter(function(alpha) {
+                    return alpha.nome.toLowerCase().includes(searchQuery.toLowerCase());
+                });
+                populateOptions(filteredAlphas);
+            }
+        
+            function populateOptions(options) {
+                var selectElement = $('#selectSearch');
+                selectElement.empty();
+                selectElement.append($('<option>', {
+                    value: "{!! $user->id_lider !!}",
+                    text: "@if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif",
+                    selected: true
+                }));
+                $.each(options, function(index, option) {
+                    selectElement.append($('<option>', {
+                        value: option.id,
+                        text: option.nome
+                    }));
+                });
+            }
+        
+            $('#searchInput').on('input', function() {
+                filterOptions($(this).val());
+            });
+        
+            populateOptions(alphas);
+        });
+    </script>
 @endsection

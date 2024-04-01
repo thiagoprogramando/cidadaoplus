@@ -13,7 +13,7 @@ class MensagemLog extends Model {
 
     protected $fillable = [
         'id_mensagem',
-        'retorno',
+        'resposta',
         'numero',
         'status',
     ];

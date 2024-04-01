@@ -13,13 +13,13 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ Auth::user()->id }}">
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="nome" placeholder="{{ Auth::user()->nome }}"/>
+                                        <input type="text" class="form-control" name="nome" value="{{ Auth::user()->nome }}" placeholder="Nome:"/>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="whatsapp" placeholder="{{ Auth::user()->whatsapp }}" oninput="mascaraTelefone(this)"/>
+                                        <input type="text" class="form-control" name="whatsapp" value="{{ Auth::user()->WhatsappFormatado }}" oninput="mascaraTelefone(this)" placeholder="WhatsApp:"/>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="email" class="form-control" name="email" placeholder="{{ Auth::user()->email }}"/>
+                                        <input type="email" class="form-control" name="email" value="{{ Auth::user()->email }}" placeholder="Email:"/>
                                     </div>
                                     <div class="mb-3">
                                         <div class="input-group input-group-merge">

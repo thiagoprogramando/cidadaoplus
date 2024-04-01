@@ -12,10 +12,10 @@ class Whatsappp extends Model {
     protected $table = 'whatsapp';
 
     protected $fillable = [
-        'instanceName',
+        'name',
         'webhookUrl',
-        'tokenKey',
-        'statusCode',
+        'phone_number_id',
+        'user_access_token',
         'status',
     ];
 }

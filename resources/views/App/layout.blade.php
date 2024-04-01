@@ -6,23 +6,21 @@
 
         <title>#Tô com Kleber - {{ Auth::user()->nome }}</title>
 
-        <link rel="icon" type="image/x-icon" href="{{ asset('template/img/favicon/favicon.ico') }}"/>
+        <link rel="icon" type="image/x-icon" href="{{ asset('template/img/background/icon.png') }}" />
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-        <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
 
         <link rel="stylesheet" href="{{ asset('template/vendor/fonts/boxicons.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('template/css/demo.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/css/core.css') }}" class="template-customizer-core-css"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/css/theme-default.css') }}" class="template-customizer-theme-css"/>
-        <link rel="stylesheet" href="{{ asset('template/css/demo.css') }}"/>
+        
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('template/vendor/libs/apex-charts/apex-charts.css') }}"/>
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css"/>
 
-        <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
-        <script src="{{ asset('template/js/config.js') }}"></script>
-        <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('template/vendor/js/sweetalert.js')}}"></script>
     </head>
 
     <body>
@@ -59,13 +57,24 @@
                               <div>Eleitores</div>
                             </a>
                         </li>
-                        @if (Auth::user()->tipo == 1)
+                        
+                        @if (Auth::user()->tipo == 4 || Auth::user()->tipo == 1)
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-user-voice"></i>
-                                <div>Liderança</div>
+                                    <i class="menu-icon tf-icons bx bx-user-voice"></i>
+                                    <div>Apoiadores</div>
                                 </a>
                             </li>
+                        @endif
+
+                        @if (Auth::user()->tipo == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['tipo' => 4]) }}" class="menu-link">
+                                    <i class='menu-icon tf-icons bx bx-user-check'></i>
+                                    <div>Coordenadores</div>
+                                </a>
+                            </li>
+
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -74,19 +83,19 @@
                             </li>
                         @endif
                         <li class="menu-item">
-                            <a href="{{ route('listGrupo') }}" class="menu-link">
-                              <i class="menu-icon tf-icons bx bx-group"></i>
-                              <div>Grupos</div>
+                            <a href="{{ route('listReport') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-data"></i>
+                                <div>Relatórios</div>
                             </a>
                         </li>
 
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Agenda & Comunicação</span></li>
-                        <li class="menu-item">
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Comunicação</span></li>
+                        {{-- <li class="menu-item">
                             <a href="{{ route('listEvent') }}" class="menu-link">
                               <i class="menu-icon tf-icons bx bx-calendar-star"></i>
                               <div>Eventos</div>
                             </a>
-                        </li>
+                        </li> --}}
                         @if (Auth::user()->tipo == 1)
                             <li class="menu-item">
                                 <a href="{{ route('listMessage') }}" class="menu-link">
@@ -99,14 +108,14 @@
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Integrações</span></li>
                             <li class="menu-item">
                                 <a href="{{ route('listWhatsapp') }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
-                                <div>WhatsApp</div>
+                                    <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
+                                    <div>WhatsApp</div>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="#" class="menu-link">
-                                <i class="menu-icon tf-icons bx bxs-file-import"></i>
-                                <div>TSE</div>
+                                    <i class="menu-icon tf-icons bx bxs-file-import"></i>
+                                    <div>TSE</div>
                                 </a>
                             </li>
                         @endif
@@ -216,7 +225,7 @@
             </div>
         @endif
 
-        @if (session('infor'))
+        @if(session('infor'))
             <div class="bs-toast toast toast-placement-ex m-2 fade bg-warning bottom-0 start-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
                 <div class="toast-header">
                     <i class="bx bx-bell me-2"></i>
@@ -234,11 +243,84 @@
         <script src="{{ asset('template/vendor/js/bootstrap.js') }}"></script>
         <script src="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
         <script src="{{ asset('template/vendor/js/menu.js') }}"></script>
+        <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
 
         <script src="{{ asset('template/js/main.js') }}"></script>
         <script src="{{ asset('template/js/ui-toasts.js') }}"></script>
         <script src="{{ asset('template/js/mask.js') }}"></script>
-        <script src="{{ asset('ckeditor/build/ckeditor.js') }}"></script>
-		<script src="{{ asset('ckeditor/script.js') }} "></script>
+        <script src="{{ asset('template/js/config.js') }}"></script>
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                $('#divComEstilo svg').addClass('d-none');
+
+                var elementosQrCode = document.querySelectorAll('.qrcode');
+                elementosQrCode.forEach(function(elemento) {
+                    var link = elemento.getAttribute("data-link");
+                    var qrcode = new QRCode(elemento, {
+                        text: link,
+                        width: 128,
+                        height: 128
+                    });
+                    elemento.href = link;
+                });
+
+                var qrCodeLinks = document.querySelectorAll(".qrcode");
+                qrCodeLinks.forEach(function(linkElement) {
+                    linkElement.addEventListener("click", function(event) {
+                        event.preventDefault();
+
+                        var link = linkElement.getAttribute("data-link");
+                        html2canvas(linkElement).then(canvas => {
+                            var imageData = canvas.toDataURL("image/png");
+                            var downloadLink = document.createElement("a");
+                            downloadLink.href = imageData;
+                            downloadLink.download = "qrcode.png";
+                            downloadLink.click();
+                        });
+                    });
+                });
+
+                const deleteForms = document.querySelectorAll('form.delete');
+                deleteForms.forEach(form => {
+                    form.addEventListener('submit', function (event) {
+                        
+                        event.preventDefault();
+                        Swal.fire({
+                            title: 'Tem certeza?',
+                            text: 'Você realmente deseja excluir este registro?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sim',
+                            confirmButtonColor: '#008000',
+                            cancelButtonText: 'Não',
+                            cancelButtonColor: '#FF0000',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+
+                $('#tabela').DataTable({
+                    "paging": false,
+                    "pageLength": 50,
+                    "responsive": true,
+                    "language": {
+                        "url": "http://cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
+                    },
+                    "autoWidth": false,
+                    "order": []
+                });
+            });
+        </script>
+        
     </body>
 </html>

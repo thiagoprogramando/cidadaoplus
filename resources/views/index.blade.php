@@ -31,7 +31,7 @@
                             <div class="mb-3">
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" name="password" placeholder="Senha"/>
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    <span class="input-group-text cursor-pointer toggle-password"><i class="bx bx-lock-alt"></i></span>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -40,7 +40,7 @@
                         </form>
 
                         <p class="text-center"> 
-                            <a href="{{ route('forgout-password') }}"> <small>Esqueceu a senha?</small> </a>
+                            <a href="{{ route('forgout') }}"> <small>Esqueceu a senha?</small> </a>
                         </p>
                     </div>
                 </div>
@@ -48,4 +48,17 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password');
+            const togglePassword = document.querySelector('.toggle-password');
+            
+            togglePassword.addEventListener('click', function () {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('bx-lock-alt');
+                togglePassword.querySelector('i').classList.toggle('bx-lock-open-alt')
+            });
+        });
+    </script>
 @endsection

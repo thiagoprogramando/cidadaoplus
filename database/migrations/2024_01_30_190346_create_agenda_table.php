@@ -9,8 +9,12 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('agenda', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_criador');
+            $table->unsignedBigInteger('id_lider')->nullable();
+
             $table->string('nome');
             $table->longText('descricao');
+
             $table->date('data');
             $table->time('hora');
             $table->timestamps();
