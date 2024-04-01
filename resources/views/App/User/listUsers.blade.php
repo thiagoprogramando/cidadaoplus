@@ -99,7 +99,7 @@
                             </tbody>
                         </table>
 
-                        <div id="divComEstilo" style="width: 100%; height: 100px;">
+                        <div id="divComEstilo" class="text-center">
                             {{ $users->links() }}
                         </div>
                         
