@@ -128,16 +128,6 @@ a.bg-primary:hover, a.bg-primary:focus {
   border: 3px solid rgba(105, 108, 255, 0.08);
 }
 
-.page-item.active .page-link, .page-item.active .page-link:hover, .page-item.active .page-link:focus,
-.pagination li.active > a:not(.page-link),
-.pagination li.active > a:not(.page-link):hover,
-.pagination li.active > a:not(.page-link):focus {
-  border-color: #0075BE;
-  background-color: #0075BE;
-  color: #fff;
-  box-shadow: 0 0.125rem 0.25rem rgba(105, 108, 255, 0.4);
-}
-
 .progress-bar {
   background-color: #0075BE;
   color: #fff;

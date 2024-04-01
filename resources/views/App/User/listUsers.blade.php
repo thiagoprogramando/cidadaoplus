@@ -17,20 +17,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-6 col-md-3 col-lg-3 mb-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
-                                <span class="fw-semibold d-block mb-1">Total de registros</span>
-                            </div>
-                            
-                            <h3 class="card-title text-white mb-2"> {{ $users->count() }} </h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-12">
                 <div class="card p-3"> 
                     <div class="table-responsive">
@@ -83,7 +69,7 @@
                                         </td>
                                     </tr>
 
-                                    <div class="modal fade" id="modalDelete{{ $user->id }}" aria-labelledby="modalDelete{{ $user->id }}" tabindex="-1" style="display: none" aria-hidden="true">
+                                    <div class="modal fade" id="modalDelete{{ $user->id }}" aria-labelledby="modalDelete{{ $user->id }}" tabindex="1" style="display: none" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <form action="{{ route('deleteUser') }}" method="POST">
@@ -112,6 +98,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+                        <div id="divComEstilo" style="width: 100%; height: 100px;">
+                            {{ $users->links() }}
+                        </div>
+                        
                     </div>
                 </div>
             </div>

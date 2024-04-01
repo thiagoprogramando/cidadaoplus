@@ -112,3 +112,7 @@
   background-position: center; /* Centralizar a imagem */
   clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
+
+#divComEstilo svg {
+  display: none;
+}

@@ -60,9 +60,13 @@ class UserController extends Controller {
     public function listUser($tipo = null) {
 
         if($tipo) {
-            $users = Auth::user()->tipo === 1 ? User::where('tipo', $tipo)->orderBy('created_at', 'desc')->get() : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+            $users = Auth::user()->tipo === 1 ? 
+                User::where('tipo', $tipo)->orderBy('created_at', 'desc')->paginate(100) : 
+                User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
         } else {
-            $users = Auth::user()->tipo === 1 ? User::all() : User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+            $users = Auth::user()->tipo === 1 ? 
+                User::orderBy('created_at', 'desc')->paginate(100) : 
+                User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
         }
 
         $alphas = Auth::user()->tipo == 1 ? 
@@ -110,7 +114,7 @@ class UserController extends Controller {
         $master         = $master->get();
 
         $alphas = Auth::user()->tipo == 1 ? 
-            User::whereIn('tipo', [2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
             User::whereIn('tipo', [2, 4])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         
         return view('App.User.listReport', [
@@ -179,7 +183,7 @@ class UserController extends Controller {
             $query->where('cep', $request->input('cep'));
         }
 
-        $users = $query->orderBy('created_at', 'desc')->get();
+        $users = $query->orderBy('created_at', 'desc')->paginate(100);
         
         $alphas = Auth::user()->tipo == 1 ? 
             User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 

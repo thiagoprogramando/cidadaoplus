@@ -16,7 +16,6 @@
         <link rel="stylesheet" href="{{ asset('template/vendor/css/theme-default.css') }}" class="template-customizer-theme-css"/>
         <link rel="stylesheet" href="{{ asset('template/css/demo.css') }}"/>
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('template/vendor/libs/apex-charts/apex-charts.css') }}"/>
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css"/>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -285,8 +284,8 @@
                 });
 
                 $('#tabela').DataTable({
-                    "paging": true,
-                    "pageLength": 25,
+                    "paging": false,
+                    "pageLength": 50,
                     "responsive": true,
                     "language": {
                         "url": "http://cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
