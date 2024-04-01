@@ -72,12 +72,13 @@
                                     <div class="modal fade" id="modalDelete{{ $user->id }}" aria-labelledby="modalDelete{{ $user->id }}" tabindex="1" style="display: none" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
-                                                <form action="{{ route('deleteUser') }}" method="POST">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalDelete{{ $user->id }}">Excluir {{ $user->name }}</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
+                                                
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalDelete{{ $user->id }}">Excluir {{ $user->name }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('deleteUser') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{ $user->id }}">
                                                         <div class="mb-3">
@@ -86,12 +87,13 @@
                                                         <div class="mb-3">
                                                             <input type="password" class="form-control" name="password" placeholder="Confirme sua senha:" autofocus/>
                                                         </div>
-                                                    </div>
-                                                    <div class="modal-footer">
+                                                </div>
+                                                <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> Cancelar </button>
                                                         <button type="submit" class="btn btn-success"> Confirmar </button>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
