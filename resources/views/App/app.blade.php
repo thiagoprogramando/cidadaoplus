@@ -29,16 +29,6 @@
             </div>
 
             <div class="col-12 row">
-                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                    <a href="{{ route('listEvent') }}">
-                        <div class="card bg-dark text-white text-center mb-3">
-                            <div class="card-header">Eventos</div>
-                            <div class="card-body">
-                                <i class="menu-icon tf-icons bx-lg bx bx-calendar-star"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
 
                 <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                     <a href="{{ route('listUser', ['tipo' => 3]) }}">
