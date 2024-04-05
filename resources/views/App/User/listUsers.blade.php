@@ -17,6 +17,18 @@
                 </div>
             </div>
 
+            <div class="col-6 col-md-3 col-lg-3 mb-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="card-title d-flex align-items-start justify-content-between">
+                            <span class="fw-semibold d-block mb-1">Total de registros</span>
+                        </div>
+                        
+                        <h3 class="card-title text-white mb-2"> {{ $usersCount }} </h3>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-12">
                 <div class="card p-3"> 
                     <div class="table-responsive">

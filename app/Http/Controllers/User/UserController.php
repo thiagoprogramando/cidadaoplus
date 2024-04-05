@@ -63,17 +63,28 @@ class UserController extends Controller {
             $users = Auth::user()->tipo === 1 ? 
                 User::where('tipo', $tipo)->orderBy('created_at', 'desc')->paginate(100) : 
                 User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
+            $usersCount = Auth::user()->tipo === 1 ? 
+                User::where('tipo', $tipo)->orderBy('created_at', 'desc')->count() : 
+                User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->count();
         } else {
             $users = Auth::user()->tipo === 1 ? 
                 User::orderBy('created_at', 'desc')->paginate(100) : 
                 User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
+            $usersCount = Auth::user()->tipo === 1 ? 
+            User::orderBy('created_at', 'desc')->count() : 
+            User::where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->count();
         }
 
         $alphas = Auth::user()->tipo == 1 ? 
             User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
             User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
-        return view('App.User.listUsers', ['users' => $users, 'tipo' => $tipo, 'alphas' => $alphas]);
+        return view('App.User.listUsers', [
+            'users'         => $users, 
+            'tipo'          => $tipo, 
+            'alphas'        => $alphas,
+            'usersCount'    => $usersCount
+        ]);
     }
 
     public function listReport(Request $request) {
@@ -183,6 +194,7 @@ class UserController extends Controller {
             $query->where('cep', $request->input('cep'));
         }
 
+        $usersCount = $query->orderBy('created_at', 'desc')->count();
         $users = $query->orderBy('created_at', 'desc')->paginate(100);
         
         $alphas = Auth::user()->tipo == 1 ? 
@@ -190,7 +202,8 @@ class UserController extends Controller {
             User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('App.User.listUsers', [
-            'users'             => $users, 
+            'users'             => $users,
+            'usersCount'        => $usersCount, 
             'tipo'              => 1, 
             'alphas'            => $alphas,
         ]);
