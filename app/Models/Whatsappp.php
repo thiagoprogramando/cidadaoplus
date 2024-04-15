@@ -13,9 +13,7 @@ class Whatsappp extends Model {
 
     protected $fillable = [
         'name',
-        'webhookUrl',
-        'phone_number_id',
-        'user_access_token',
-        'status',
+        'url',
+        'number',
     ];
 }

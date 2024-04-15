@@ -25,7 +25,7 @@
                             <thead>
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Webhook</th>
+                                    <th>URL</th>
                                     <th>Status</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -34,39 +34,16 @@
                                 @foreach ($whatsapps as $key => $whatsapp)
                                     <tr>
                                         <td><strong>{{ $whatsapp->name }}</strong> </td>
-                                        <td>{{ $whatsapp->webhookUrl }}</td>
+                                        <td>{{ $whatsapp->url }}</td>
                                         <td>{{ $whatsapp->status }}</td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $whatsapp->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
+                                            <form action="{{ route('delete-whatsapp') }}" method="POST" class="delete">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $whatsapp->id }}">
+                                                <button type="submit" class="btn btn-outline-danger"> <i class="tf-icons bx bx-trash"></i> </button>
+                                            </form>
                                         </td>
                                     </tr>
-
-                                    <div class="modal fade" id="modalDelete{{ $whatsapp->id }}" aria-labelledby="modalDelete{{ $whatsapp->id }}" tabindex="-1" style="display: none" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <form action="{{ route('deleteWhatsapp') }}" method="POST">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalDelete{{ $whatsapp->id }}">Excluir {{ $whatsapp->instanceName }}</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{ $whatsapp->id }}">
-                                                        <div class="mb-3">
-                                                            <p>Para confirmar a exclusão, confirme sua senha:</p>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <input type="text" class="form-control" name="password" placeholder="Confirme sua senha:" autofocus/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> Cancelar </button>
-                                                        <button type="submit" class="btn btn-success"> Confirmar </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @endforeach
                             </tbody>
                         </table>
@@ -80,7 +57,7 @@
     <div class="modal fade" id="modalWhatsapp" aria-labelledby="modalWhatsapp" tabindex="-1" style="display: none" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('registrerWhatsapp') }}" method="POST">
+                <form action="{{ route('registrer-whatsapp') }}" method="POST">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalWhatsapp">Cadastrar WhatsApp</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

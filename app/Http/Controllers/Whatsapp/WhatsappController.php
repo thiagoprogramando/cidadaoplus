@@ -26,11 +26,9 @@ class WhatsappController extends Controller {
     public function registrerWhatsapp(Request $request) {
 
         $whatsapp = new Whatsappp();
-        $whatsapp->name                = $request->name;
-        $whatsapp->webhookUrl          = $request->webhookUrl;
-        $whatsapp->phone_number_id     = $request->phone_number_id;
-        $whatsapp->user_access_token   = $request->user_access_token;
-
+        $whatsapp->name     = $request->name;
+        $whatsapp->url      = $request->url;
+        $whatsapp->number   = $request->number;
         if($whatsapp->save()) {
             return redirect()->back()->with('success', 'WhatsApp criado com sucesso!');
         }
@@ -40,19 +38,13 @@ class WhatsappController extends Controller {
 
     public function deleteWhatsapp(Request $request) {
 
-        $password = $request->password;    
-        if (Hash::check($password, auth()->user()->password)) {
-           
-            $whatsapp = Whatsappp::find($request->id);
-            if ($whatsapp) {
-                $whatsapp->delete();
-                return redirect()->back()->with('success', 'Whatsapp excluído com sucesso!');
-            } else {
-                return redirect()->back()->with('error', 'Não encontramos dados do Whatsapp, tente novamente mais tarde!');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Senha incorreta!');
+        $whatsapp = Whatsappp::find($request->id);
+        if ($whatsapp) {
+            $whatsapp->delete();
+            return redirect()->back()->with('success', 'Whatsapp excluído com sucesso!');
         }
+            
+        return redirect()->back()->with('error', 'Não encontramos dados do Whatsapp, tente novamente mais tarde!');
     }
 
     public function listMessage() {
