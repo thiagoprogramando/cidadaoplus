@@ -78,7 +78,7 @@
                     </div>
             
                     <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listWhatsapp') }}">
+                        <a href="{{ route('list-whatsapp') }}">
                             <div class="card bg-dark text-white text-center mb-3">
                                 <div class="card-header">WhatsApp</div>
                                 <div class="card-body">

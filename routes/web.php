@@ -51,9 +51,9 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::post('updateEvent', [AgendaController::class, 'updateEvent'])->name('updateEvent');
     Route::post('deleteEvent', [AgendaController::class, 'deleteEvent'])->name('deleteEvent');
 
-    Route::get('/listWhatsapp', [WhatsappController::class, 'listWhatsapp'])->name('listWhatsapp');
-    Route::post('registrerWhatsapp', [WhatsappController::class, 'registrerWhatsapp'])->name('registrerWhatsapp');
-    Route::post('deleteWhatsapp', [WhatsappController::class, 'deleteWhatsapp'])->name('deleteWhatsapp');
+    Route::get('/list-whatsapp', [WhatsappController::class, 'listWhatsapp'])->name('list-whatsapp');
+    Route::post('registrer-whatsapp', [WhatsappController::class, 'registrerWhatsapp'])->name('registrer-whatsapp');
+    Route::post('delete-whatsapp', [WhatsappController::class, 'deleteWhatsapp'])->name('delete-whatsapp');
 
     Route::get('/listMessage', [WhatsappController::class, 'listMessage'])->name('listMessage');
     Route::post('registrerMessage', [WhatsappController::class, 'registrerMessage'])->name('registrerMessage');

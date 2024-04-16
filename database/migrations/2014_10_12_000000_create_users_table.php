@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->integer('sexo')->nullable(); // 1 - Masc 2 - Fem 3 - Outros
             $table->string('profissao')->nullable();
 
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->nullable();
             $table->string('whatsapp')->unique();
             $table->string('instagram')->nullable();
             $table->string('facebook')->nullable();
