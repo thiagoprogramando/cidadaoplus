@@ -2,7 +2,6 @@
 @section('app')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
-
             <div class="col-12">
                 <div class="mt-3 mb-3">
                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -11,7 +10,7 @@
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalWhatsapp">Cadastrar</a>
-                                <a class="dropdown-item" href="{{ route('listMessage') }}">Envio em Massa</a>
+                                <a class="dropdown-item" href="{{ route('log') }}">Log</a>
                             </div>
                         </div>
                     </div>
@@ -26,7 +25,7 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>URL</th>
-                                    <th>Status</th>
+                                    <th>Número</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
                             </thead>
@@ -35,7 +34,7 @@
                                     <tr>
                                         <td><strong>{{ $whatsapp->name }}</strong> </td>
                                         <td>{{ $whatsapp->url }}</td>
-                                        <td>{{ $whatsapp->status }}</td>
+                                        <td>{{ $whatsapp->number }}</td>
                                         <td class="text-center">
                                             <form action="{{ route('delete-whatsapp') }}" method="POST" class="delete">
                                                 @csrf
@@ -50,7 +49,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -69,13 +67,10 @@
                                 <input type="text" class="form-control" name="name" placeholder="Nome:" required/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input type="text" class="form-control" name="webhookUrl" placeholder="WebHook:" value="{{ env('APP_WHATSAPP_URL') }}" readonly/>
+                                <input type="text" class="form-control" name="url" placeholder="URL:" required/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input type="text" class="form-control" name="phone_number_id" placeholder="Identificação do número de telefone:" required/>
-                            </div>
-                            <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input type="text" class="form-control" name="user_access_token" placeholder="Token de acesso:" required/>
+                                <input type="text" class="form-control" name="number" placeholder="Número:" required/>
                             </div>
                         </div>
                     </div>

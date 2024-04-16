@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PhoneNumbersImport;
 use App\Models\MensagemLog;
+use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -47,79 +48,11 @@ class WhatsappController extends Controller {
         return redirect()->back()->with('error', 'Não encontramos dados do Whatsapp, tente novamente mais tarde!');
     }
 
-    public function listMessage() {
-
-        $messages = Mensagem::orderBy('created_at', 'desc')->get();
-        $whatsapps = Whatsappp::all();
-        return view('App.Whatsapp.listMessage', ['messages' => $messages, 'whatsapps' => $whatsapps]);
-    }
-
-    public function registrerMessage(Request $request) {
-
-        $whatsapp = Whatsappp::find($request->whatsapp_id);
-        if(!$whatsapp) {
-            return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-        }
-
-        $code = $whatsapp->id.rand(0, 999999);
-
-        $phoneNumbers = Excel::toCollection(new PhoneNumbersImport, $request->file('numero'))[0]->skip(1);
-        
-        if ($request->hasFile('base64')) {
-            $file      = $request->file('base64');
-            $fileName  = rand(0, 5689).rand(0, 99999).'.'.$file->getClientOriginalExtension();
-            $path      = $file->storeAs('whatsapp', $fileName);
-        }
-
-        foreach ($phoneNumbers as $phoneNumber) {
-
-            $number = preg_replace('/\D/', '', $phoneNumber[5]);
-            
-            if ($request->hasFile('base64')) {
-                if($number) {
-                    $img = env('APP_URL').'/storage/'.$path;
-                    $send = $this->sendMidia($number, $img, $whatsapp->phone_number_id, $whatsapp->user_access_token);
-                    if(!empty($send['error'])) {
-                        $this->createLog($number, $send['error'], $code, 'error');
-                    } else {
-                        $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
-                    }
-                }
-            }
-
-            if ($request->texto) {
-                if($number) {
-                    $send = $this->sendMessage($number, $request->texto, $whatsapp->phone_number_id, $whatsapp->user_access_token);
-                    if(!empty($send['error'])) {
-                        $this->createLog($number, $send['error'], $code, 'error');
-                    } else {
-                        $this->createLog($number, 'Disparo concluído com Sucesso!', $code, 'success');
-                    }
-                }
-            }
-        }
-
-        $message = new Mensagem();
-        $message->id_whatsapp        = $whatsapp->id;
-        $message->code               = $code;
-        $message->texto              = $request->texto;
-        $message->phone_number_id    = $whatsapp->phone_number_id;
-        $message->user_access_token  = $whatsapp->user_access_token;
-        $message->status             = 'Operação Finalizada';
-        $message->base64             = !empty($base64) ? $base64 : '';
-        if($message->save()) {
-            return redirect()->back()->with('success', 'Disparos enviados com sucesso, confira o Log!');
-        }
-
-        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-    }
-
-    private function createLog($number, $retorno, $code, $status) {
+    private function createLog($numbers, $response, $status) {
 
         $log                = new MensagemLog();
-        $log->code          = $code;
-        $log->numero        = $number;
-        $log->resposta      = $retorno;
+        $log->numbers       = $numbers;
+        $log->response      = $response;
         $log->status        = $status;
         if($log->save()) {
             return true;
@@ -128,79 +61,75 @@ class WhatsappController extends Controller {
         return false;
     }
 
-    private function sendMidia($number, $base64, $phone_number_id, $user_access_token) {
+    public function log() {
 
-        $client = new Client();
-
-        $options = [
-            'headers' => [
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer '.$user_access_token,
-            ],
-            'json' => [
-                'messaging_product' => "whatsapp",
-                'recipient_type'    => "individual",
-                'to'                => '55'.$number,
-                'type'              => "image",
-                'image'             => [
-                    'link' => $base64
-                ],
-            ],
-            'verify' => false
-        ];
-
-        try {
-            $response = $client->post('https://graph.facebook.com/v18.0/'.$phone_number_id.'/messages', $options);
-    
-            if ($response->getStatusCode() === 200) {
-                return true;
-            } else {
-                return ['error' => 'API não enviou status'];
-            }
-        } catch (RequestException $e) {
-            return ['error' => $e->getMessage()];
-        }
-    }
-
-    private function sendMessage($number, $text, $phone_number_id, $user_access_token) {
-
-        $client = new Client();
-
-        $options = [
-            'headers' => [
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Bearer '.$user_access_token,
-            ],
-            'json' => [
-                'messaging_product' => "whatsapp",
-                'recipient_type'    => "individual",
-                'to'                => '55'.$number,
-                'type'              => "text",
-                'text'             => [
-                    'preview_url' => false,
-                    'body'        => $text
-                ],
-            ],
-            'verify' => false
-        ];
-
-        try {
-            $response = $client->post('https://graph.facebook.com/v18.0/'.$phone_number_id.'/messages', $options);
-    
-            if ($response->getStatusCode() === 200) {
-                return true;
-            } else {
-                return ['error' => 'API não enviou status'];
-            }
-        } catch (RequestException $e) {
-            return ['error' => $e->getMessage()];
-        }
-    }
-
-    public function log($code) {
-
-        $logs = MensagemLog::where('code', $code)->orderBy('created_at', 'desc')->get();
+        $logs = MensagemLog::orderBy('created_at', 'desc')->get();
         return view('App.Whatsapp.listLog', ['logs' => $logs]);
     }
 
+    public function listHappy() {
+
+        $users = User::whereMonth('dataNasc', now()->month)->whereDay('dataNasc', now()->day)->get();
+        
+        return view('App.Whatsapp.ListHappy', [
+            'users' => $users,
+            'whatsapps' => Whatsappp::all()
+        ]);
+    }
+
+    public function sendHappy($number = null) {
+
+        $whatsapp = Whatsappp::first();
+        if(!$whatsapp) {
+            return redirect()->back()->with('error', 'Nenhum Whatsapp cadastrado!');
+        }
+
+        if(!$number) {
+            $users = User::whereMonth('dataNasc', now()->month)->whereDay('dataNasc', now()->day)->get();
+            $numbers = $users->pluck('whatsapp')->toArray();
+        } else {
+            $numbers = [$number];
+        }
+
+        $numbers = array_filter(array_map(function($num) {
+            $num = preg_replace('/[^0-9]/', '', $num);
+            if (strpos($num, '84') === 0) {
+                if (strlen($num) > 10) {
+                    return $num = "5584" . substr($num, 3);
+                }
+                return '55'.$num;
+            } else {
+                return null;
+            }
+        }, $numbers));
+
+        $client = new Client();
+
+        $options = [
+            'headers' => [
+                'Content-Type'  => 'application/json',
+            ],
+            'json' => [
+                'numbers'   => $numbers,
+                'image'     => "https://tocomkleberfernandes.com.br/storage/whatsapp/happy.jpg",
+                'message'   => "Olá, Passando para lhe desejar um feliz aniversário. 🎂🎉",
+            ],
+            'verify' => false
+        ];
+
+        try {
+            $response = $client->post($whatsapp->url, $options);
+    
+            if ($response->getStatusCode() === 200) {
+                $this->createLog(implode(', ', $numbers), 'Disparo concluído com Sucesso!', 'success');
+                return redirect()->back()->with('success', 'Disparo concluído com Sucesso!');
+            } else {
+                $this->createLog(implode(', ', $numbers), 'Disparo não efetuado!', 'error');
+                return redirect()->back()->with('error', 'Disparo não efetuado!');
+            }
+        } catch (RequestException $e) {
+            $this->createLog(implode(', ', $numbers), $e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Disparo não efetuado!');
+        }
+    }
 }

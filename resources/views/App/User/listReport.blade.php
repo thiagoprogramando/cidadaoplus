@@ -34,7 +34,7 @@
                     <div class="card bg-warning text-white text-center">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">Eleitores</span>
+                                <span class="fw-semibold d-block mb-1">Usuários</span>
                             </div>
                             
                             <h3 class="card-title text-white mb-2"> {{ $eleitores->count() }} </h3>

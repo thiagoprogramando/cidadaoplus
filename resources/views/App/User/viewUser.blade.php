@@ -20,10 +20,10 @@
                     <div class="card bg-warning text-white">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between">
-                                <span class="fw-semibold d-block mb-1">Eleitores</span>
+                                <span class="fw-semibold d-block mb-1">Usuários</span>
                             </div>
                             
-                            <h3 class="card-title text-white mb-2"> {{ $eleitores }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $Usuários }} </h3>
                         </div>
                     </div>
                 </div>

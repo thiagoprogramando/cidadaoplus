@@ -9,9 +9,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('mensagem_log', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->longText('resposta');
-            $table->string('numero');
+            $table->longText('response');
+            $table->longText('numbers');
             $table->string('status');
             $table->timestamps();
         });

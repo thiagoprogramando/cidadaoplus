@@ -55,7 +55,7 @@
                         <li class="menu-item">
                             <a href="{{ route('listUser', ['tipo' => 3]) }}" class="menu-link">
                               <i class="menu-icon tf-icons bx bx-user-pin"></i>
-                              <div>Eleitores</div>
+                              <div>Usuários</div>
                             </a>
                         </li>
                         
@@ -93,13 +93,7 @@
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Comunicação</span></li>
                         @if (Auth::user()->tipo == 1)
                             <li class="menu-item">
-                                <a href="{{ route('listMessage') }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
-                                    <div>Disparo em Massa</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('listMessage') }}" class="menu-link">
+                                <a href="{{ route('list-happy') }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-calendar"></i>
                                     <div>Aniversariantes</div>
                                 </a>
@@ -111,12 +105,6 @@
                                 <a href="{{ route('list-whatsapp') }}" class="menu-link">
                                     <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
                                     <div>WhatsApp</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bxs-file-import"></i>
-                                    <div>TSE</div>
                                 </a>
                             </li>
                         @endif

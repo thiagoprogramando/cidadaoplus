@@ -12,9 +12,8 @@ class MensagemLog extends Model {
     protected $table = 'mensagem_log';
 
     protected $fillable = [
-        'id_mensagem',
-        'resposta',
-        'numero',
+        'response',
+        'numbers',
         'status',
     ];
 
