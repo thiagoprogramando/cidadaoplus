@@ -92,7 +92,7 @@ class WhatsappController extends Controller {
         }
 
         $numbers = array_filter(array_map(function($num) {
-            $num = preg_replace('/[^\d()]/', '', $num);
+            $num = preg_replace('/[^0-9]/', '', $num);
             if (strpos($num, '84') === 0) {
                 if (strlen($num) > 10) {
                     return $num = "5584" . substr($num, 3);
