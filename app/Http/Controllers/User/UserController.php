@@ -57,6 +57,93 @@ class UserController extends Controller {
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
     }
 
+    private function searchPostalCode($bairro) {
+
+        switch($bairro) {
+            case 'Igapó':
+                $ceps = [];
+                break;
+            case 'Lagoa Azul':
+                $ceps = [];
+                break;
+            case 'Nossa Senhora da Apresentação':
+                $ceps = [];
+                break;
+            case 'Pajuçara':
+                $ceps = ['59133300', '59131515', '59123610', '59122365', '59122518', '59122770', '59131430', '59133390', '59123405', '59123030', '59133030', '59133380', '59132280', '59132480', '59133020', '59133010', '59132440', '59133090', '59132000', '59122537', '59131000', '59132045', '59122385', '59133145', '59133250', '59133240', '59133230', '59133150', '59133270', '59133340', '59133280', '59133290', '59133350', '59133260', '59133220', '59133370', '59133190', '59133310', '59133160', '59133210', '59133200', '59133180', '59133140', '59133320', '59133360', '59133170', '59133330', '59133135', '59131400', '59133065'];
+                break;
+            case 'Potengi':
+                $ceps = [];
+                break;
+            case 'Redinha':
+                $ceps = [];
+                break;
+            case 'Salinas':
+                $ceps = [];
+                break;
+
+            case 'Alecrim':
+                // Código para o bairro Alecrim
+                break;
+            case 'Areia Preta':
+                // Código para o bairro Areia Preta
+                break;
+            case 'Barro Vermelho':
+                // Código para o bairro Barro Vermelho
+                break;
+            case 'Cidade Alta':
+                // Código para o bairro Cidade Alta
+                break;
+            case 'Lagoa Seca':
+                // Código para o bairro Lagoa Seca
+                break;
+            case 'Mãe Luiza':
+                // Código para o bairro Mãe Luiza
+                break;
+            case 'Petrópolis':
+                // Código para o bairro Petrópolis
+                break;
+            case 'Praia do Meio':
+                // Código para o bairro Praia do Meio
+                break;
+            case 'Ribeira':
+                // Código para o bairro Ribeira
+                break;
+            case 'Rocas':
+                // Código para o bairro Rocas
+                break;
+            case 'Santos Reis':
+                // Código para o bairro Santos Reis
+                break;
+            case 'Tirol':
+                // Código para o bairro Tirol
+                break;
+            
+            case 'Candelária':
+                // Código para o bairro Candelária
+                break;
+            case 'Capim Macio':
+                // Código para o bairro Capim Macio
+                break;
+            case 'Lagoa Nova':
+                // Código para o bairro Lagoa Nova
+                break;
+            case 'Neópolis':
+                // Código para o bairro Neópolis
+                break;
+            case 'Nova Descoberta':
+                // Código para o bairro Nova Descoberta
+                break;
+            case 'Pitimbu':
+                // Código para o bairro Pitimbu
+                break;
+            case 'Ponta Negra':
+                // Código para o bairro Ponta Negra
+                break;
+        }
+
+    }
+
     public function listUser($tipo = null) {
 
         if($tipo) {

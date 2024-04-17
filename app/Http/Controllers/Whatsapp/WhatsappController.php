@@ -92,7 +92,7 @@ class WhatsappController extends Controller {
         }
 
         $numbers = array_filter(array_map(function($num) {
-            $num = preg_replace('/[^0-9]/', '', $num);
+            $num = preg_replace('/[^\d()]/', '', $num);
             if (strpos($num, '84') === 0) {
                 if (strlen($num) > 10) {
                     return $num = "5584" . substr($num, 3);
@@ -112,7 +112,7 @@ class WhatsappController extends Controller {
             'json' => [
                 'numbers'   => $numbers,
                 'image'     => "https://tocomkleberfernandes.com.br/storage/whatsapp/happy.jpg",
-                'message'   => "Olá, Passando para lhe desejar um feliz aniversário. 🎂🎉",
+                'message'   => "Olá, passando para te desejar um feliz aniversário 🎂🎉",
             ],
             'verify' => false
         ];
