@@ -1566,14 +1566,14 @@ class UserController extends Controller {
         $user = User::where('id', $id)->first();
         if($user) {
 
-            $eleitores      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
+            $usuarios      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
             $apoiadores     = User::where('id_lider', $user->id)->where('tipo', 2)->count();
             $coordenadores  = User::where('id_lider', $user->id)->where('tipo', 4)->count();
             $todos          = User::where('id_lider', $user->id)->orderBy('created_at', 'desc')->get();
 
             return view('App.User.viewUser', [
                 'user'          => $user, 
-                'eleitores'     => $eleitores, 
+                'usuarios'     => $usuarios, 
                 'apoiadores'    => $apoiadores, 
                 'coordenadores' => $coordenadores, 
                 'todos'         => $todos,

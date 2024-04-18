@@ -23,7 +23,7 @@
                                 <span class="fw-semibold d-block mb-1">Usuários</span>
                             </div>
                             
-                            <h3 class="card-title text-white mb-2"> {{ $Usuários }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $usuarios }} </h3>
                         </div>
                     </div>
                 </div>
