@@ -108,7 +108,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        @csrf
                         <div class="row">
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:"/>
@@ -176,7 +175,35 @@
                                 </select>
                             </div>
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <input type="number" class="form-control" name="cep" placeholder="CEP:"/>
+                                <select name="bairro" class="form-control">
+                                    <option value="" selected>Bairros</option>
+                                    <option value="Igapó">Igapó</option>
+                                    <option value="Lagoa Azul">Lagoa Azul</option>
+                                    <option value="Nossa Senhora da Apresentação">Nossa Senhora da Apresentação</option>
+                                    <option value="Pajuçara">Pajuçara</option>
+                                    <option value="Potengi">Potengi</option>
+                                    <option value="Redinha">Redinha</option>
+                                    <option value="Salinas">Salinas</option>
+                                    <option value="Alecrim">Alecrim</option>
+                                    <option value="Areia Preta">Areia Preta</option>
+                                    <option value="Barro Vermelho">Barro Vermelho</option>
+                                    <option value="Cidade Alta">Cidade Alta</option>
+                                    <option value="Lagoa Seca">Lagoa Seca</option>
+                                    <option value="Mãe Luiza">Mãe Luiza</option>
+                                    <option value="Petrópolis">Petrópolis</option>
+                                    <option value="Praia do Meio">Praia do Meio</option>
+                                    <option value="Ribeira">Ribeira</option>
+                                    <option value="Rocas">Rocas</option>
+                                    <option value="Santos Reis">Santos Reis</option>
+                                    <option value="Tirol">Tirol</option>
+                                    <option value="Candelária">Candelária</option>
+                                    <option value="Capim Macio">Capim Macio</option>
+                                    <option value="Lagoa Nova">Lagoa Nova</option>
+                                    <option value="Neópolis">Neópolis</option>
+                                    <option value="Nova Descoberta">Nova Descoberta</option>
+                                    <option value="Pitimbu">Pitimbu</option>
+                                    <option value="Ponta Negra">Ponta Negra</option>
+                                </select>
                             </div>
                         </div>
                     </div>
