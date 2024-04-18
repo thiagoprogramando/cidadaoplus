@@ -1480,13 +1480,12 @@ class UserController extends Controller {
         if($request->input('cep')) {
             $query->where('cep', $request->input('cep'));
         }
-        
-        $usersCount = $query->orderBy('created_at', 'desc')->count();
 
         if($request->input('bairro')) {
             $query->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
         }
         
+        $usersCount = $query->orderBy('created_at', 'desc')->count();
         $users = $query->orderBy('created_at', 'desc')->paginate(100);
         
         $alphas = Auth::user()->tipo == 1 ? 
