@@ -113,6 +113,16 @@
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <select name="bairro" class="form-control">
                                     <option value="" selected>Bairros</option>
+                                    <option value="Cidade da Esperança">Cidade da Esperança</option>
+                                    <option value="Cidade Nova">Cidade Nova</option>
+                                    <option value="Guarapes">Guarapes</option>
+                                    <option value="Nossa Senhora de Nazaré">Nossa Senhora de Nazaré</option>
+                                    <option value="Bom Pastor">Bom Pastor</option>
+                                    <option value="Planalto">Planalto</option>
+                                    <option value="Felipe Camarão">Felipe Camarão</option>
+                                    <option value="Nordeste">Nordeste</option>
+                                    <option value="Dix-Sept Rosado">Dix-Sept Rosado</option>
+                                    <option value="Quintas">Quintas</option>
                                     <option value="Igapó">Igapó</option>
                                     <option value="Lagoa Azul">Lagoa Azul</option>
                                     <option value="Nossa Senhora da Apresentação">Nossa Senhora da Apresentação</option>

@@ -11,6 +11,7 @@
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalFilter">Filtrar</a>
+                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalImport">Importar</a>
                             </div>
                         </div>
                     </div>
@@ -41,6 +42,7 @@
                                     <th class="d-none">Sexo</th>
                                     <th class="d-none">Profissão</th>
                                     <th>WhatsApp</th>
+                                    <th>Obser.</th>
                                     <th class="d-none">Email</th>
                                     <th class="d-none">instagram</th>
                                     <th class="d-none">facebook</th>
@@ -64,6 +66,7 @@
                                         <td class="d-none">{{ $user->Sexualidade }}</td>
                                         <td class="d-none">{{ $user->profissao }}</td>
                                         <td>{{ $user->whatsapp }}</td>
+                                        <td>{{ $user->observacao }}</td>
                                         <td class="d-none">{{ $user->email }}</td>
                                         <td class="d-none">{{ $user->instagram }}</td>
                                         <td class="d-none">{{ $user->facebook }}</td>
@@ -177,6 +180,16 @@
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="bairro" class="form-control">
                                     <option value="" selected>Bairros</option>
+                                    <option value="Cidade da Esperança">Cidade da Esperança</option>
+                                    <option value="Cidade Nova">Cidade Nova</option>
+                                    <option value="Guarapes">Guarapes</option>
+                                    <option value="Nossa Senhora de Nazaré">Nossa Senhora de Nazaré</option>
+                                    <option value="Bom Pastor">Bom Pastor</option>
+                                    <option value="Planalto">Planalto</option>
+                                    <option value="Felipe Camarão">Felipe Camarão</option>
+                                    <option value="Nordeste">Nordeste</option>
+                                    <option value="Dix-Sept Rosado">Dix-Sept Rosado</option>
+                                    <option value="Quintas">Quintas</option>
                                     <option value="Igapó">Igapó</option>
                                     <option value="Lagoa Azul">Lagoa Azul</option>
                                     <option value="Nossa Senhora da Apresentação">Nossa Senhora da Apresentação</option>
@@ -205,6 +218,34 @@
                                     <option value="Ponta Negra">Ponta Negra</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> Cancelar </button>
+                        <button type="submit" class="btn btn-success"> Confirmar </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalImport" aria-labelledby="modalImport" tabindex="-1" style="display: none" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ route('import-user') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalImport">Importar Registros</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12 mb-3">
+                                <p>Faça o download do Modelo: <a download href="{{ asset('template/archive/Modelo de importação.xlsx') }}">Modelo Importação Usuário</a></p>
+                            </div>   
+                            <div class="col-12 col-md-12 col-lg-12 mb-3">
+                                <input name="file" type="file" class="form-control" accept=".xlsx, .xls"/>
+                            </div>                                                  
                         </div>
                     </div>
                     <div class="modal-footer">

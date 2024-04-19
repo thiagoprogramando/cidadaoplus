@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->string('bairro')->nullable();
             $table->string('cidade')->nullable();
             $table->string('estado')->nullable();
+            $table->longText('observacao')->nullable();
 
             $table->integer('tipo'); // 1 - Master 2 - Liderança 3 - Eleitor 4 - Coordenador
             $table->string('password')->nullable();
