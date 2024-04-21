@@ -39,6 +39,7 @@
                                             <form action="{{ route('delete-whatsapp') }}" method="POST" class="delete">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $whatsapp->id }}">
+                                                <a href="{{ $whatsapp->url }}/generate-qr" target="_blank" class="btn btn-outline-success"><i class="tf-icons bx bx-qr"></i></a>
                                                 <button type="submit" class="btn btn-outline-danger"> <i class="tf-icons bx bx-trash"></i> </button>
                                             </form>
                                         </td>

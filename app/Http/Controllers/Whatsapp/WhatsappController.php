@@ -93,6 +93,11 @@ class WhatsappController extends Controller {
 
         $numbers = array_filter(array_map(function($num) {
             $num = preg_replace('/[^0-9]/', '', $num);
+
+            if (strlen($num) < 8) {
+                return null;
+            }
+
             if (strpos($num, '84') === 0) {
                 if (strlen($num) > 10) {
                     return $num = "5584" . substr($num, 3);
@@ -102,6 +107,10 @@ class WhatsappController extends Controller {
                 return null;
             }
         }, $numbers));
+
+        if (empty($numbers)) {
+            return redirect()->back()->with('error', 'Nenhum número válido encontrado para enviar mensagem!');
+        }
 
         $client = new Client();
 
@@ -118,7 +127,7 @@ class WhatsappController extends Controller {
         ];
 
         try {
-            $response = $client->post($whatsapp->url, $options);
+            $response = $client->post($whatsapp->url.'/happy-birth', $options);
     
             if ($response->getStatusCode() === 200) {
                 $this->createLog(implode(', ', $numbers), 'Disparo concluído com Sucesso!', 'success');
