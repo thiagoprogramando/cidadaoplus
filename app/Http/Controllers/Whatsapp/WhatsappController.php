@@ -69,7 +69,7 @@ class WhatsappController extends Controller {
 
     public function listHappy() {
 
-        $users = User::whereMonth('dataNasc', now()->month)->whereDay('dataNasc', now()->day)->get();
+        $users = User::whereMonth('dataNasc', now()->month)->whereDay('dataNasc', now()->day)->orderBy('nome', 'asc')->get();
         
         return view('App.Whatsapp.ListHappy', [
             'users' => $users,

@@ -1907,11 +1907,11 @@ class UserController extends Controller {
 
     public function listReport(Request $request) {
 
-        $eleitores      = User::where('tipo', 3);
+        $eleitores      = User::where('tipo', 3)->where('observacao', null);
         $apoiadores     = User::where('tipo', 2);
         $coordenadores  = User::where('tipo', 4);
         $master         = User::where('tipo', 1);
-
+        $antigos        = User::where('observacao', '!=', null);
         
         if($request->input('id_lider')) {
             $id_lider = $request->input('id_lider');
@@ -1920,6 +1920,7 @@ class UserController extends Controller {
             $apoiadores->where('id_lider', $id_lider);
             $coordenadores->where('id_lider', $id_lider);
             $master->where('id_lider', $id_lider);
+            $antigos->where('id_lider', $id_lider);
 
             $rede = User::where('id', $id_lider)->first();
             $rede = $rede->totalUsers();
@@ -1929,11 +1930,13 @@ class UserController extends Controller {
                 $apoiadores->where('id_lider', Auth::user()->id);
                 $coordenadores->where('id_lider', Auth::user()->id);
                 $master->where('id_lider', Auth::user()->id);
+                $antigos->where('id_lider', Auth::user()->id);
 
                 $rede = User::where('id', Auth::user()->id)->first();
                 $rede = $rede->totalUsers();
             } else {
                 $rede = 0;
+                $antigos->where('id_lider', 729);
             }
         }
 
@@ -1948,6 +1951,7 @@ class UserController extends Controller {
         $apoiadores     = $apoiadores->get();
         $coordenadores  = $coordenadores->get();
         $master         = $master->get();
+        $antigos        = $antigos->get();
 
         $alphas = Auth::user()->tipo == 1 ? 
             User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
@@ -1959,6 +1963,7 @@ class UserController extends Controller {
             'coordenadores' => $coordenadores,
             'master'        => $master,
             'alphas'        => $alphas,
+            'antigos'       => $antigos,
             'rede'          => $rede
         ]);
     }
