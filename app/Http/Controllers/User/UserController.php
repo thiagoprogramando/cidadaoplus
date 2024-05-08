@@ -1907,7 +1907,7 @@ class UserController extends Controller {
 
     public function listReport(Request $request) {
 
-        $eleitores      = User::where('tipo', 3)->where('observacao', null);
+        $eleitores      = User::where('tipo', 3);
         $apoiadores     = User::where('tipo', 2);
         $coordenadores  = User::where('tipo', 4);
         $master         = User::where('tipo', 1);
@@ -1975,6 +1975,11 @@ class UserController extends Controller {
         if ($request->input('nome')) {
             $query->where('nome', 'like', '%' . $request->input('nome') . '%');
         }
+
+        if ($request->input('dataCreated')) {
+            $dataCreated = date('Y-m-d H:i:s', strtotime($request->input('dataCreated')));
+            $query->whereDate('created_at', '=', $dataCreated);
+        }        
 
         if ($request->input('dataNasc')) {
             $dataNasc = $request->input('dataNasc');

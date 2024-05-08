@@ -115,8 +115,11 @@
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <input type="text" class="form-control" name="nome" placeholder="Nome:"/>
                             </div>
-                            <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <input type="text" class="form-control" name="dataNasc" oninput="mascaraData(this)" placeholder="Data Nascimento:"/>
+                            <div class="col-12 col-md-3 col-lg-3 mb-3">
+                                <input type="text" class="form-control" name="dataNasc" oninput="mascaraData(this)" placeholder="Aniversário:"/>
+                            </div>
+                            <div class="col-12 col-md-3 col-lg-3 mb-3">
+                                <input type="text" class="form-control" name="dataCreated" oninput="mascaraData(this)" placeholder="Cadastro:"/>
                             </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
