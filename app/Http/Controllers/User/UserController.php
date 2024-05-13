@@ -1882,8 +1882,8 @@ class UserController extends Controller {
             : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
 
         $usersCount = Auth::user()->tipo === 1 
-            ? User::where('tipo', $tipo)->where('id_lider', '!=', 729)->orderBy('created_at', 'desc')->count() 
-            : User::where('tipo', $tipo)->where('id_lider', '!=', 729)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->count();
+            ? User::where('id_lider', '!=', 729)->orderBy('created_at', 'desc')->count() 
+            : User::where('id_lider', '!=', 729)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->count();
         
         $alphas = Auth::user()->tipo == 1 
             ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() 
