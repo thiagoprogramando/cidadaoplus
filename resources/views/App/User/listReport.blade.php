@@ -25,7 +25,7 @@
                                 <span class="fw-semibold d-block mb-1">Total de registros</span>
                             </div>
                             
-                            <h3 class="card-title text-white mb-2"> {{ $eleitores->count() + $apoiadores->count() + $coordenadores->count() + $master->count() }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $eleitores->count() + $apoiadores->count() + $coordenadores->count() + $master->count() + $antigos }} </h3>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                                 <span class="fw-semibold d-block mb-1">Usuários</span>
                             </div>
                             
-                            <h3 class="card-title text-white mb-2"> {{ $eleitores->count() - $antigos->count() }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $eleitores->count() }} </h3>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                             <div class="card-title d-flex align-items-start justify-content-center">
                                 <span class="fw-semibold d-block mb-1">S. Antigo</span>
                             </div>
-                            <h3 class="card-title text-white mb-2"> {{ $antigos->count() }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $antigos }} </h3>
                         </div>
                     </div>
                 </div>
