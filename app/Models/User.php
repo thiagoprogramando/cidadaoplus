@@ -36,6 +36,7 @@ class User extends Authenticatable {
         'bairro',
         'cidade',
         'estado',
+        'observacao',
         
         'tipo',
         'password',

@@ -23,15 +23,15 @@
                             <thead>
                                 <tr>
                                     <th>Resposta</th>
-                                    <th class="text-center">Número</th>
+                                    <th class="text-center">Números</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
                                 @foreach ($logs as $key => $log)
                                     <tr>
-                                        <td><strong>{{ $log->resposta }}</strong></td>
-                                        <td class="text-center">{{ $log->numero }}</td>
+                                        <td><strong>{{ $log->response }}</strong></td>
+                                        <td class="text-center">{{ $log->numbers }}</td>
                                         <td>{{ $log->status }}</td>
                                     </tr>
                                 @endforeach

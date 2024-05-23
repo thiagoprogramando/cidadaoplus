@@ -10,10 +10,8 @@ return new class extends Migration {
         Schema::create('whatsapp', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->longText('webhookUrl')->nullable();
-            $table->longText('phone_number_id');
-            $table->longText('user_access_token');
-            $table->string('status')->nullable();
+            $table->longText('url')->nullable();
+            $table->longText('number');
             $table->timestamps();
         });
     }

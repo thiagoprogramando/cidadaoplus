@@ -4,9 +4,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>#Tô com Kleber - {{ Auth::user()->nome }}</title>
+        <title>Tô com Kleber - {{ Auth::user()->nome }}</title>
 
         <link rel="icon" type="image/x-icon" href="{{ asset('template/img/background/icon.png') }}" />
+        
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
@@ -17,9 +18,9 @@
         <link rel="stylesheet" href="{{ asset('template/vendor/css/theme-default.css') }}" class="template-customizer-theme-css"/>
         
         <link rel="stylesheet" href="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css"/>
+        <link rel="stylesheet" href="{{ asset('template/vendor/css/datatables.css') }}"/>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('template/vendor/js/jquery.js') }}"></script>
         <script src="{{ asset('template/vendor/js/sweetalert.js')}}"></script>
     </head>
 
@@ -54,7 +55,7 @@
                         <li class="menu-item">
                             <a href="{{ route('listUser', ['tipo' => 3]) }}" class="menu-link">
                               <i class="menu-icon tf-icons bx bx-user-pin"></i>
-                              <div>Eleitores</div>
+                              <div>Usuários</div>
                             </a>
                         </li>
                         
@@ -90,32 +91,20 @@
                         </li>
 
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Comunicação</span></li>
-                        {{-- <li class="menu-item">
-                            <a href="{{ route('listEvent') }}" class="menu-link">
-                              <i class="menu-icon tf-icons bx bx-calendar-star"></i>
-                              <div>Eventos</div>
-                            </a>
-                        </li> --}}
                         @if (Auth::user()->tipo == 1)
                             <li class="menu-item">
-                                <a href="{{ route('listMessage') }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
-                                    <div>Envio em Massa</div>
+                                <a href="{{ route('list-happy') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                                    <div>Aniversariantes</div>
                                 </a>
                             </li>
                         
 
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Integrações</span></li>
                             <li class="menu-item">
-                                <a href="{{ route('listWhatsapp') }}" class="menu-link">
+                                <a href="{{ route('list-whatsapp') }}" class="menu-link">
                                     <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
                                     <div>WhatsApp</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bxs-file-import"></i>
-                                    <div>TSE</div>
                                 </a>
                             </li>
                         @endif
@@ -238,7 +227,6 @@
             </div>
         @endif
 
-        <script src="{{ asset('template/vendor/libs/jquery/jquery.js') }}"></script>
         <script src="{{ asset('template/vendor/libs/popper/popper.js') }}"></script>
         <script src="{{ asset('template/vendor/js/bootstrap.js') }}"></script>
         <script src="{{ asset('template/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
@@ -246,14 +234,13 @@
         <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
 
         <script src="{{ asset('template/js/main.js') }}"></script>
-        <script src="{{ asset('template/js/ui-toasts.js') }}"></script>
         <script src="{{ asset('template/js/mask.js') }}"></script>
         <script src="{{ asset('template/js/config.js') }}"></script>
     
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
-        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-        <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+        <script src="{{ asset('template/js/xlsx.min.js') }}"></script>
+        <script src="{{ asset('template/js/qrcode.js') }}"></script>
+        <script src="{{ asset('template/js/html2canvas.js') }}"></script>
+        <script src="{{ asset('template/js/dataTables.js') }}"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {

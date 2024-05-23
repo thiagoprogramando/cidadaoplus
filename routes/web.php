@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Acess\AcessController;
-use App\Http\Controllers\Agenda\AgendaController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Whatsapp\WhatsappController;
@@ -36,7 +35,7 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::post('/createUser', [UserController::class, 'createUser'])->name('createUser');
     Route::post('/updateUser', [UserController::class, 'updateUser'])->name('updateUser');
     Route::post('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
-    Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
+    Route::post('import-user', [UserController::class, 'importUser'])->name('import-user');
 
     Route::get('/listReport', [UserController::class, 'listReport'])->name('listReport');
 
@@ -44,20 +43,14 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::post('/createGrupo', [UserController::class, 'createGrupo'])->name('createGrupo');
     Route::post('/deleteGrupo', [UserController::class, 'deleteGrupo'])->name('deleteGrupo');
 
-    Route::get('/listEvent', [AgendaController::class, 'listEvent'])->name('listEvent');
-    Route::get('/viewEvent/{id}', [AgendaController::class, 'viewEvent'])->name('viewEvent');
-    Route::get('/filterEvent', [AgendaController::class, 'filterEvent'])->name('filterEvent');
-    Route::post('registrerEvent', [AgendaController::class, 'registrerEvent'])->name('registrerEvent');
-    Route::post('updateEvent', [AgendaController::class, 'updateEvent'])->name('updateEvent');
-    Route::post('deleteEvent', [AgendaController::class, 'deleteEvent'])->name('deleteEvent');
+    Route::get('/list-whatsapp', [WhatsappController::class, 'listWhatsapp'])->name('list-whatsapp');
+    Route::post('registrer-whatsapp', [WhatsappController::class, 'registrerWhatsapp'])->name('registrer-whatsapp');
+    Route::post('delete-whatsapp', [WhatsappController::class, 'deleteWhatsapp'])->name('delete-whatsapp');
 
-    Route::get('/listWhatsapp', [WhatsappController::class, 'listWhatsapp'])->name('listWhatsapp');
-    Route::post('registrerWhatsapp', [WhatsappController::class, 'registrerWhatsapp'])->name('registrerWhatsapp');
-    Route::post('deleteWhatsapp', [WhatsappController::class, 'deleteWhatsapp'])->name('deleteWhatsapp');
+    Route::get('/log', [WhatsappController::class, 'log'])->name('log');
 
-    Route::get('/listMessage', [WhatsappController::class, 'listMessage'])->name('listMessage');
-    Route::post('registrerMessage', [WhatsappController::class, 'registrerMessage'])->name('registrerMessage');
-    Route::get('/log/{code}', [WhatsappController::class, 'log'])->name('log');
+    Route::get('/list-happy', [WhatsappController::class, 'listHappy'])->name('list-happy');
+    Route::get('/send-happy/{number?}', [WhatsappController::class, 'sendHappy'])->name('send-happy');
 
     Route::get('/logout', [AcessController::class, 'logout'])->name('logout');
 })->middleware(\App\Http\Middleware\NoCacheMiddleware::class);
