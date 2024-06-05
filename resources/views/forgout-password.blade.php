@@ -9,7 +9,7 @@
                         
                         <div class="app-brand justify-content-center">
                             <a href="{{ route('login') }}" class="app-brand-link gap-2">
-                                <span class="app-brand-text demo text-body fw-bolder">#Tô com Kleber</span>
+                                <span class="app-brand-text demo text-body fw-bolder">Cidadão Plus</span>
                             </a>
                         </div>
                         
@@ -36,7 +36,7 @@
                             <form class="mb-3" action="{{ route('forgout-password') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" name="whatsapp" placeholder="WhatsApp:" oninput="mascaraTelefone(this)" autofocus/>
+                                    <input type="email" class="form-control" name="email" placeholder="Email:" autofocus required/>
                                 </div>
                                 <div class="mb-3">
                                     <button class="btn btn-primary d-grid w-100" type="submit">Recuperar</button>

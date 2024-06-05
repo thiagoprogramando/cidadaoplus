@@ -13,10 +13,10 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ Auth::user()->id }}">
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="nome" value="{{ Auth::user()->nome }}" placeholder="Nome:"/>
+                                        <input type="text" class="form-control" name="nome" value="{{ Auth::user()->name }}" placeholder="Nome:"/>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="whatsapp" value="{{ Auth::user()->WhatsappFormatado }}" oninput="mascaraTelefone(this)" placeholder="WhatsApp:"/>
+                                        <input type="text" class="form-control" name="phone" value="{{ Auth::user()->phone }}" placeholder="WhatsApp:"/>
                                     </div>
                                     <div class="mb-3">
                                         <input type="email" class="form-control" name="email" value="{{ Auth::user()->email }}" placeholder="Email:"/>

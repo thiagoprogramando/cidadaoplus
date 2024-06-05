@@ -43,13 +43,9 @@ class AcessController extends Controller {
 
     public function forgoutPassword(Request $request) {
 
-        $user = User::where('whatsapp', str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp))->first();
-        if(!$user) {
-            return redirect()->back()->with('error', 'Não encontramos dados relacionados ao número de telefone!');
-        }
-
+        $user = User::where('email', $request->email)->first();
         if(empty($user->email)) {
-            return redirect()->back()->with('error', 'Usuário sem Email, verifique com o suporte!');
+            return redirect()->back()->with('error', 'Cadastro sem E-mail, verifique com o suporte!');
         }
 
         $code = new Code();
@@ -57,8 +53,8 @@ class AcessController extends Controller {
         if($code->save()) {
 
             Mail::to($user->email, $user->nome)->send(new Forgout([
-                'fromName'      => 'Kleber Fernandes',
-                'fromEmail'     => 'suporte@tocomkleberfernandes.com.br',
+                'fromName'      => 'Cidadão Plus -'.$user->company()->name,
+                'fromEmail'     => $user->company()->name,
                 'subject'       => 'Recuperação de Senha',
                 'message'       => 'Olá,'.$user->nome.'! Gerei um código de segurança para você redefinir sua senha de acesso, basta clicar no código e escolher uma nova senha!',
                 'code'          => $code->code

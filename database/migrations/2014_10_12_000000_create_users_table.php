@@ -9,29 +9,31 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_lider')->nullable();
+            $table->unsignedBigInteger('id_creator')->nullable();
+            $table->unsignedBigInteger('id_company')->nullable();
 
-            $table->string('nome');
-            $table->string('foto')->nullable();
-            $table->date('dataNasc')->nullable();
-            $table->integer('sexo')->nullable(); // 1 - Masc 2 - Fem 3 - Outros
-            $table->string('profissao')->nullable();
+            $table->string('name');
+            $table->string('photo')->nullable();
+            $table->date('birth')->nullable();
+            $table->integer('sex')->nullable(); // 1 - Masc 2 - Fem 3 - Outros
+            $table->string('profession')->nullable();
 
             $table->string('email')->nullable();
-            $table->string('whatsapp')->unique();
+            $table->string('phone')->nullable();
+
             $table->string('instagram')->nullable();
             $table->string('facebook')->nullable();
 
-            $table->string('cep')->nullable();
-            $table->string('logradouro')->nullable();
-            $table->string('numero')->nullable();
-            $table->string('bairro')->nullable();
-            $table->string('cidade')->nullable();
-            $table->string('estado')->nullable();
-            $table->longText('observacao')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('address')->nullable();
+            $table->string('number')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
 
-            $table->integer('tipo'); // 1 - Master 2 - Liderança 3 - Eleitor 4 - Coordenador
-            $table->string('password')->nullable();
+            $table->longText('obs')->nullable();
+
+            $table->integer('type'); // 1 - Administrador 2 - Apoiador 3 - Cidadão 4 - Coordenador
+            $table->string('password');
             
             $table->timestamps();
         });

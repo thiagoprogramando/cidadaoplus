@@ -28,12 +28,12 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/profileUpdate', [UserController::class, 'profileUpdate'])->name('profileUpdate');
     
-    Route::get('/listUser/{tipo?}', [UserController::class, 'listUser'])->name('listUser');
+    Route::get('/listUser/{type?}', [UserController::class, 'listUser'])->name('listUser');
     Route::get('/filterUser', [UserController::class, 'filterUser'])->name('filterUser');
     Route::get('/viewUser/{id?}', [UserController::class, 'viewUser'])->name('viewUser');
-    Route::get('/view/{id}', [UserController::class, 'view'])->name('view');
     Route::post('/createUser', [UserController::class, 'createUser'])->name('createUser');
-    Route::post('/updateUser', [UserController::class, 'updateUser'])->name('updateUser');
+
+    Route::post('/update-user', [UserController::class, 'updateUser'])->name('update-user');
     Route::post('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
     Route::post('import-user', [UserController::class, 'importUser'])->name('import-user');
 

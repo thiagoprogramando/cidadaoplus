@@ -5,40 +5,43 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Mail\Welcome;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 use Laravel\Sanctum\HasApiTokens;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable {
+    
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'id_lider',
+        'id_creator',
+        'id_company',
         
-        'nome',
-        'foto',
-        'dataNasc',
-        'sexo',
-        'profissao',
+        'name',
+        'photo',
+        'birth',
+        'sex',
+        'profession',
 
         'email',
-        'whatsapp',
+        'phone',
+
         'instagram',
         'facebook',
 
-        'cep',
-        'logradouro',
-        'numero',
-        'bairro',
-        'cidade',
-        'estado',
-        'observacao',
+        'postal_code',
+        'address',
+        'number',
+        'city',
+        'state',
+
+        'obs',
         
-        'tipo',
+        'type',
         'password',
     ];
 
@@ -52,50 +55,50 @@ class User extends Authenticatable {
         'password' => 'hashed',
     ];
 
-    public function getTypeAttribute() {
-        return $this->attributes['tipo'] == 1 ? 'Master' : ($this->attributes['tipo'] == 2 ? 'Apoiador' : ($this->attributes['tipo'] == 4 ? 'Coordenador' : 'Eleitor'));
-    }
-
-    public function getSexualidadeAttribute() {
-        return $this->attributes['sexo'] == 1 ? 'Masc' : ($this->attributes['sexo'] == 2 ? 'Fem' : 'Outros');
-    }
-
-    public function lider() {
-        return $this->belongsTo(User::class, 'id_lider');
-    }
-
-    public function getDataFormatadaAttribute() {
-        if ($this->dataNasc) {
-            return Carbon::parse($this->dataNasc)->format('d-m-Y');
+    public function typeLabel() {
+        switch ($this->type) {
+            case 1:
+                return 'Administrador';
+                break;
+            case 2:
+                return 'Apoiador';
+                break;
+            case 3:
+                return 'Cidadão';
+                break;
+            case 4:
+                return 'Coordenador';
+                break;
+            default:
+                return '---';
+                break;
         }
-        
-        return null;
     }
 
-    public function getWhatsappFormatadoAttribute() {
-        if ($this->whatsapp) {
-            $numero = Str::of($this->whatsapp)->replaceMatches('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3');
-            return $numero;
+    public function sexLabel() {
+        switch ($this->sex) {
+            case 1:
+                return 'Masculino';
+                break;
+            case 2:
+                return 'Feminino';
+                break;
+            case 3:
+                return 'Outros';
+                break;
+            default:
+                return '---';
+                break;
         }
-        
-        return null;
     }
 
-    public function subUsers() {
-        return $this->hasMany(User::class, 'id_lider', 'id');
+    public function creator() {
+        return $this->belongsTo(User::class, 'id_creator');
     }
 
-    public function totalUsers() {
-
-        $total = 1;
-        $subUsers = $this->subUsers;
-
-        foreach ($subUsers as $subUser) {
-            $total += $subUser->totalUsers();
-        }
-    
-        return $total;
-    }
+    public function company() {
+        return $this->belongsTo(User::class, 'id_company');
+    }  
 
     protected static function boot() {
 
@@ -104,16 +107,11 @@ class User extends Authenticatable {
         static::created(function ($user) {
             if (!empty($user->email) && $user->validarEmail($user->email) != false) {
                 Mail::to($user->email, $user->nome)->send(new Welcome([
-                    'fromName'  => 'Kleber Fernandes',
-                    'fromEmail' => 'suporte@tocomkleberfernandes.com.br',
-                    'subject'   => 'Boas vindas',
+                    'fromName'  => 'Cidadão Plus',
+                    'fromEmail' => 'suporte@cidadaoplus.com.br',
+                    'subject'   => 'Você foi cadastrado na pesquisa de área!',
                 ]));
             }
         });
     }
-
-    private function validarEmail($email) {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-    }
-    
 }

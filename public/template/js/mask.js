@@ -65,7 +65,7 @@ function mascaraPorcentagem(input) {
 }
 
 function consultaCEP() {
-    var cep = $('[name="cep"]').val();
+    var cep = $('[name="postal_code"]').val();
 
     cep = cep.replace(/\D/g, '');
 
@@ -73,10 +73,9 @@ function consultaCEP() {
 
         cep = cep.replace(/(\d{5})(\d{3})/, '$1-$2');
         $.get(`https://viacep.com.br/ws/${cep}/json/`, function (data) {
-            $('[name="logradouro"]').val(data.logradouro);
-            $('[name="bairro"]').val(data.bairro);
-            $('[name="cidade"]').val(data.localidade);
-            $('[name="estado"]').val(data.uf);
+            $('[name="address"]').val(data.logradouro);
+            $('[name="city"]').val(data.localidade);
+            $('[name="state"]').val(data.uf);
         })
             .fail(function () {
                 console.error('CEP não encontrado');

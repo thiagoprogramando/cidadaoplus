@@ -25,7 +25,7 @@
                                 <span class="fw-semibold d-block mb-1">Total de registros</span>
                             </div>
                             
-                            <h3 class="card-title text-white mb-2"> {{ $eleitores->count() + $apoiadores->count() + $coordenadores->count() + $master->count() + $antigos }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $cidadao->count() + $apoiador->count() + $coordenador->count() + $administrador->count() }} </h3>
                         </div>
                     </div>
                 </div>
@@ -34,22 +34,10 @@
                     <div class="card bg-primary text-white text-center">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">Usuários</span>
+                                <span class="fw-semibold d-block mb-1">Cidadão</span>
                             </div>
                             
-                            <h3 class="card-title text-white mb-2"> {{ $eleitores->count() }} </h3>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-6 col-md-4 col-lg-4 mb-4">
-                    <div class="card bg-primary text-white text-center">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">Rede</span>
-                            </div>
-                            
-                            <h3 class="card-title text-white mb-2"> {{ $rede }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $cidadao->count() }} </h3>
                         </div>
                     </div>
                 </div>
@@ -58,9 +46,9 @@
                     <div class="card bg-dark text-white text-center">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">Coordenadores</span>
+                                <span class="fw-semibold d-block mb-1">Coordenador</span>
                             </div>
-                            <h3 class="card-title text-white mb-2"> {{ $coordenadores->count() }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $coordenador->count() }} </h3>
                         </div>
                     </div>
                 </div>
@@ -69,9 +57,9 @@
                     <div class="card bg-dark text-white text-center">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">Masters</span>
+                                <span class="fw-semibold d-block mb-1">Administrador</span>
                             </div>
-                            <h3 class="card-title text-white mb-2"> {{ $master->count() }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $administrador->count() }} </h3>
                         </div>
                     </div>
                 </div>
@@ -80,20 +68,9 @@
                     <div class="card bg-dark text-white text-center">
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">Apoiadores</span>
+                                <span class="fw-semibold d-block mb-1">Apoiador</span>
                             </div>
-                            <h3 class="card-title text-white mb-2"> {{ $apoiadores->count() }} </h3>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-6 col-md-3 col-lg-3 mb-4">
-                    <div class="card bg-dark text-white text-center">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-center">
-                                <span class="fw-semibold d-block mb-1">S. Antigo</span>
-                            </div>
-                            <h3 class="card-title text-white mb-2"> {{ $antigos }} </h3>
+                            <h3 class="card-title text-white mb-2"> {{ $apoiador->count() }} </h3>
                         </div>
                     </div>
                 </div>

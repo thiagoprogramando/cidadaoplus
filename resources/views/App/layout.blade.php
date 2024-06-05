@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Tô com Kleber - {{ Auth::user()->nome }}</title>
+        <title>Cidadão Plus - {{ Auth::user()->name }}</title>
 
         <link rel="icon" type="image/x-icon" href="{{ asset('template/img/background/icon.png') }}" />
         
@@ -32,7 +32,7 @@
                 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                     <div class="app-brand demo">
                         <a href="{{ route('app') }}" class="app-brand-link">
-                            <span class="app-brand-text demo menu-text fw-bolder ms-2">#Tô com Kleber</span>
+                            <span class="app-brand-text demo menu-text fw-bolder ms-2">Cidadão Plus</span>
                         </a>
 
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -51,38 +51,34 @@
                             </a>
                         </li>
 
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Cadastro</span></li>
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Usuários</span></li>
+                        
+                        @if (Auth::user()->type == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['type' => 1]) }}" class="menu-link"> <i class="menu-icon tf-icons bx bx-user"></i> <div>Administrador</div> </a>
+                            </li>
+
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['type' => 4]) }}" class="menu-link"> <i class='menu-icon tf-icons bx bx-user-check'></i> <div>Coordenador</div> </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->type == 4 || Auth::user()->type == 1)
+                            <li class="menu-item">
+                                <a href="{{ route('listUser', ['type' => 2]) }}" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-user-voice"></i>
+                                    <div>Apoiador</div>
+                                </a>
+                            </li>
+                        @endif
+                        
                         <li class="menu-item">
-                            <a href="{{ route('listUser', ['tipo' => 3]) }}" class="menu-link">
+                            <a href="{{ route('listUser', ['type' => 3]) }}" class="menu-link">
                               <i class="menu-icon tf-icons bx bx-user-pin"></i>
-                              <div>Usuários</div>
+                              <div>Cidadão</div>
                             </a>
                         </li>
-                        
-                        @if (Auth::user()->tipo == 4 || Auth::user()->tipo == 1)
-                            <li class="menu-item">
-                                <a href="{{ route('listUser', ['tipo' => 2]) }}" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bx-user-voice"></i>
-                                    <div>Apoiadores</div>
-                                </a>
-                            </li>
-                        @endif
 
-                        @if (Auth::user()->tipo == 1)
-                            <li class="menu-item">
-                                <a href="{{ route('listUser', ['tipo' => 4]) }}" class="menu-link">
-                                    <i class='menu-icon tf-icons bx bx-user-check'></i>
-                                    <div>Coordenadores</div>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a href="{{ route('listUser', ['tipo' => 1]) }}" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-user"></i>
-                                <div>Master</div>
-                                </a>
-                            </li>
-                        @endif
                         <li class="menu-item">
                             <a href="{{ route('listReport') }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-data"></i>
@@ -91,7 +87,7 @@
                         </li>
 
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Comunicação</span></li>
-                        @if (Auth::user()->tipo == 1)
+                        @if (Auth::user()->type == 1)
                             <li class="menu-item">
                                 <a href="{{ route('list-happy') }}" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-calendar"></i>
@@ -137,7 +133,7 @@
 
                                     <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                         <div class="avatar avatar-online">
-                                            <img src="@if(Auth::user()->sexo == 1) {{ asset("template/img/avatar/man.png") }} @else {{ asset("template/img/avatar/woman.png") }} @endif" class="w-px-40 h-auto rounded-circle"/>
+                                            <img src="@if(Auth::user()->sex == 1) {{ asset("template/img/avatar/man.png") }} @elseif(Auth::user()->sex == 2) {{ asset("template/img/avatar/woman.png") }} @else {{ asset("template/img/avatar/neutral.png") }}  @endif" class="w-px-40 h-auto rounded-circle"/>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
@@ -146,12 +142,12 @@
                                                 <div class="d-flex">
                                                     <div class="flex-shrink-0 me-3">
                                                         <div class="avatar avatar-online">
-                                                            <img src="@if(Auth::user()->sexo == 1) {{ asset("template/img/avatar/man.png") }} @else {{ asset("template/img/avatar/woman.png") }} @endif" class="w-px-40 h-auto rounded-circle"/>
+                                                            <img src="@if(Auth::user()->sex == 1) {{ asset("template/img/avatar/man.png") }} @elseif(Auth::user()->sex == 2) {{ asset("template/img/avatar/woman.png") }} @else {{ asset("template/img/avatar/neutral.png") }}  @endif" class="w-px-40 h-auto rounded-circle"/>
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <span class="fw-semibold d-block">{{ Auth::user()->whatsapp }}</span>
-                                                        <small class="text-muted">{{ Auth::user()->Type }}</small>
+                                                        <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
+                                                        <small class="text-muted">{{ Auth::user()->typeLabel() }}</small>
                                                     </div>
                                                 </div>
                                             </a>
@@ -294,17 +290,6 @@
                             }
                         });
                     });
-                });
-
-                $('#tabela').DataTable({
-                    "paging": false,
-                    "pageLength": 50,
-                    "responsive": true,
-                    "language": {
-                        "url": "http://cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
-                    },
-                    "autoWidth": false,
-                    "order": []
                 });
             });
         </script>

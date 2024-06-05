@@ -36,23 +36,22 @@
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
-                                    <th class="d-none">Identificador Apoiador</th>
+                                    <th class="d-none">Indicador</th>
+                                    <th class="d-none">Associação</th>
                                     <th>Nome</th>
                                     <th class="d-none">D. Nascimento</th>
-                                    <th class="d-none">Sexo</th>
+                                    <th>Sexo</th>
                                     <th class="d-none">Profissão</th>
-                                    <th>WhatsApp</th>
-                                    <th>Obser.</th>
+                                    <th>Telefone</th>
                                     <th class="d-none">Email</th>
                                     <th class="d-none">instagram</th>
                                     <th class="d-none">facebook</th>
                                     <th class="d-none">CEP</th>
                                     <th class="d-none">Endereço</th>
                                     <th class="d-none">N°</th>
-                                    <th class="d-none">Bairro</th>
                                     <th class="d-none">Cidade</th>
                                     <th class="d-none">Estado</th>
-                                    <th>Apoiador</th>
+                                    <th>Responsável</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -60,24 +59,23 @@
                             <tbody class="table-border-bottom-0">
                                 @foreach ($users as $key => $user)
                                     <tr>
-                                        <td class="d-none">{{ $user->id_lider }}</td>
-                                        <td><strong><a href="{{ route('view', ['id' => $user->id]) }}">{{ $user->nome }}</a></strong> </td>
-                                        <td class="d-none">{{ $user->dataNasc }}</td>
-                                        <td class="d-none">{{ $user->Sexualidade }}</td>
-                                        <td class="d-none">{{ $user->profissao }}</td>
-                                        <td>{{ $user->whatsapp }}</td>
-                                        <td>{{ $user->observacao }}</td>
+                                        <td class="d-none">N° {{ $user->creator->id }} - {{ $user->creator->name }}</td>
+                                        <td class="d-none">N° {{ $user->company->id }} - {{ $user->company->name }}</td>
+                                        <td><strong>{{ $user->name }}</strong> </td>
+                                        <td class="d-none">{{ $user->birth }}</td>
+                                        <td>{{ $user->sexLabel() }}</td>
+                                        <td class="d-none">{{ $user->profession }}</td>
+                                        <td>{{ $user->phone }}</td>
                                         <td class="d-none">{{ $user->email }}</td>
                                         <td class="d-none">{{ $user->instagram }}</td>
                                         <td class="d-none">{{ $user->facebook }}</td>
-                                        <td class="d-none">{{ $user->cep }}</td>
-                                        <td class="d-none">{{ $user->logradouro }}</td>
-                                        <td class="d-none">{{ $user->numero }}</td>
-                                        <td class="d-none">{{ $user->bairro }}</td>
-                                        <td class="d-none">{{ $user->cidade }}</td>
-                                        <td class="d-none">{{ $user->estado }}</td>
-                                        <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
-                                        <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->Type }}</span></td>
+                                        <td class="d-none">{{ $user->postal_code }}</td>
+                                        <td class="d-none">{{ $user->address }}</td>
+                                        <td class="d-none">{{ $user->number }}</td>
+                                        <td class="d-none">{{ $user->city }}</td>
+                                        <td class="d-none">{{ $user->state }}</td>
+                                        <td>@if(isset($user->creator->id)) <a href="{{ route('viewUser', ['id' => $user->creator->id ]) }}">{{ $user->creator->name }}</a> @else --- @endif</td>
+                                        <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->typeLabel() }}</span></td>
                                         <td class="text-center">
                                             <form action="{{ route('deleteUser') }}" method="POST" class="delete">
                                                 @csrf
@@ -112,42 +110,46 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <input type="text" class="form-control" name="nome" placeholder="Nome:"/>
-                            </div>
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="dataNasc" oninput="mascaraData(this)" placeholder="Aniversário:"/>
-                            </div>
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="dataCreated" oninput="mascaraData(this)" placeholder="Cadastro:"/>
-                            </div>
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
-                                <select name="id_lider" id="selectSearch" class="form-control selectSearch">
-                                    <option value="" selected>Apoiador</option>
+                                <input type="text" class="form-control" name="name" placeholder="Nome:"/>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-6 mb-3">
+                                <input type="text" class="form-control" name="birth" oninput="mascaraData(this)" placeholder="Aniversário:"/>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6 mb-3">
+                                <input type="text" class="form-control" name="created" oninput="mascaraData(this)" placeholder="Cadastro:"/>
+                            </div>
+
+                            <div class="col-12 col-md-12 col-lg-12 mb-3">
+                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquise o nome do responsável...">
+                                <select name="id_Creator" id="selectSearch" class="form-control selectSearch">
+                                    <option value="" selected>Responsável</option>
                                     @foreach ($alphas as $alpha)
-                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
+                                        <option value="{{ $alpha->id }}">{{ $alpha->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>                                                     
-                            <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <select name="tipo" class="form-control">
+                            </div> 
+
+                            <div class="col-12 col-md-4 col-lg-4 mb-3">
+                                <select name="type" class="form-control">
                                     <option value="" selected>Tipo</option>
-                                    @if (Auth::user()->tipo == 1) <option value="1">Master</option> @endif
+                                    @if (Auth::user()->type == 1) <option value="1">Master</option> @endif
                                     <option value="2">Apoiador</option>
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <select name="sexo" class="form-control">
+
+                            <div class="col-12 col-md-4 col-lg-4 mb-3">
+                                <select name="sex" class="form-control">
                                     <option value="" selected>Sexo</option>
                                     <option value="1">Masculino</option>
                                     <option value="2">Feminino</option>
                                     <option value="3">Outros</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <select name="profissao" class="form-control">
+                            <div class="col-12 col-md-4 col-lg-4 mb-3">
+                                <select name="profession" class="form-control">
                                     <option value="" selected>Profissão</option>
                                     <option value="outros">Outros</option>
                                     <option value="do_lar">Do lar</option>
@@ -178,47 +180,6 @@
                                     <option value="tecnico_de_informatica">Técnico de Informática</option>
                                     <option value="veterinario">Veterinário</option>
                                     <option value="web_designer">Web Designer</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <select name="bairro" class="form-control">
-                                    <option value="" selected>Bairros</option>
-                                    <option value="Cidade da Esperança">Cidade da Esperança</option>
-                                    <option value="Cidade Nova">Cidade Nova</option>
-                                    <option value="Guarapes">Guarapes</option>
-                                    <option value="Nossa Senhora de Nazaré">Nossa Senhora de Nazaré</option>
-                                    <option value="Bom Pastor">Bom Pastor</option>
-                                    <option value="Planalto">Planalto</option>
-                                    <option value="Felipe Camarão">Felipe Camarão</option>
-                                    <option value="Nordeste">Nordeste</option>
-                                    <option value="Dix-Sept Rosado">Dix-Sept Rosado</option>
-                                    <option value="Quintas">Quintas</option>
-                                    <option value="Igapó">Igapó</option>
-                                    <option value="Lagoa Azul">Lagoa Azul</option>
-                                    <option value="Nossa Senhora da Apresentação">Nossa Senhora da Apresentação</option>
-                                    <option value="Pajuçara">Pajuçara</option>
-                                    <option value="Potengi">Potengi</option>
-                                    <option value="Redinha">Redinha</option>
-                                    <option value="Salinas">Salinas</option>
-                                    <option value="Alecrim">Alecrim</option>
-                                    <option value="Areia Preta">Areia Preta</option>
-                                    <option value="Barro Vermelho">Barro Vermelho</option>
-                                    <option value="Cidade Alta">Cidade Alta</option>
-                                    <option value="Lagoa Seca">Lagoa Seca</option>
-                                    <option value="Mãe Luiza">Mãe Luiza</option>
-                                    <option value="Petrópolis">Petrópolis</option>
-                                    <option value="Praia do Meio">Praia do Meio</option>
-                                    <option value="Ribeira">Ribeira</option>
-                                    <option value="Rocas">Rocas</option>
-                                    <option value="Santos Reis">Santos Reis</option>
-                                    <option value="Tirol">Tirol</option>
-                                    <option value="Candelária">Candelária</option>
-                                    <option value="Capim Macio">Capim Macio</option>
-                                    <option value="Lagoa Nova">Lagoa Nova</option>
-                                    <option value="Neópolis">Neópolis</option>
-                                    <option value="Nova Descoberta">Nova Descoberta</option>
-                                    <option value="Pitimbu">Pitimbu</option>
-                                    <option value="Ponta Negra">Ponta Negra</option>
                                 </select>
                             </div>
                         </div>
@@ -266,7 +227,7 @@
             var alphas = {!! json_encode($alphas) !!};
             function filterOptions(searchQuery) {
                 var filteredAlphas = alphas.filter(function(alpha) {
-                    return alpha.nome.toLowerCase().includes(searchQuery.toLowerCase());
+                    return alpha.name.toLowerCase().includes(searchQuery.toLowerCase());
                 });
                 populateOptions(filteredAlphas);
             }
@@ -276,13 +237,13 @@
                 selectElement.empty();
                 selectElement.append($('<option>', {
                     value: " ",
-                    text: "Apoiador",
+                    text: "Responsável",
                     selected: true
                 }));
                 $.each(options, function(index, option) {
                     selectElement.append($('<option>', {
                         value: option.id,
-                        text: option.nome
+                        text: option.name
                     }));
                 });
             }

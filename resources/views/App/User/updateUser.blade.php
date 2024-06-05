@@ -11,29 +11,29 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
-                    <form id="formAuthentication" class="mb-3" action="{{ route('updateUser') }}" method="POST">
+                    <form id="formAuthentication" class="mb-3" action="{{ route('update-user') }}" method="POST">
                         @csrf
                         <div class="row">
                             <input type="hidden" name="id" value="{{ $user->id }}">
 
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
-                                <input type="text" class="form-control" name="nome" placeholder="Nome:" value="{{ $user->nome }}"/>
+                                <input type="text" class="form-control" name="name" placeholder="Nome:" value="{{ $user->name }}"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="dataNasc" placeholder="Data de Nascimento:" oninput="mascaraData(this)" value="{{ $user->DataFormatada }}"/>
+                                <input type="date" class="form-control" name="birth" placeholder="Data de Nascimento:" value="{{ $user->birth }}"/>
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="sexo" class="form-control">
-                                    <option value="{{ $user->sexo }}" selected>{{ $user->sexualidade }}</option>
+                                <select name="sex" class="form-control">
+                                    <option value="{{ $user->sex }}" selected>{{ $user->sexLabel() }}</option>
                                     <option value="1">Masculino</option>
                                     <option value="2">Feminino</option>
                                     <option value="3">Outros</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="profissao" class="form-control">
-                                    <option value="{{ $user->profissao }}" selected>{{ $user->profissao }}</option>
+                                <select name="profession" class="form-control">
+                                    <option value="{{ $user->profession }}" selected>Profissão</option>
                                     <option value="outros">Outros</option>
                                     <option value="do_lar">Do lar</option>
                                     <option value="autonomo">Autônomo</option>
@@ -66,37 +66,37 @@
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="tipo" class="form-control">
-                                    <option value="{{ $user->tipo }}" selected>{{ $user->Type }}</option>
-                                    @if (Auth::user()->tipo == 1) 
+                                <select name="type" class="form-control">
+                                    <option value="{{ $user->type }}" selected>{{ $user->typeLabel() }}</option>
+                                    @if (Auth::user()->type == 1) 
                                         <option value="1">Master</option>  
                                         <option value="4">Coordenador</option>
                                     @endif
-                                    @if(Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
+                                    @if(Auth::user()->type == 1 || Auth::user()->type == 4)
                                         <option value="2">Apoiador</option>
                                     @endif
                                     <option value="3">Eleitor</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+                                <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquise o nome do responsável...">
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <select name="id_lider" id="selectSearch" class="form-control">
-                                    <option value="{{ $user->id_lider }}" selected>
-                                        @if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif
+                                <select name="id_creator" id="selectSearch" class="form-control">
+                                    <option value="{{ $user->id_creator }}" selected>
+                                        @if(isset($user->lider->name)) {{ $user->lider->name }} @else Responsável @endif
                                     </option>
                                     @foreach ($alphas as $alpha)
-                                        <option value="{{ $alpha->id }}">{{ $alpha->nome }}</option>
+                                        <option value="{{ $alpha->id }}">{{ $alpha->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="email" value="{{ $user->email }}" placeholder="Email:"/>
+                                <input type="email" class="form-control" name="email" value="{{ $user->email }}" placeholder="Email:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="whatsapp" value="{{ $user->whatsapp }}" placeholder="WhatsApp:" oninput="mascaraTelefone(this)"/>
+                                <input type="text" class="form-control" name="phone" value="{{ $user->phone }}" placeholder="Telefone:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
                                 <input type="text" class="form-control" name="instagram" value="{{ $user->instagram }}" placeholder="Instagram"/>
@@ -105,20 +105,22 @@
                                 <input type="text" class="form-control" name="facebook" value="{{ $user->facebook }}" placeholder="Facebook"/>
                             </div>
 
+                            <div class="col-12 col-md-2 col-lg-2 mb-3">
+                                <input type="number" class="form-control" name="postal_code" value="{{ $user->postal_code }}" placeholder="CEP:" onblur="consultaCEP()"/>
+                            </div>
+                            <div class="col-12 col-md-1 col-lg-1 mb-3">
+                                <input type="number" class="form-control" name="number" value="{{ $user->number }}" placeholder="N°:"/>
+                            </div>
+
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="number" class="form-control" name="cep" value="{{ $user->cep }}" placeholder="CEP:" onblur="consultaCEP()"/>
+                                <input type="text" class="form-control" name="address" value="{{ $user->address }}" placeholder="Endereço:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="logradouro" value="{{ $user->logradouro }}" placeholder="Endereço:"/>
+                                <input type="text" class="form-control" name="city" value="{{ $user->city }}" placeholder="Cidade:"/>
                             </div>
                             <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="numero" value="{{ $user->numero }}" placeholder="N°:"/>
+                                <input type="text" class="form-control" name="state" value="{{ $user->state }}" placeholder="Estado:"/>
                             </div>
-                            <div class="col-12 col-md-3 col-lg-3 mb-3">
-                                <input type="text" class="form-control" name="bairro" value="{{ $user->bairro }}" placeholder="Bairro:"/>
-                            </div>
-                            <input type="hidden" class="form-control" name="cidade" value="{{ $user->cidade }}"/>
-                            <input type="hidden" class="form-control" name="estado" value="{{ $user->estado }}"/>
                             
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
                                 <button class="btn btn-success d-grid w-100" type="submit">Salvar</button>
@@ -137,7 +139,7 @@
             var alphas = {!! json_encode($alphas) !!};
             function filterOptions(searchQuery) {
                 var filteredAlphas = alphas.filter(function(alpha) {
-                    return alpha.nome.toLowerCase().includes(searchQuery.toLowerCase());
+                    return alpha.name.toLowerCase().includes(searchQuery.toLowerCase());
                 });
                 populateOptions(filteredAlphas);
             }
@@ -146,14 +148,14 @@
                 var selectElement = $('#selectSearch');
                 selectElement.empty();
                 selectElement.append($('<option>', {
-                    value: "{!! $user->id_lider !!}",
-                    text: "@if(isset($user->lider->nome)) {{ $user->lider->nome }} @else Apoiador @endif",
+                    value: "{!! $user->id_creator !!}",
+                    text: "@if(isset($user->lider->name)) {{ $user->lider->name }} @else Responsável @endif",
                     selected: true
                 }));
                 $.each(options, function(index, option) {
                     selectElement.append($('<option>', {
                         value: option.id,
-                        text: option.nome
+                        text: option.name
                     }));
                 });
             }

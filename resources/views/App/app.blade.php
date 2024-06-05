@@ -5,14 +5,13 @@
 
             <div class="col-12 mb-3">
                 <div class="row">
-
                     <div class="col-12 col-md-6 col-lg-6 mb-3">
                         <div class="card bg-dark text-white h-100 mb-3">
-                            <div class="card-header">Links para indicação</div>
+                            <div class="card-header">Link (Formulário de Pesquisa) </div>
                             <div class="card-body">
-                                <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}" href="#" class="text-info"> {{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }} </a>
+                                <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/pesquisa-cidadao/{{ Auth::user()->id }}" href="#" class="text-info"> {{ env('APP_URL') }}/pesquisa-cidadao/{{ Auth::user()->id }} </a>
                                 <br>
-                                <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}" href="#" class="btn btn-success mt-2">Copiar Link</a>
+                                <a onclick="copyToClipboard(this)" data-link="{{ env('APP_URL') }}/pesquisa-cidadao/{{ Auth::user()->id }}" href="#" class="btn btn-success mt-2">Copiar Link</a>
                             </div>
                         </div>
                     </div>
@@ -20,30 +19,44 @@
                     <div class="col-12 col-md-6 col-lg-6 mb-3">
                         <div class="card bg-light text-white h-100 mb-3">
                             <div class="card-body">
-                                <center><a class="qrcode" href="#" class="text-info" data-link="{{ env('APP_URL') }}/cadastra-usuario/{{ Auth::user()->id }}"></a></center>
+                                <div class="div-qrcode">
+                                    <a class="qrcode" href="#" class="text-info" data-link="{{ env('APP_URL') }}/pesquisa-cidadao/{{ Auth::user()->id }}"></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div class="col-12 row">
 
-                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                    <a href="{{ route('listUser', ['tipo' => 3]) }}">
-                        <div class="card bg-dark text-white text-center mb-3">
-                            <div class="card-header">Usuários</div>
-                            <div class="card-body">
-                                <i class="menu-icon tf-icons bx-lg bx bx-user-pin"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                @if (Auth::user()->tipo == 1 || Auth::user()->tipo == 4)
+                @if (Auth::user()->type == 1)
                     <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listUser', ['tipo' => 2]) }}">
+                        <a href="{{ route('listUser', ['type' => 1]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Administrador</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['type' => 4]) }}">
+                            <div class="card bg-dark text-white text-center mb-3">
+                                <div class="card-header">Coordenador</div>
+                                <div class="card-body">
+                                    <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endif
+
+                @if (Auth::user()->type == 1 || Auth::user()->type == 4)
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ route('listUser', ['type' => 2]) }}">
                             <div class="card bg-dark text-white text-center mb-3">
                                 <div class="card-header">Apoiador</div>
                                 <div class="card-body">
@@ -54,47 +67,12 @@
                     </div>
                 @endif
 
-                @if (Auth::user()->tipo == 1)
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listUser', ['tipo' => 4]) }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">Coordenador</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bx-user-check"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('listUser', ['tipo' => 1]) }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">Master</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bx-user"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-            
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                        <a href="{{ route('list-whatsapp') }}">
-                            <div class="card bg-dark text-white text-center mb-3">
-                                <div class="card-header">WhatsApp</div>
-                                <div class="card-body">
-                                    <i class="menu-icon tf-icons bx-lg bx bxl-whatsapp"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-
                 <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                    <a href="{{ route('listReport') }}">
+                    <a href="{{ route('listUser', ['type' => 3]) }}">
                         <div class="card bg-dark text-white text-center mb-3">
-                            <div class="card-header">Relatórios</div>
+                            <div class="card-header">Cidadão</div>
                             <div class="card-body">
-                                <i class="menu-icon tf-icons bx-lg bx bx-data"></i>
+                                <i class="menu-icon tf-icons bx-lg bx bx-user-pin"></i>
                             </div>
                         </div>
                     </a>

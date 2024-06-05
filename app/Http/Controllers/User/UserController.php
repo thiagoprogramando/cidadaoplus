@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
-use App\Mail\Welcome;
+
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -14,8 +14,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller {
     
@@ -28,40 +26,318 @@ class UserController extends Controller {
         
         $user = User::find($request->id);
         if($user) {
-            if($request->nome) {
-                $user->nome = $request->nome;
+
+            if($request->name) {
+                $data['name'] = $request->name;
             }
-            if($request->password) {
-                $user->password = $request->name;
+            if($request->cpfcnpj) {
+                $data['cpfcnpj'] = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->cpfcnpj);
             }
-            if($request->cpf) {
-                $user->cpf = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->cpf);
-            }
-            if($request->whatsapp) {
-                $user->whatsapp = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->whatsapp);
+            if($request->phone) {
+                $data['phone'] = str_replace(['.', ' ', ',', '-', '(', ')'], '', $request->phone);
             }
             if($request->email) {
-                $user->email = strtolower($request->email);
+                $data['email'] = strtolower($request->email);
             }
             if($request->password) {
-                $user->password = bcrypt($request->password);
+                $data['password'] = bcrypt($request->password);
             }
 
-            if($user->save()) {
+            if($user->update($data)) {
                 return redirect()->back()->with('success', 'Perfil atualizado com sucesso!');
-            }
+            }            
 
             return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
         }
 
+        return redirect()->back()->with('error', 'Não localizamos os dados do usuário, tente novamente mais tarde!');
+    }
+
+    public function listUser($type = null) {
+
+        $users = Auth::user()->type === 1 
+            ? User::where('type', $type)->orderBy('created_at', 'desc')->paginate(100) 
+            : User::where('type', $type)->where('id_creator', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
+
+        $usersCount = Auth::user()->type === 1 
+            ? User::where('type', $type)->where('id_creator', '!=', 729)->orderBy('created_at', 'desc')->count() 
+            : User::where('type', $type)->where('id_creator', '!=', 729)->where('id_creator', Auth::user()->id)->orderBy('created_at', 'desc')->count();
+        
+        $alphas = Auth::user()->type == 1 
+            ? User::whereIn('type', [1, 2, 4])->orderBy('created_at', 'desc')->get() 
+            : User::whereIn('type', [1, 2])->where('id_creator', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+        return view('App.User.listUsers', [
+            'users'         => $users, 
+            'type'          => $type, 
+            'alphas'        => $alphas,
+            'usersCount'    => $usersCount
+        ]);
+    }
+
+    public function filterUser(Request $request) {
+
+        $query = User::query();
+
+        if ($request->input('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->input('created')) {
+            $created = date('Y-m-d H:i:s', strtotime($request->input('created')));
+            $query->whereDate('created_at', '=', $created);
+        }        
+
+        if ($request->input('birth')) {
+            $birth = $request->input('birth');
+            $birthParts = explode('-', $birth);
+
+            if (count($birthParts) === 2) {
+                $dia = $birthParts[0];
+                $mes = $birthParts[1];
+
+                $query->whereRaw("DAY(birth) = $dia")
+                    ->whereRaw("MONTH(birth) = $mes");
+            } elseif (count($birthParts) === 3) {
+                $dia = $birthParts[0];
+                $mes = $birthParts[1];
+                $ano = $birthParts[2];
+
+                $query->whereRaw("DAY(birth) = $dia")
+                    ->whereRaw("MONTH(birth) = $mes")
+                    ->whereRaw("YEAR(birth) = $ano");
+            } else {
+                $dia = $birthParts[0];
+                $query->whereRaw("DAY(birth) = $dia");
+            }
+        }
+
+        if(Auth::user()->type == 1 || Auth::user()->type == 4) {
+            if ($request->input('id_creator')) {
+                $query->where('id_creator', $request->input('id_creator'));
+            }
+        } else {
+            $query->where('id_creator', Auth::user()->id);
+        }
+
+        if($request->input('type')) {
+            $query->where('type', $request->input('type'));
+        }
+
+        if($request->input('sex')) {
+            $query->where('sex', $request->input('sex'));
+        }
+
+        if($request->input('profession')) {
+            $query->where('profession', $request->input('profession'));
+        }
+        
+        $usersCount = $query->orderBy('created_at', 'desc')->count();
+        $users = $query->orderBy('created_at', 'desc')->paginate(100);
+        
+        $alphas = Auth::user()->type == 1 ? 
+            User::whereIn('type', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('type', [1, 2])->where('id_creator', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+        return view('App.User.listUsers', [
+            'users'             => $users,
+            'usersCount'        => $usersCount, 
+            'type'              => 1, 
+            'alphas'            => $alphas,
+        ]);
+    }
+
+    public function listReport(Request $request) {
+
+        $cidadao      = User::where('type', 3);
+        $apoiador     = User::where('type', 2);
+        $coordenador  = User::where('type', 4);
+        $administrador         = User::where('type', 1);
+        
+        if($request->input('id_creator')) {
+            $id_creator = $request->input('id_creator');
+
+            $cidadao->where('id_creator', $id_creator);
+            $apoiador->where('id_creator', $id_creator);
+            $coordenador->where('id_creator', $id_creator);
+            $administrador->where('id_creator', $id_creator);
+        } else {
+            if(Auth::user()->type != 1) {
+                $cidadao->where('id_creator', Auth::user()->id);
+                $apoiador->where('id_creator', Auth::user()->id);
+                $coordenador->where('id_creator', Auth::user()->id);
+                $administrador->where('id_creator', Auth::user()->id);
+            }
+        }
+        
+        $cidadao        = $cidadao->get();
+        $apoiador       = $apoiador->get();
+        $coordenador    = $coordenador->get();
+        $administrador  = $administrador->get();
+        
+        return view('App.User.listReport', [
+            'cidadao'       => $cidadao,
+            'apoiador'      => $apoiador,
+            'coordenador'   => $coordenador,
+            'administrador' => $administrador,
+        ]);
+    }
+
+    public function createUserExternal(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'whatsapp'  => 'required|unique:users,whatsapp',
+            'birth'  => 'required|date_format:d-m-Y',
+            'email'     => 'nullable|email|unique:users,email',
+        ], [
+            'name.required'         => 'Por favor, informe um name!',
+            'whatsapp.required'     => 'Por favor, informe um WhatsApp!',
+            'whatsapp.unique'       => 'Já existe uma Pessoa com esse WhatsApp!',
+            'birth.required'     => 'Por favor, informe uma Data de Nascimento!',
+            'birth.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!',
+            'email.email'           => 'Formato de e-mail inválido!',
+            'email.unique'          => 'Já existe uma Pessoa com esse E-mail!'
+        ]);        
+
+        if($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        } else {
+            $user               = new User();
+            $user->id_creator     = $request->id_creator;
+            $user->name         = $request->name;
+            $user->birth     = Carbon::parse($request->birth);
+            $user->sexo         = $request->sexo;
+            $user->profession    = $request->profession;
+            $user->type         = 3;
+            $user->email        = strtolower($request->email);
+            $user->whatsapp     = $request->whatsapp;
+            $user->instagram    = $request->instagram;
+            $user->facebook     = $request->facebook;
+            $user->postal_code          = $request->postal_code;
+            $user->logradouro   = $request->logradouro;
+            $user->numero       = $request->numero;
+            $user->bairro       = $request->bairro;
+            $user->cidade       = $request->cidade;
+            $user->estado       = $request->estado;
+            $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
+
+            if($user->save()) {
+
+                return redirect('https://api.whatsapp.com/send?phone=5584987674348&text=Ol%C3%A1,%20acabei%20de%20me%20cadastrar%20via%20site%20e%20gostaria%20de%20conhecer%20os%20projetos%20do%20vereador%20Kleber%C2%A0Fernandes!');
+            }
+        }
+    }
+    
+    public function viewUser($id) {
+
+        $user = User::where('id', $id)->first();
+        $alphas = Auth::user()->type == 1 ? 
+            User::whereIn('type', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
+            User::whereIn('type', [1, 2])->where('id_creator', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+        if($user) {
+            return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
+        }
+        
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+    }
+
+    public function updateUser(Request $request) {
+
+        $user = User::where('id', $request->id)->first();
+        if($user) {
+            $data = [];
+
+            if ($request->has('id_creator')) {
+                $data['id_creator'] = $request->id_creator;
+            }
+            if ($request->has('name')) {
+                $data['name'] = $request->name;
+            }
+            if ($request->has('profession')) {
+                $data['profession'] = $request->profession;
+            }
+            if ($request->has('birth')) {
+                $data['birth'] = Carbon::parse($request->birth);
+            }
+            if ($request->has('sex')) {
+                $data['sex'] = $request->sex;
+            }
+            if ($request->has('type')) {
+                $data['type'] = $request->type;
+            }
+            if ($request->has('email')) {
+                $data['email'] = strtolower($request->email);
+            }
+            if ($request->has('phone')) {
+                $data['phone'] = str_replace(['.', ',', '-', '(', ')'], '', $request->phone);
+            }
+            if ($request->has('instagram')) {
+                $data['instagram'] = $request->instagram;
+            }
+            if ($request->has('facebook')) {
+                $data['facebook'] = $request->facebook;
+            }
+            if ($request->has('postal_code')) {
+                $data['postal_code'] = $request->postal_code;
+            }
+            if ($request->has('address')) {
+                $data['address'] = $request->address;
+            }
+            if ($request->has('number')) {
+                $data['number'] = $request->number;
+            }
+            if ($request->has('city')) {
+                $data['city'] = $request->city;
+            }
+            if ($request->has('state')) {
+                $data['state'] = $request->state;
+            }
+            if ($request->has('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+
+            if($user->update($data)) {
+                return redirect()->back()->with('success', 'Dados atualizados com sucesso!');
+            }
+        }
+        
+        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+    }
+
+    public function deleteUser(Request $request) {
+    
+        $user = User::find($request->id);
+        if ($user && $user->delete()) {
+            return redirect()->back()->with('success', 'Usuário excluído com sucesso!');
+        } else {
+            return redirect()->back()->with('error', 'Não encontramos dados do Usuário, tente novamente mais tarde!');
+        }
+    }
+
+    public function importUser(Request $request) {
+
+        set_time_limit(300);
+        
+        $file = $request->file('file');
+        if($file) {
+            try {
+                Excel::import(new UsersImport, $file);
+                return redirect()->back()->with('success', 'Dados importados com sucesso!');
+            } catch (\Throwable $e) {
+                return redirect()->back()->with('error', 'Ocorreu um erro durante a importação: ' . $e->getMessage());
+            }
+        }
+        
+        return redirect()->back()->with('error', 'Importação incompleta, nenhum arquivo enviado!');
     }
 
     private function searchPostalCode($bairro) {
 
         switch($bairro) {
             case 'Igapó':
-                return $ceps = [
+                return $postal_codes = [
                     '59101045',
                     '59104180',
                     '59104000',
@@ -115,7 +391,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Lagoa Azul':
-                return $ceps = [
+                return $postal_codes = [
                     '59139410',
                     '59139290',
                     '59135000',
@@ -169,7 +445,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Nossa Senhora da Apresentação':
-                return $ceps = [
+                return $postal_codes = [
                     '59114645',
                     '59114250',
                     '59114309',
@@ -223,10 +499,10 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Pajuçara':
-                return $ceps = ['59133300', '59131515', '59123610', '59122365', '59122518', '59122770', '59131430', '59133390', '59123405', '59123030', '59133030', '59133380', '59132280', '59132480', '59133020', '59133010', '59132440', '59133090', '59132000', '59122537', '59131000', '59132045', '59122385', '59133145', '59133250', '59133240', '59133230', '59133150', '59133270', '59133340', '59133280', '59133290', '59133350', '59133260', '59133220', '59133370', '59133190', '59133310', '59133160', '59133210', '59133200', '59133180', '59133140', '59133320', '59133360', '59133170', '59133330', '59133135', '59131400', '59133065'];
+                return $postal_codes = ['59133300', '59131515', '59123610', '59122365', '59122518', '59122770', '59131430', '59133390', '59123405', '59123030', '59133030', '59133380', '59132280', '59132480', '59133020', '59133010', '59132440', '59133090', '59132000', '59122537', '59131000', '59132045', '59122385', '59133145', '59133250', '59133240', '59133230', '59133150', '59133270', '59133340', '59133280', '59133290', '59133350', '59133260', '59133220', '59133370', '59133190', '59133310', '59133160', '59133210', '59133200', '59133180', '59133140', '59133320', '59133360', '59133170', '59133330', '59133135', '59131400', '59133065'];
                 break;
             case 'Potengi':
-                return $ceps = [
+                return $postal_codes = [
                     '59124000',
                     '59120260',
                     '59108000',
@@ -280,7 +556,7 @@ class UserController extends Controller {
                 ];                
                 break;
             case 'Redinha':
-                return $ceps = [
+                return $postal_codes = [
                     '59122120',
                     '59122200',
                     '59122468',
@@ -334,7 +610,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Salinas':
-                return $ceps = [
+                return $postal_codes = [
                     '59107005',
                     '59107030',
                     '59107025',
@@ -350,7 +626,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Alecrim':
-                return $ceps = [
+                return $postal_codes = [
                     '59030160',
                     '59030130',
                     '59030145',
@@ -404,7 +680,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Areia Preta':
-                return $ceps = [
+                return $postal_codes = [
                     '59014100',
                     '59014104',
                     '59014061',
@@ -436,7 +712,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Barro Vermelho':
-                return $ceps = [
+                return $postal_codes = [
                     '59030660',
                     '59022545',
                     '59022550',
@@ -490,7 +766,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Cidade Alta':
-                return $ceps = [
+                return $postal_codes = [
                     '59025280',
                     '59025600',
                     '59025145',
@@ -544,7 +820,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Lagoa Seca':
-                return $ceps = [
+                return $postal_codes = [
                     '59022350',
                     '59022385',
                     '59031125',
@@ -598,7 +874,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Mãe Luiza':
-                return $ceps = [
+                return $postal_codes = [
                     '59014425',
                     '59014380',
                     '59014360',
@@ -652,7 +928,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Petrópolis':
-                return $ceps = [
+                return $postal_codes = [
                     '59020065',
                     '59020055',
                     '59012220',
@@ -706,7 +982,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Praia do Meio':
-                return $ceps = [
+                return $postal_codes = [
                     '59010056',
                     '59010000',
                     '59010030',
@@ -755,7 +1031,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Ribeira':
-                return $ceps = [
+                return $postal_codes = [
                     '59010900',
                     '59012600',
                     '59012200',
@@ -809,7 +1085,7 @@ class UserController extends Controller {
                 ];                
                 break;
             case 'Rocas':
-                return $ceps = [
+                return $postal_codes = [
                     '59010775',
                     '59020901',
                     '59012500',
@@ -863,7 +1139,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Santos Reis':
-                return $ceps = [
+                return $postal_codes = [
                     '59010530',
                     '59010640',
                     '59010396',
@@ -898,7 +1174,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Tirol':
-                return $ceps = [
+                return $postal_codes = [
                     '59014550',
                     '59020100',
                     '59020265',
@@ -952,7 +1228,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Candelária':
-                return $ceps = [
+                return $postal_codes = [
                     '59064746',
                     '59064747',
                     '59064760',
@@ -1006,7 +1282,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Capim Macio':
-                return $ceps = [
+                return $postal_codes = [
                     '59080100',
                     '59082065',
                     '59082085',
@@ -1060,7 +1336,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Lagoa Nova':
-                return $ceps = [
+                return $postal_codes = [
                     '59075970',
                     '59075971',
                     '59075959',
@@ -1114,7 +1390,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Neópolis':
-                return $ceps = [
+                return $postal_codes = [
                     '59080560',
                     '59080280',
                     '59080360',
@@ -1168,7 +1444,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Nova Descoberta':
-                return $ceps = [
+                return $postal_codes = [
                     '59075970',
                     '59075959',
                     '59074780',
@@ -1222,7 +1498,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Pitimbu':
-                return $ceps = [
+                return $postal_codes = [
                     '59069100',
                     '59066430',
                     '59066400',
@@ -1276,7 +1552,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Ponta Negra':
-                return $ceps = [
+                return $postal_codes = [
                     '59091010',
                     '59091120',
                     '59091900',
@@ -1330,7 +1606,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Quintas':
-                return $ceps = [
+                return $postal_codes = [
                     '59050-005',
                     '59050-000',
                     '59050-480',
@@ -1384,7 +1660,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Dix-Sept Rosado':
-                return $ceps = [
+                return $postal_codes = [
                     '59054-145',
                     '59052-475',
                     '59052-465',
@@ -1438,7 +1714,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Nordeste':
-                return $ceps = [
+                return $postal_codes = [
                     '59042-610',
                     '59042-200',
                     '59042-095',
@@ -1492,7 +1768,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Felipe Camarão':
-                $cep_array = [
+                $postal_code_array = [
                     '59074-160',
                     '59074-166',
                     '59074-167',
@@ -1546,7 +1822,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Planalto':
-                return $cep = [
+                return $postal_code = [
                     '59073-210',
                     '59073-141',
                     '59073-090',
@@ -1600,7 +1876,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Bom Pastor':
-                return $ceps = [
+                return $postal_codes = [
                     '59062-250',
                     '59052-000',
                     '59052-080',
@@ -1654,7 +1930,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Nossa Senhora de Nazaré':
-                return $ceps = [
+                return $postal_codes = [
                     '59062-195',
                     '59060-400',
                     '59060-500',
@@ -1708,7 +1984,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Guarapes':
-                return $ceps = [
+                return $postal_codes = [
                     '59074-852',
                     '59074-850',
                     '59074-605',
@@ -1762,7 +2038,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Cidade Nova':
-                return $ceps = [
+                return $postal_codes = [
                     '59072-645',
                     '59072-800',
                     '59072-865',
@@ -1814,7 +2090,7 @@ class UserController extends Controller {
                 ];
                 break;
             case 'Cidade da Esperança':
-                return $ceps = [
+                return $postal_codes = [
                     '59071-355',
                     '59070-400',
                     '59071-110',
@@ -1868,324 +2144,11 @@ class UserController extends Controller {
                 ];
                 break;
             default:
-                return $ceps = [];
+                return $postal_codes = [];
                 break;
         }
 
-        return $ceps = [];
-    }
-
-    public function listUser($tipo = null) {
-
-        $users = Auth::user()->tipo === 1 
-            ? User::where('tipo', $tipo)->orderBy('created_at', 'desc')->paginate(100) 
-            : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
-
-        $usersCount = Auth::user()->tipo === 1 
-            ? User::where('tipo', $tipo)->where('id_lider', '!=', 729)->orderBy('created_at', 'desc')->count() 
-            : User::where('tipo', $tipo)->where('id_lider', '!=', 729)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->count();
-        
-        $alphas = Auth::user()->tipo == 1 
-            ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() 
-            : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-
-        return view('App.User.listUsers', [
-            'users'         => $users, 
-            'tipo'          => $tipo, 
-            'alphas'        => $alphas,
-            'usersCount'    => $usersCount
-        ]);
-    }
-
-    public function listReport(Request $request) {
-
-        $eleitores      = User::where('tipo', 3)->where('id_lider', '!=', 729);
-        $apoiadores     = User::where('tipo', 2);
-        $coordenadores  = User::where('tipo', 4);
-        $master         = User::where('tipo', 1);
-        $antigos        = User::where('id_lider', 729)->count();
-        
-        if($request->input('id_lider')) {
-            $id_lider = $request->input('id_lider');
-
-            $eleitores->where('id_lider', $id_lider);
-            $apoiadores->where('id_lider', $id_lider);
-            $coordenadores->where('id_lider', $id_lider);
-            $master->where('id_lider', $id_lider);
-
-            $rede = User::where('id', $id_lider)->first();
-            $rede = $rede->totalUsers();
-
-            $antigos = 0;
-        } else {
-            if(Auth::user()->tipo != 1) {
-                $eleitores->where('id_lider', Auth::user()->id);
-                $apoiadores->where('id_lider', Auth::user()->id);
-                $coordenadores->where('id_lider', Auth::user()->id);
-                $master->where('id_lider', Auth::user()->id);
-
-                $rede = User::where('id', Auth::user()->id)->first();
-                $rede = $rede->totalUsers();
-
-                $antigos = 0;
-            } else {
-                $rede = 0;
-            }
-        }
-
-        if($request->input('bairro')) {
-            $eleitores->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
-            $apoiadores->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
-            $coordenadores->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
-            $master->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
-        }
-        
-        $eleitores      = $eleitores->get();
-        $apoiadores     = $apoiadores->get();
-        $coordenadores  = $coordenadores->get();
-        $master         = $master->get();
-
-        $alphas = Auth::user()->tipo == 1 
-            ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get()
-            : User::whereIn('tipo', [2, 4])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-        
-        return view('App.User.listReport', [
-            'eleitores'     => $eleitores,
-            'apoiadores'    => $apoiadores,
-            'coordenadores' => $coordenadores,
-            'master'        => $master,
-            'alphas'        => $alphas,
-            'antigos'       => $antigos,
-            'rede'          => $rede
-        ]);
-    }
-
-    public function filterUser(Request $request) {
-
-        $query = User::query();
-
-        if ($request->input('nome')) {
-            $query->where('nome', 'like', '%' . $request->input('nome') . '%');
-        }
-
-        if ($request->input('dataCreated')) {
-            $dataCreated = date('Y-m-d H:i:s', strtotime($request->input('dataCreated')));
-            $query->whereDate('created_at', '=', $dataCreated);
-        }        
-
-        if ($request->input('dataNasc')) {
-            $dataNasc = $request->input('dataNasc');
-            $dataNascParts = explode('-', $dataNasc);
-
-            if (count($dataNascParts) === 2) {
-                $dia = $dataNascParts[0];
-                $mes = $dataNascParts[1];
-
-                $query->whereRaw("DAY(dataNasc) = $dia")
-                    ->whereRaw("MONTH(dataNasc) = $mes");
-            } elseif (count($dataNascParts) === 3) {
-                $dia = $dataNascParts[0];
-                $mes = $dataNascParts[1];
-                $ano = $dataNascParts[2];
-
-                $query->whereRaw("DAY(dataNasc) = $dia")
-                    ->whereRaw("MONTH(dataNasc) = $mes")
-                    ->whereRaw("YEAR(dataNasc) = $ano");
-            } else {
-                $dia = $dataNascParts[0];
-                $query->whereRaw("DAY(dataNasc) = $dia");
-            }
-        }
-
-        if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
-            if ($request->input('id_lider')) {
-                $query->where('id_lider', $request->input('id_lider'));
-            }
-        } else {
-            $query->where('id_lider', Auth::user()->id);
-        }
-
-        if($request->input('tipo')) {
-            $query->where('tipo', $request->input('tipo'));
-        }
-
-        if($request->input('sexo')) {
-            $query->where('sexo', $request->input('sexo'));
-        }
-
-        if($request->input('profissao')) {
-            $query->where('profissao', $request->input('profissao'));
-        }
-
-        if($request->input('cep')) {
-            $query->where('cep', $request->input('cep'));
-        }
-
-        if($request->input('bairro')) {
-            $query->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
-        }
-        
-        $usersCount = $query->orderBy('created_at', 'desc')->count();
-        $users = $query->orderBy('created_at', 'desc')->paginate(100);
-        
-        $alphas = Auth::user()->tipo == 1 ? 
-            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
-            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-
-        return view('App.User.listUsers', [
-            'users'             => $users,
-            'usersCount'        => $usersCount, 
-            'tipo'              => 1, 
-            'alphas'            => $alphas,
-        ]);
-    }
-
-    public function createUserExternal(Request $request) {
-
-        $validator = Validator::make($request->all(), [
-            'nome'      => 'required',
-            'whatsapp'  => 'required|unique:users,whatsapp',
-            'dataNasc'  => 'required|date_format:d-m-Y',
-            'email'     => 'nullable|email|unique:users,email',
-        ], [
-            'nome.required'         => 'Por favor, informe um Nome!',
-            'whatsapp.required'     => 'Por favor, informe um WhatsApp!',
-            'whatsapp.unique'       => 'Já existe uma Pessoa com esse WhatsApp!',
-            'dataNasc.required'     => 'Por favor, informe uma Data de Nascimento!',
-            'dataNasc.date_format'  => 'Formato de data de nascimento inválido. Use o formato DD-MM-AAAA!',
-            'email.email'           => 'Formato de e-mail inválido!',
-            'email.unique'          => 'Já existe uma Pessoa com esse E-mail!'
-        ]);        
-
-        if($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors())->withInput();
-        } else {
-            $user               = new User();
-            $user->id_lider     = $request->id_lider;
-            $user->nome         = $request->nome;
-            $user->dataNasc     = Carbon::parse($request->dataNasc);
-            $user->sexo         = $request->sexo;
-            $user->profissao    = $request->profissao;
-            $user->tipo         = 3;
-            $user->email        = strtolower($request->email);
-            $user->whatsapp     = $request->whatsapp;
-            $user->instagram    = $request->instagram;
-            $user->facebook     = $request->facebook;
-            $user->cep          = $request->cep;
-            $user->logradouro   = $request->logradouro;
-            $user->numero       = $request->numero;
-            $user->bairro       = $request->bairro;
-            $user->cidade       = $request->cidade;
-            $user->estado       = $request->estado;
-            $user->password     = bcrypt(str_replace(['.', ' ',',', '-', '(', ')'], '', $request->whatsapp));
-
-            if($user->save()) {
-
-                return redirect('https://api.whatsapp.com/send?phone=5584987674348&text=Ol%C3%A1,%20acabei%20de%20me%20cadastrar%20via%20site%20e%20gostaria%20de%20conhecer%20os%20projetos%20do%20vereador%20Kleber%C2%A0Fernandes!');
-            }
-        }
-    }
-    
-    public function viewUser($id) {
-
-        $user = User::where('id', $id)->first();
-        $alphas = Auth::user()->tipo == 1 ? 
-            User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
-            User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-
-        if($user) {
-            return view('App.User.updateUser', ['user' => $user, 'alphas' => $alphas]);
-        }
-        
-        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-    }
-
-    public function view($id) {
-
-        $user = User::where('id', $id)->first();
-        if($user) {
-
-            $usuarios      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
-            $apoiadores     = User::where('id_lider', $user->id)->where('tipo', 2)->count();
-            $coordenadores  = User::where('id_lider', $user->id)->where('tipo', 4)->count();
-            $todos          = User::where('id_lider', $user->id)->orderBy('created_at', 'desc')->get();
-
-            return view('App.User.viewUser', [
-                'user'          => $user, 
-                'usuarios'     => $usuarios, 
-                'apoiadores'    => $apoiadores, 
-                'coordenadores' => $coordenadores, 
-                'todos'         => $todos,
-                'rede'          => $user->totalUsers()
-            ]);
-        }
-        
-        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-    }
-
-    public function updateUser(Request $request) {
-
-        if (!preg_match('/^\d{2}-\d{2}-\d{4}$/', $request->dataNasc)) {
-            return redirect()->back()->with('error', 'Data de Nascimento enviada incorreta! Formato correto: DD-MM-AAAA');
-        }
-
-        $user = User::where('id', $request->id)->first();
-        if($user) {
-            $user->id_lider     = $request->id_lider;
-            $user->nome         = $request->nome;
-            $user->profissao    = $request->profissao;
-            $user->dataNasc     = Carbon::parse($request->dataNasc);
-            $user->sexo         = $request->sexo;
-            $user->tipo         = $request->tipo;
-            $user->email        = strtolower($request->email);
-            $user->whatsapp     = str_replace(['.', ',', '-', '(', ')'], '', $request->whatsapp);
-            $user->instagram    = $request->instagram;
-            $user->facebook     = $request->facebook;
-            $user->cep          = $request->cep;
-            $user->logradouro   = $request->logradouro;
-            $user->numero       = $request->numero;
-            $user->bairro       = $request->bairro;
-            $user->cidade       = $request->cidade;
-            $user->estado       = $request->estado;
-            if($request->password) {
-                $user->password = bcrypt(str_replace(['.', ',', '-', '(', ')'], '', $request->password));
-            }
-
-            if($user->save()) {
-                return redirect()->back()->with('success', 'Dados atualizados com sucesso!');
-            }
-        }
-        
-        return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
-    }
-
-    public function deleteUser(Request $request) {
-    
-        $user = User::find($request->id);
-        if ($user) {
-
-            $user->delete();
-            return redirect()->back()->with('success', 'Usuário excluído com sucesso!');
-        } else {
-            return redirect()->back()->with('error', 'Não encontramos dados do Usuário, tente novamente mais tarde!');
-        }
-    }
-
-    public function importUser(Request $request) {
-
-        set_time_limit(300);
-        
-        $file = $request->file('file');
-        if($file) {
-            try {
-                Excel::import(new UsersImport, $file);
-                return redirect()->back()->with('success', 'Dados importados com sucesso!');
-            } catch (\Throwable $e) {
-                return redirect()->back()->with('error', 'Ocorreu um erro durante a importação: ' . $e->getMessage());
-            }
-        }
-        
-        return redirect()->back()->with('error', 'Importação incompleta, nenhum arquivo enviado!');
+        return $postal_codes = [];
     }
     
 }
