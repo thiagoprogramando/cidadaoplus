@@ -1875,15 +1875,37 @@ class UserController extends Controller {
         return $ceps = [];
     }
 
-    public function listUser($tipo = null) {
+    public function listUser($tipo = null, $antigo = null) {
 
         $users = Auth::user()->tipo === 1 
-            ? User::where('tipo', $tipo)->orderBy('created_at', 'desc')->paginate(100) 
-            : User::where('tipo', $tipo)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
+            ? User::where('tipo', $tipo)->where('id_lider', '!=', 729)->orderBy('created_at', 'desc')->paginate(100) 
+            : User::where('tipo', $tipo)->where('id_lider', '!=', 729)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(100);
 
         $usersCount = Auth::user()->tipo === 1 
             ? User::where('tipo', $tipo)->where('id_lider', '!=', 729)->orderBy('created_at', 'desc')->count() 
             : User::where('tipo', $tipo)->where('id_lider', '!=', 729)->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->count();
+        
+        $alphas = Auth::user()->tipo == 1 
+            ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() 
+            : User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+        return view('App.User.listUsers', [
+            'users'         => $users, 
+            'tipo'          => $tipo, 
+            'alphas'        => $alphas,
+            'usersCount'    => $usersCount
+        ]);
+    }
+
+    public function listAntigo($tipo = null) {
+
+        $users = Auth::user()->tipo === 1 
+            ? User::where('tipo', $tipo)->where('id_lider', 729)->orderBy('created_at', 'desc')->paginate(100) 
+            : User::where('tipo', $tipo)->where('id_lider', 729)->orderBy('created_at', 'desc')->paginate(100);
+
+        $usersCount = Auth::user()->tipo === 1 
+            ? User::where('tipo', $tipo)->where('id_lider', 729)->orderBy('created_at', 'desc')->count() 
+            : User::where('tipo', $tipo)->where('id_lider', 729)->orderBy('created_at', 'desc')->count();
         
         $alphas = Auth::user()->tipo == 1 
             ? User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() 

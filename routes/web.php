@@ -29,6 +29,7 @@ Route::middleware(['auth', 'check.type:3'])->group(function () {
     Route::post('/profileUpdate', [UserController::class, 'profileUpdate'])->name('profileUpdate');
     
     Route::get('/listUser/{tipo?}', [UserController::class, 'listUser'])->name('listUser');
+    Route::get('/listAntigo/{tipo?}', [UserController::class, 'listAntigo'])->name('listAntigo');
     Route::get('/filterUser', [UserController::class, 'filterUser'])->name('filterUser');
     Route::get('/viewUser/{id?}', [UserController::class, 'viewUser'])->name('viewUser');
     Route::get('/view/{id}', [UserController::class, 'view'])->name('view');

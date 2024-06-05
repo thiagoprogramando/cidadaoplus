@@ -82,6 +82,13 @@
                                 <div>Master</div>
                                 </a>
                             </li>
+
+                            <li class="menu-item">
+                                <a href="{{ route('listAntigo', ['tipo' => 3]) }}" class="menu-link">
+                                    <i class='menu-icon tf-icons bx bx-user-pin'></i>
+                                    <div>Sistema Antigo</div>
+                                </a>
+                            </li>
                         @endif
                         <li class="menu-item">
                             <a href="{{ route('listReport') }}" class="menu-link">
