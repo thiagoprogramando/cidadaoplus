@@ -3,14 +3,6 @@
     <div class="container-xxl">
         <div class="container-p-y">
             <div class="authentication-inner">
-
-                <div class="mb-3">
-                    <div class="justify-content-center">
-                        <a href="https://www.instagram.com/kleberfernandesvereador/" target="_blank">
-                            <img style="width: 100%;" src="{{ asset('template/img/background/tocomkleber.png') }}">
-                        </a>
-                    </div>
-                </div>
                 
                 <div class="card">
                     <div class="card-body">

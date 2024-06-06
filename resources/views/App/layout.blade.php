@@ -67,7 +67,7 @@
                             <li class="menu-item">
                                 <a href="{{ route('listUser', ['type' => 2]) }}" class="menu-link">
                                     <i class="menu-icon tf-icons bx bx-user-voice"></i>
-                                    <div>Apoiador</div>
+                                    <div>Gestor</div>
                                 </a>
                             </li>
                         @endif

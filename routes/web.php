@@ -16,7 +16,7 @@ Route::get('/forgout/{code?}', [AcessController::class, 'forgout'])->name('forgo
 Route::post('/forgout-password', [AcessController::class, 'forgoutPassword'])->name('forgout-password');
 Route::post('/recoverPassword', [AcessController::class, 'recoverPassword'])->name('recoverPassword');
 
-Route::get('/cadastra-usuario/{code}', [AcessController::class, 'registerUserExternal'])->name('cadastra-usuario')->middleware(\App\Http\Middleware\NoCacheMiddleware::class);
+Route::get('/pesquisa-cidadao/{code}', [AcessController::class, 'registerUserExternal'])->name('pesquisa-cidadao')->middleware(\App\Http\Middleware\NoCacheMiddleware::class);
 Route::post('/createUserExternal', [UserController::class, 'createUserExternal'])->name('createUserExternal');
 
 Route::post('/logon', [AcessController::class, 'logon'])->name('logon');
