@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
 use App\Mail\Welcome;
@@ -2048,7 +2049,7 @@ class UserController extends Controller {
         }
         
         $usersCount = $query->orderBy('created_at', 'desc')->count();
-        $users = $query->orderBy('created_at', 'desc')->paginate(100);
+        $users = $query->orderBy('created_at', 'desc')->paginate(100)->appends($request->except('page'));
         
         $alphas = Auth::user()->tipo == 1 ? 
             User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
@@ -2060,6 +2061,76 @@ class UserController extends Controller {
             'tipo'              => 1, 
             'alphas'            => $alphas,
         ]);
+    }
+
+    public function geraExcelUser(Request $request) {
+
+        $query = User::select('nome', 'whatsapp', 'email', 'created_at', 'dataNasc', 'sexo', 'profissao', 'cep', 'bairro');
+
+        if ($request->input('nome')) {
+            $query->where('nome', 'like', '%' . $request->input('nome') . '%');
+        }
+
+        if ($request->input('dataCreated')) {
+            $dataCreated = date('Y-m-d H:i:s', strtotime($request->input('dataCreated')));
+            $query->whereDate('created_at', '=', $dataCreated);
+        }        
+
+        if ($request->input('dataNasc')) {
+            $dataNasc = $request->input('dataNasc');
+            $dataNascParts = explode('-', $dataNasc);
+
+            if (count($dataNascParts) === 2) {
+                $dia = $dataNascParts[0];
+                $mes = $dataNascParts[1];
+
+                $query->whereRaw("DAY(dataNasc) = $dia")
+                    ->whereRaw("MONTH(dataNasc) = $mes");
+            } elseif (count($dataNascParts) === 3) {
+                $dia = $dataNascParts[0];
+                $mes = $dataNascParts[1];
+                $ano = $dataNascParts[2];
+
+                $query->whereRaw("DAY(dataNasc) = $dia")
+                    ->whereRaw("MONTH(dataNasc) = $mes")
+                    ->whereRaw("YEAR(dataNasc) = $ano");
+            } else {
+                $dia = $dataNascParts[0];
+                $query->whereRaw("DAY(dataNasc) = $dia");
+            }
+        }
+
+        if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
+            if ($request->input('id_lider')) {
+                $query->where('id_lider', $request->input('id_lider'));
+            }
+        } else {
+            $query->where('id_lider', Auth::user()->id);
+        }
+
+        if($request->input('tipo')) {
+            $query->where('tipo', $request->input('tipo'));
+        }
+
+        if($request->input('sexo')) {
+            $query->where('sexo', $request->input('sexo'));
+        }
+
+        if($request->input('profissao')) {
+            $query->where('profissao', $request->input('profissao'));
+        }
+
+        if($request->input('cep')) {
+            $query->where('cep', $request->input('cep'));
+        }
+
+        if($request->input('bairro')) {
+            $query->whereIn('cep', $this->searchPostalCode($request->input('bairro')));
+        }
+        
+        $users = $query->orderBy('created_at', 'desc')->get();
+        
+        return Excel::download(new UsersExport($users), 'users.xlsx');
     }
 
     public function createUserExternal(Request $request) {

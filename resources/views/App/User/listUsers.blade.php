@@ -6,7 +6,12 @@
             <div class="col-12">
                 <div class="mt-3 mb-3">
                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <button type="button" onclick="geraExcel()" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </button>
+                        @php
+                            $currentUrl = url()->full();
+                            $newRoute = route('geraExcelUser');
+                            $newUrl = preg_replace("/^" . preg_quote(url()->current(), '/') . "/", $newRoute, $currentUrl);
+                        @endphp
+                        <a href="{{ $newUrl }}" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </a>
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -91,7 +96,7 @@
                             </tbody>
                         </table>
 
-                        <div id="divComEstilo" class="text-center">
+                        <div class="text-center">
                             {{ $users->links() }}
                         </div>
                         
@@ -103,7 +108,7 @@
     </div>
 
     <div class="modal fade" id="modalFilter" aria-labelledby="modalFilter" tabindex="-1" style="display: none" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ route('filterUser') }}" method="GET">
                     <div class="modal-header">
