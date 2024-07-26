@@ -15,8 +15,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class UserController extends Controller {
     
@@ -2181,7 +2181,7 @@ class UserController extends Controller {
     
     public function viewUser($id) {
 
-        $user = User::where('id', $id)->first();
+        $user = User::find($id);
         $alphas = Auth::user()->tipo == 1 ? 
             User::whereIn('tipo', [1, 2, 4])->orderBy('created_at', 'desc')->get() : 
             User::whereIn('tipo', [1, 2])->where('id_lider', Auth::user()->id)->orderBy('created_at', 'desc')->get();
@@ -2195,25 +2195,37 @@ class UserController extends Controller {
 
     public function view($id) {
 
-        $user = User::where('id', $id)->first();
+        $user = User::find($id);
         if($user) {
 
-            $usuarios      = User::where('id_lider', $user->id)->where('tipo', 3)->count();
+            $usuarios       = User::where('id_lider', $user->id)->where('tipo', 3)->count();
             $apoiadores     = User::where('id_lider', $user->id)->where('tipo', 2)->count();
             $coordenadores  = User::where('id_lider', $user->id)->where('tipo', 4)->count();
-            $todos          = User::where('id_lider', $user->id)->orderBy('created_at', 'desc')->get();
+            $todos = $this->getAllLinkedUsers($user);
 
             return view('App.User.viewUser', [
                 'user'          => $user, 
-                'usuarios'     => $usuarios, 
+                'usuarios'      => $usuarios, 
                 'apoiadores'    => $apoiadores, 
                 'coordenadores' => $coordenadores, 
                 'todos'         => $todos,
-                'rede'          => $user->totalUsers()
+                'rede'          => $todos->count()
             ]);
         }
         
         return redirect()->back()->with('error', 'Encontramos um problema, tente novamente mais tarde!');
+    }
+
+    private function getAllLinkedUsers($user) {
+        $allUsers = collect();
+        $subUsers = $user->subUsers;
+
+        foreach ($subUsers as $subUser) {
+            $allUsers->push($subUser);
+            $allUsers = $allUsers->merge($this->getAllLinkedUsers($subUser));
+        }
+
+        return $allUsers;
     }
 
     public function updateUser(Request $request) {

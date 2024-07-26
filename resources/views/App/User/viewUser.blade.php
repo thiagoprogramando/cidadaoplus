@@ -67,24 +67,20 @@
 
             <div class="col-12">
                 <div class="card p-3"> 
+
+                    <div class="btn-group w-25" role="group">
+                        <button type="button" onclick="geraExcel()" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </button>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
+                                    <th>Líder</th>
                                     <th>Nome</th>
                                     <th>D. Nascimento</th>
-                                    <th>Sexo</th>
-                                    <th>Profissão</th>
                                     <th>WhatsApp</th>
-                                    <th>Email</th>
-                                    <th>instagram</th>
-                                    <th>facebook</th>
-                                    <th>CEP</th>
-                                    <th>Endereço</th>
-                                    <th>N°</th>
                                     <th>Bairro</th>
-                                    <th>Cidade</th>
-                                    <th>Estado</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -92,20 +88,11 @@
                             <tbody class="table-border-bottom-0">
                                 @foreach ($todos as $key => $todo)
                                     <tr>
+                                        <td><strong>{{ $todo->lider->nome }}</strong> </td>
                                         <td><strong>{{ $todo->nome }}</strong> </td>
                                         <td>{{ $todo->DataFormatada }}</td>
-                                        <td>{{ $todo->Sexualidade }}</td>
-                                        <td>{{ $todo->profissao }}</td>
                                         <td>{{ $todo->whatsapp }}</td>
-                                        <td>{{ $todo->email }}</td>
-                                        <td>{{ $todo->instagram }}</td>
-                                        <td>{{ $todo->facebook }}</td>
-                                        <td>{{ $todo->cep }}</td>
-                                        <td>{{ $todo->logradouro }}</td>
-                                        <td>{{ $todo->numero }}</td>
                                         <td>{{ $todo->bairro }}</td>
-                                        <td>{{ $todo->cidade }}</td>
-                                        <td>{{ $todo->estado }}</td>
                                         <td class="text-center"><span class="badge bg-label-success me-1">{{ $todo->Type }}</span></td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $todo->id }}"> <i class="tf-icons bx bx-trash"></i> </button>
