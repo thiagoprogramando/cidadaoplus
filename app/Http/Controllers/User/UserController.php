@@ -2065,7 +2065,7 @@ class UserController extends Controller {
 
     public function geraExcelUser(Request $request) {
 
-        $query = User::select('nome', 'whatsapp', 'email', 'created_at', 'dataNasc', 'sexo', 'profissao', 'cep', 'bairro');
+        $query = User::select('id_lider', 'nome', 'whatsapp', 'email', 'created_at', 'dataNasc', 'sexo', 'profissao', 'cep', 'bairro');
 
         if ($request->input('nome')) {
             $query->where('nome', 'like', '%' . $request->input('nome') . '%');

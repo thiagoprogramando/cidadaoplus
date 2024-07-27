@@ -17,13 +17,15 @@ class UsersExport implements FromCollection {
         // return $this->users;
         return $this->users->map(function($user) {
             return [
+                'Apoiador'              => optional($user->lider)->nome ?: '---',
                 'Nome'                  => $user->nome,
                 'Whatsapp'              => $user->whatsapp,
                 'Email'                 => $user->email,
                 'Data de Criação'       => $user->created_at,
                 'Data de Nascimento'    => $user->dataNasc,
                 'CEP'                   => $user->cep,
-                'Bairro'                => $user->bairro
+                'Bairro'                => $user->bairro,
+                'Observação'            => $user->observacao
             ];
         });
     }

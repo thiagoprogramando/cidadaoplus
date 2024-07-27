@@ -41,7 +41,7 @@
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
-                                    <th class="d-none">Apoiador</th>
+                                    <th>Apoiador</th>
                                     <th>Nome</th>
                                     <th class="d-none">D. Nascimento</th>
                                     <th class="d-none">Sexo</th>
@@ -57,7 +57,6 @@
                                     <th class="d-none">Bairro</th>
                                     <th class="d-none">Cidade</th>
                                     <th class="d-none">Estado</th>
-                                    <th>Apoiador</th>
                                     <th class="text-center">Tipo</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -65,7 +64,7 @@
                             <tbody class="table-border-bottom-0">
                                 @foreach ($users as $key => $user)
                                     <tr>
-                                        <td class="d-none">{{ $user->lider->nome }}</td>
+                                        <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
                                         <td><strong><a href="{{ route('view', ['id' => $user->id]) }}">{{ $user->nome }}</a></strong> </td>
                                         <td class="d-none">{{ $user->dataNasc }}</td>
                                         <td class="d-none">{{ $user->Sexualidade }}</td>
@@ -81,7 +80,6 @@
                                         <td class="d-none">{{ $user->bairro }}</td>
                                         <td class="d-none">{{ $user->cidade }}</td>
                                         <td class="d-none">{{ $user->estado }}</td>
-                                        <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
                                         <td class="text-center"><span class="badge bg-label-success me-1">{{ $user->Type }}</span></td>
                                         <td class="text-center">
                                             <form action="{{ route('deleteUser') }}" method="POST" class="delete">
