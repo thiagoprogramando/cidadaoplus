@@ -20,10 +20,9 @@
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
-                                    <th>Líder</th>
+                                    <th>Apoiador</th>
                                     <th>Nome</th>
                                     <th class="text-center">Whatsapp</th>
-                                    <th>Apoiador</th>
                                     <th>Obs</th>
                                     <th class="text-center">Opções</th>
                                 </tr>
@@ -31,10 +30,9 @@
                             <tbody class="table-border-bottom-0">
                                 @foreach ($users as $key => $user)
                                     <tr>
-                                        <td title="{{ $user->lider->nome }}"><strong>{{ $user->lider->nome }}</strong></td>
-                                        <td title="{{ $user->nome }}"><strong>{{ strlen($user->nome) > 40 ? substr($user->nome, 0, 40) . '...' : $user->nome }}</strong></td>
-                                        <td class="text-center">{{ $user->whatsapp }}</td>
                                         <td>@if(isset($user->lider->id)) <a href="{{ route('viewUser', ['id' => $user->lider->id ]) }}">{{ $user->lider->nome }}</a> @else --- @endif</td>
+                                        <td title="{{ $user->nome }}"><strong>{{ strlen($user->nome) > 40 ? substr($user->nome, 0, 40) . '...' : $user->nome }}</strong></td>
+                                        <td class="text-center">{{ $user->whatsapp }}</td> 
                                         <td>{{ $user->observacao }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('send-happy', ['number' => $user->whatsapp]) }}" class="btn btn-outline-success"> <i class="tf-icons bx bxl-whatsapp"></i> </a>

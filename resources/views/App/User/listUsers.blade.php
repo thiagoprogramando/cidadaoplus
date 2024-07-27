@@ -41,7 +41,7 @@
                         <table class="table table-hover" id="tabela">
                             <thead>
                                 <tr>
-                                    <th class="d-none">Identificador Apoiador</th>
+                                    <th class="d-none">Apoiador</th>
                                     <th>Nome</th>
                                     <th class="d-none">D. Nascimento</th>
                                     <th class="d-none">Sexo</th>
@@ -65,7 +65,7 @@
                             <tbody class="table-border-bottom-0">
                                 @foreach ($users as $key => $user)
                                     <tr>
-                                        <td class="d-none">{{ $user->id_lider }}</td>
+                                        <td class="d-none">{{ $user->lider->nome }}</td>
                                         <td><strong><a href="{{ route('view', ['id' => $user->id]) }}">{{ $user->nome }}</a></strong> </td>
                                         <td class="d-none">{{ $user->dataNasc }}</td>
                                         <td class="d-none">{{ $user->Sexualidade }}</td>
