@@ -2103,6 +2103,8 @@ class UserController extends Controller {
         if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
             if ($request->input('id_lider')) {
                 $query->where('id_lider', $request->input('id_lider'));
+            } else {
+                $query->where('id_lider', Auth::user()->id);
             }
         } else {
             $query->where('id_lider', Auth::user()->id);

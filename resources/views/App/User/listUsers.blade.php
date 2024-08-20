@@ -11,7 +11,7 @@
                             $newRoute = route('geraExcelUser');
                             $newUrl = preg_replace("/^" . preg_quote(url()->current(), '/') . "/", $newRoute, $currentUrl);
                         @endphp
-                        <a href="{{ $newUrl }}" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </a>
+                        <a href="{{ $newUrl }}?tipo={{ $tipo }}" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </a>
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
