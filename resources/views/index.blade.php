@@ -42,6 +42,10 @@
                         <p class="text-center"> 
                             <a href="{{ route('forgout') }}"> <small>Esqueceu a senha?</small> </a>
                         </p>
+
+                        <p class="text-center">
+                            Desenvolvido por <a href="#"> BSM INFORMÁTICA </a>
+                        </p>
                     </div>
                 </div>
                 
