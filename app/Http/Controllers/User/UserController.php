@@ -1876,7 +1876,7 @@ class UserController extends Controller {
         return $ceps = [];
     }
 
-    public function listUser($tipo = null, $antigo = null) {
+    public function listUser($tipo = null) {
 
         $users = Auth::user()->tipo === 1 
             ? User::where('tipo', $tipo)->where('id_lider', '!=', 729)->orderBy('created_at', 'desc')->paginate(100) 
@@ -2100,15 +2100,24 @@ class UserController extends Controller {
             }
         }
 
-        if(Auth::user()->tipo == 1 || Auth::user()->tipo == 2 || Auth::user()->tipo == 4) {
-            if ($request->input('id_lider')) {
-                $query->where('id_lider', $request->input('id_lider'));
+        if (Auth::user()->tipo == 1 && empty($request->id_lider)) {
+            
+        } else {
+            if (in_array(Auth::user()->tipo, [1, 2, 4])) {
+                if (Auth::user()->tipo == 1 && $request->has('id_lider')) {
+                    $query->where('id_lider', $request->input('id_lider'));
+                }
+                elseif (in_array(Auth::user()->tipo, [2, 4])) {
+                    if ($request->has('id_lider')) {
+                        $query->where('id_lider', $request->input('id_lider'));
+                    } else {
+                        $query->where('id_lider', Auth::user()->id);
+                    }
+                }
             } else {
                 $query->where('id_lider', Auth::user()->id);
             }
-        } else {
-            $query->where('id_lider', Auth::user()->id);
-        }
+        }        
 
         if($request->input('tipo')) {
             $query->where('tipo', $request->input('tipo'));

@@ -11,7 +11,7 @@
                             $newRoute = route('geraExcelUser');
                             $newUrl = preg_replace("/^" . preg_quote(url()->current(), '/') . "/", $newRoute, $currentUrl);
                         @endphp
-                        <a href="{{ $newUrl }}?tipo={{ $tipo }}" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </a>
+                        <a href="{{ $newUrl }}" class="btn btn-outline-secondary"> <i class="tf-icons bx bx-download"></i> </a>
                         <div class="btn-group" role="group">
                             <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Opções </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -135,7 +135,7 @@
                             </div>                                                     
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <select name="tipo" class="form-control">
-                                    <option value="" selected>Tipo</option>
+                                    <option value="{{ $tipo }}" selected>Tipo</option>
                                     @if (Auth::user()->tipo == 1) <option value="1">Master</option> @endif
                                     <option value="2">Apoiador</option>
                                     <option value="3">Eleitor</option>
